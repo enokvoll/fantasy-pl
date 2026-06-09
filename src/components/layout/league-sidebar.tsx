@@ -19,6 +19,8 @@ export function LeagueSidebar({ league, myTeam }: LeagueSidebarProps) {
     { href: `${base}/draft`, label: "Draft Room", icon: "🎯" },
     { href: `${base}/roster`, label: "My Roster", icon: "👕" },
     { href: `${base}/players`, label: "Players", icon: "⚽" },
+    { href: `${base}/waivers`, label: "Waivers", icon: "🔄" },
+    { href: `${base}/matchups`, label: "Matchups", icon: "📅" },
     { href: `${base}/standings`, label: "Standings", icon: "📊" },
     { href: `${base}/simulate`, label: "Simulate", icon: "🔬" },
   ]
