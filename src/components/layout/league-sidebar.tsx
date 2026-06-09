@@ -20,6 +20,7 @@ export function LeagueSidebar({ league, myTeam }: LeagueSidebarProps) {
     { href: `${base}/roster`, label: "My Roster", icon: "👕" },
     { href: `${base}/players`, label: "Players", icon: "⚽" },
     { href: `${base}/standings`, label: "Standings", icon: "📊" },
+    { href: `${base}/simulate`, label: "Simulate", icon: "🔬" },
   ]
 
   return (
