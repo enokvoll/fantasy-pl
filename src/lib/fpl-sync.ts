@@ -142,12 +142,14 @@ export async function syncFixtures(): Promise<number> {
   return count
 }
 
-export async function syncLiveScores(gameweekId: number): Promise<number> {
-  // Only sync if there are active fixtures
-  const activeFixtures = await prisma.fixture.count({
-    where: { gameweekId, started: true, finished: false },
-  })
-  if (activeFixtures === 0) return 0
+export async function syncLiveScores(gameweekId: number, force = false): Promise<number> {
+  if (!force) {
+    // During live season, only sync if there are active fixtures
+    const activeFixtures = await prisma.fixture.count({
+      where: { gameweekId, started: true, finished: false },
+    })
+    if (activeFixtures === 0) return 0
+  }
 
   const liveData = await getLiveGameweek(gameweekId)
   let count = 0

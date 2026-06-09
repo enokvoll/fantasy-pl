@@ -51,7 +51,7 @@ export async function syncAllHistoricalGameweeks(): Promise<{ synced: number[]; 
 
   for (const gw of gameweeks) {
     try {
-      const count = await syncLiveScores(gw.id)
+      const count = await syncLiveScores(gw.id, true)
       if (count > 0) synced.push(gw.id)
       else skipped.push(gw.id)
     } catch {
