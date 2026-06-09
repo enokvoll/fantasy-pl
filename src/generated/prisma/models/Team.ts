@@ -62,6 +62,7 @@ export type TeamMinAggregateOutputType = {
   ties: number | null
   pointsFor: number | null
   pointsAgainst: number | null
+  isBot: boolean | null
   createdAt: Date | null
 }
 
@@ -79,6 +80,7 @@ export type TeamMaxAggregateOutputType = {
   ties: number | null
   pointsFor: number | null
   pointsAgainst: number | null
+  isBot: boolean | null
   createdAt: Date | null
 }
 
@@ -96,6 +98,7 @@ export type TeamCountAggregateOutputType = {
   ties: number
   pointsFor: number
   pointsAgainst: number
+  isBot: number
   createdAt: number
   _all: number
 }
@@ -137,6 +140,7 @@ export type TeamMinAggregateInputType = {
   ties?: true
   pointsFor?: true
   pointsAgainst?: true
+  isBot?: true
   createdAt?: true
 }
 
@@ -154,6 +158,7 @@ export type TeamMaxAggregateInputType = {
   ties?: true
   pointsFor?: true
   pointsAgainst?: true
+  isBot?: true
   createdAt?: true
 }
 
@@ -171,6 +176,7 @@ export type TeamCountAggregateInputType = {
   ties?: true
   pointsFor?: true
   pointsAgainst?: true
+  isBot?: true
   createdAt?: true
   _all?: true
 }
@@ -275,6 +281,7 @@ export type TeamGroupByOutputType = {
   ties: number
   pointsFor: number
   pointsAgainst: number
+  isBot: boolean
   createdAt: Date
   _count: TeamCountAggregateOutputType | null
   _avg: TeamAvgAggregateOutputType | null
@@ -315,6 +322,7 @@ export type TeamWhereInput = {
   ties?: Prisma.IntFilter<"Team"> | number
   pointsFor?: Prisma.FloatFilter<"Team"> | number
   pointsAgainst?: Prisma.FloatFilter<"Team"> | number
+  isBot?: Prisma.BoolFilter<"Team"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Team"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   league?: Prisma.XOR<Prisma.LeagueScalarRelationFilter, Prisma.LeagueWhereInput>
@@ -344,6 +352,7 @@ export type TeamOrderByWithRelationInput = {
   ties?: Prisma.SortOrder
   pointsFor?: Prisma.SortOrder
   pointsAgainst?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   league?: Prisma.LeagueOrderByWithRelationInput
@@ -377,6 +386,7 @@ export type TeamWhereUniqueInput = Prisma.AtLeast<{
   ties?: Prisma.IntFilter<"Team"> | number
   pointsFor?: Prisma.FloatFilter<"Team"> | number
   pointsAgainst?: Prisma.FloatFilter<"Team"> | number
+  isBot?: Prisma.BoolFilter<"Team"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Team"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   league?: Prisma.XOR<Prisma.LeagueScalarRelationFilter, Prisma.LeagueWhereInput>
@@ -406,6 +416,7 @@ export type TeamOrderByWithAggregationInput = {
   ties?: Prisma.SortOrder
   pointsFor?: Prisma.SortOrder
   pointsAgainst?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TeamCountOrderByAggregateInput
   _avg?: Prisma.TeamAvgOrderByAggregateInput
@@ -431,6 +442,7 @@ export type TeamScalarWhereWithAggregatesInput = {
   ties?: Prisma.IntWithAggregatesFilter<"Team"> | number
   pointsFor?: Prisma.FloatWithAggregatesFilter<"Team"> | number
   pointsAgainst?: Prisma.FloatWithAggregatesFilter<"Team"> | number
+  isBot?: Prisma.BoolWithAggregatesFilter<"Team"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Team"> | Date | string
 }
 
@@ -446,6 +458,7 @@ export type TeamCreateInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -475,6 +488,7 @@ export type TeamUncheckedCreateInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -500,6 +514,7 @@ export type TeamUpdateInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -529,6 +544,7 @@ export type TeamUncheckedUpdateInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -556,6 +572,7 @@ export type TeamCreateManyInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
 }
 
@@ -571,6 +588,7 @@ export type TeamUpdateManyMutationInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -588,6 +606,7 @@ export type TeamUncheckedUpdateManyInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -620,6 +639,7 @@ export type TeamCountOrderByAggregateInput = {
   ties?: Prisma.SortOrder
   pointsFor?: Prisma.SortOrder
   pointsAgainst?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -648,6 +668,7 @@ export type TeamMaxOrderByAggregateInput = {
   ties?: Prisma.SortOrder
   pointsFor?: Prisma.SortOrder
   pointsAgainst?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -665,6 +686,7 @@ export type TeamMinOrderByAggregateInput = {
   ties?: Prisma.SortOrder
   pointsFor?: Prisma.SortOrder
   pointsAgainst?: Prisma.SortOrder
+  isBot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -935,6 +957,7 @@ export type TeamCreateWithoutUserInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
   rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutTeamInput
@@ -962,6 +985,7 @@ export type TeamUncheckedCreateWithoutUserInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -1018,6 +1042,7 @@ export type TeamScalarWhereInput = {
   ties?: Prisma.IntFilter<"Team"> | number
   pointsFor?: Prisma.FloatFilter<"Team"> | number
   pointsAgainst?: Prisma.FloatFilter<"Team"> | number
+  isBot?: Prisma.BoolFilter<"Team"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Team"> | Date | string
 }
 
@@ -1033,6 +1058,7 @@ export type TeamCreateWithoutLeagueInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutTeamInput
@@ -1060,6 +1086,7 @@ export type TeamUncheckedCreateWithoutLeagueInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -1111,6 +1138,7 @@ export type TeamCreateWithoutRosterSlotsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1139,6 +1167,7 @@ export type TeamUncheckedCreateWithoutRosterSlotsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
   awayMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutAwayTeamInput
@@ -1179,6 +1208,7 @@ export type TeamUpdateWithoutRosterSlotsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -1207,6 +1237,7 @@ export type TeamUncheckedUpdateWithoutRosterSlotsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
   awayMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutAwayTeamNestedInput
@@ -1231,6 +1262,7 @@ export type TeamCreateWithoutOwnedDraftPicksInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1259,6 +1291,7 @@ export type TeamUncheckedCreateWithoutOwnedDraftPicksInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -1288,6 +1321,7 @@ export type TeamCreateWithoutOriginalDraftPicksInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1316,6 +1350,7 @@ export type TeamUncheckedCreateWithoutOriginalDraftPicksInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -1356,6 +1391,7 @@ export type TeamUpdateWithoutOwnedDraftPicksInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -1384,6 +1420,7 @@ export type TeamUncheckedUpdateWithoutOwnedDraftPicksInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -1419,6 +1456,7 @@ export type TeamUpdateWithoutOriginalDraftPicksInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -1447,6 +1485,7 @@ export type TeamUncheckedUpdateWithoutOriginalDraftPicksInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -1471,6 +1510,7 @@ export type TeamCreateWithoutDraftPickSlotsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1499,6 +1539,7 @@ export type TeamUncheckedCreateWithoutDraftPickSlotsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -1539,6 +1580,7 @@ export type TeamUpdateWithoutDraftPickSlotsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -1567,6 +1609,7 @@ export type TeamUncheckedUpdateWithoutDraftPickSlotsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -1591,6 +1634,7 @@ export type TeamCreateWithoutHomeMatchupsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1619,6 +1663,7 @@ export type TeamUncheckedCreateWithoutHomeMatchupsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   awayMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutAwayTeamInput
@@ -1648,6 +1693,7 @@ export type TeamCreateWithoutAwayMatchupsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1676,6 +1722,7 @@ export type TeamUncheckedCreateWithoutAwayMatchupsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -1716,6 +1763,7 @@ export type TeamUpdateWithoutHomeMatchupsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -1744,6 +1792,7 @@ export type TeamUncheckedUpdateWithoutHomeMatchupsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   awayMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutAwayTeamNestedInput
@@ -1779,6 +1828,7 @@ export type TeamUpdateWithoutAwayMatchupsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -1807,6 +1857,7 @@ export type TeamUncheckedUpdateWithoutAwayMatchupsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -1831,6 +1882,7 @@ export type TeamCreateWithoutWaiverClaimsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1859,6 +1911,7 @@ export type TeamUncheckedCreateWithoutWaiverClaimsInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -1899,6 +1952,7 @@ export type TeamUpdateWithoutWaiverClaimsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -1927,6 +1981,7 @@ export type TeamUncheckedUpdateWithoutWaiverClaimsInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -1951,6 +2006,7 @@ export type TeamCreateWithoutTradesOfferedInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -1979,6 +2035,7 @@ export type TeamUncheckedCreateWithoutTradesOfferedInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -2008,6 +2065,7 @@ export type TeamCreateWithoutTradesReceivedInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -2036,6 +2094,7 @@ export type TeamUncheckedCreateWithoutTradesReceivedInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -2076,6 +2135,7 @@ export type TeamUpdateWithoutTradesOfferedInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -2104,6 +2164,7 @@ export type TeamUncheckedUpdateWithoutTradesOfferedInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -2139,6 +2200,7 @@ export type TeamUpdateWithoutTradesReceivedInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -2167,6 +2229,7 @@ export type TeamUncheckedUpdateWithoutTradesReceivedInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -2191,6 +2254,7 @@ export type TeamCreateWithoutTradeVotesInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTeamsInput
   league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
@@ -2219,6 +2283,7 @@ export type TeamUncheckedCreateWithoutTradeVotesInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutTeamInput
   homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
@@ -2259,6 +2324,7 @@ export type TeamUpdateWithoutTradeVotesInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
@@ -2287,6 +2353,7 @@ export type TeamUncheckedUpdateWithoutTradeVotesInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -2312,6 +2379,7 @@ export type TeamCreateManyUserInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
 }
 
@@ -2327,6 +2395,7 @@ export type TeamUpdateWithoutUserInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
   rosterSlots?: Prisma.RosterSlotUpdateManyWithoutTeamNestedInput
@@ -2354,6 +2423,7 @@ export type TeamUncheckedUpdateWithoutUserInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -2380,6 +2450,7 @@ export type TeamUncheckedUpdateManyWithoutUserInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -2396,6 +2467,7 @@ export type TeamCreateManyLeagueInput = {
   ties?: number
   pointsFor?: number
   pointsAgainst?: number
+  isBot?: boolean
   createdAt?: Date | string
 }
 
@@ -2411,6 +2483,7 @@ export type TeamUpdateWithoutLeagueInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTeamsNestedInput
   rosterSlots?: Prisma.RosterSlotUpdateManyWithoutTeamNestedInput
@@ -2438,6 +2511,7 @@ export type TeamUncheckedUpdateWithoutLeagueInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutTeamNestedInput
   homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
@@ -2464,6 +2538,7 @@ export type TeamUncheckedUpdateManyWithoutLeagueInput = {
   ties?: Prisma.IntFieldUpdateOperationsInput | number
   pointsFor?: Prisma.FloatFieldUpdateOperationsInput | number
   pointsAgainst?: Prisma.FloatFieldUpdateOperationsInput | number
+  isBot?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -2593,6 +2668,7 @@ export type TeamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   ties?: boolean
   pointsFor?: boolean
   pointsAgainst?: boolean
+  isBot?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   league?: boolean | Prisma.LeagueDefaultArgs<ExtArgs>
@@ -2623,6 +2699,7 @@ export type TeamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   ties?: boolean
   pointsFor?: boolean
   pointsAgainst?: boolean
+  isBot?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   league?: boolean | Prisma.LeagueDefaultArgs<ExtArgs>
@@ -2642,6 +2719,7 @@ export type TeamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   ties?: boolean
   pointsFor?: boolean
   pointsAgainst?: boolean
+  isBot?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   league?: boolean | Prisma.LeagueDefaultArgs<ExtArgs>
@@ -2661,10 +2739,11 @@ export type TeamSelectScalar = {
   ties?: boolean
   pointsFor?: boolean
   pointsAgainst?: boolean
+  isBot?: boolean
   createdAt?: boolean
 }
 
-export type TeamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "abbreviation" | "userId" | "leagueId" | "draftOrder" | "waiverPriority" | "faabBalance" | "wins" | "losses" | "ties" | "pointsFor" | "pointsAgainst" | "createdAt", ExtArgs["result"]["team"]>
+export type TeamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "abbreviation" | "userId" | "leagueId" | "draftOrder" | "waiverPriority" | "faabBalance" | "wins" | "losses" | "ties" | "pointsFor" | "pointsAgainst" | "isBot" | "createdAt", ExtArgs["result"]["team"]>
 export type TeamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   league?: boolean | Prisma.LeagueDefaultArgs<ExtArgs>
@@ -2719,6 +2798,7 @@ export type $TeamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     ties: number
     pointsFor: number
     pointsAgainst: number
+    isBot: boolean
     createdAt: Date
   }, ExtArgs["result"]["team"]>
   composites: {}
@@ -3168,6 +3248,7 @@ export interface TeamFieldRefs {
   readonly ties: Prisma.FieldRef<"Team", 'Int'>
   readonly pointsFor: Prisma.FieldRef<"Team", 'Float'>
   readonly pointsAgainst: Prisma.FieldRef<"Team", 'Float'>
+  readonly isBot: Prisma.FieldRef<"Team", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Team", 'DateTime'>
 }
     

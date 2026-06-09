@@ -26,6 +26,7 @@ export default function CreateLeaguePage() {
     draftPickTimeSeconds: "90",
     waiverType: "ROLLING",
     faabBudget: "1000",
+    botCount: "0",
     rosterConfig: { GK: 1, DEF: 4, MID: 4, FWD: 2, BENCH: 5, FLEX: 0 },
   })
 
@@ -52,7 +53,12 @@ export default function CreateLeaguePage() {
         return
       }
       const { league } = await res.json()
-      toast.success("League created!")
+      // Add bots
+      const bots = parseInt(form.botCount)
+      for (let i = 0; i < bots; i++) {
+        await fetch(`/api/leagues/${league.id}/bots`, { method: "POST" })
+      }
+      toast.success(`League created${bots > 0 ? ` with ${bots} bot${bots > 1 ? "s" : ""}` : ""}!`)
       router.push(`/league/${league.id}`)
     } finally {
       setLoading(false)
@@ -113,6 +119,24 @@ export default function CreateLeaguePage() {
                     options={[["2025-26","2025-26"],["2026-27","2026-27"]]} />
                 </Field>
               </div>
+
+              <Field label="Fill remaining spots with bots 🤖">
+                <div className="space-y-2">
+                  <SelectField
+                    value={form.botCount}
+                    onChange={v => set("botCount", v)}
+                    options={Array.from({ length: parseInt(form.maxTeams) }, (_, i) => [
+                      String(i),
+                      i === 0 ? "No bots — human players only" : `${i} bot${i > 1 ? "s" : ""}`
+                    ])}
+                  />
+                  {parseInt(form.botCount) > 0 && (
+                    <p className="text-xs text-slate-400">
+                      Bots auto-pick using best-available-player logic. Great for testing or filling empty spots.
+                    </p>
+                  )}
+                </div>
+              </Field>
             </>
           )}
 
@@ -188,6 +212,9 @@ export default function CreateLeaguePage() {
               <ReviewRow label="Pick time" value={`${form.draftPickTimeSeconds}s`} />
               <ReviewRow label="Roster" value={`${form.rosterConfig.GK}GK ${form.rosterConfig.DEF}DEF ${form.rosterConfig.MID}MID ${form.rosterConfig.FWD}FWD + ${form.rosterConfig.BENCH} bench`} />
               <ReviewRow label="Waivers" value={form.waiverType} />
+              {parseInt(form.botCount) > 0 && (
+                <ReviewRow label="Bots" value={`${form.botCount} auto-pick bot${parseInt(form.botCount) > 1 ? "s" : ""} 🤖`} />
+              )}
             </div>
           )}
 

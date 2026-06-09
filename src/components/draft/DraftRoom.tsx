@@ -19,7 +19,7 @@ interface DraftRoomProps {
   myTeamId: string | null
   myTeamName: string
   isCommissioner: boolean
-  teams: Array<{ id: string; name: string; draftOrder: number | null; userId: string }>
+  teams: Array<{ id: string; name: string; draftOrder: number | null; userId: string; isBot: boolean }>
   rosterConfig: RosterConfig
 }
 
@@ -32,6 +32,7 @@ export function DraftRoom({
   teams,
   rosterConfig,
 }: DraftRoomProps) {
+  const botTeamIds = teams.filter(t => t.isBot).map(t => t.id)
   const {
     isConnected,
     draftState,
@@ -165,7 +166,7 @@ export function DraftRoom({
         <div className="flex-1 min-w-0 bg-slate-900 border border-slate-800 rounded-xl p-3 overflow-auto">
           <p className="text-slate-400 text-xs font-medium mb-2">Draft Board</p>
           {draftState && (
-            <DraftBoard draftState={draftState} myTeamId={myTeamId} />
+            <DraftBoard draftState={draftState} myTeamId={myTeamId} botTeamIds={botTeamIds} />
           )}
         </div>
 

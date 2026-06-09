@@ -13,9 +13,10 @@ const POS_COLORS: Record<string, string> = {
 interface DraftBoardProps {
   draftState: DraftState
   myTeamId: string | null
+  botTeamIds?: string[]
 }
 
-export function DraftBoard({ draftState, myTeamId }: DraftBoardProps) {
+export function DraftBoard({ draftState, myTeamId, botTeamIds = [] }: DraftBoardProps) {
   const { picks, teams, currentPick, status, pickOrder } = draftState
   if (!teams.length) return null
 
@@ -45,7 +46,10 @@ export function DraftBoard({ draftState, myTeamId }: DraftBoardProps) {
                   "px-2 py-2 font-medium text-center min-w-[100px] max-w-[120px]",
                   team.id === myTeamId ? "text-emerald-400" : "text-slate-300"
                 )}>
-                <div className="truncate">{team.name}</div>
+                <div className="truncate">
+                  {botTeamIds.includes(team.id) && <span className="mr-1 text-xs">🤖</span>}
+                  {team.name}
+                </div>
               </th>
             ))}
           </tr>

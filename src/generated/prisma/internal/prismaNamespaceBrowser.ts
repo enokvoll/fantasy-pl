@@ -272,6 +272,7 @@ export const TeamScalarFieldEnum = {
   ties: 'ties',
   pointsFor: 'pointsFor',
   pointsAgainst: 'pointsAgainst',
+  isBot: 'isBot',
   createdAt: 'createdAt'
 } as const
 

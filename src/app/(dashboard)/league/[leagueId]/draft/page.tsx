@@ -52,6 +52,7 @@ export default async function DraftPage({
           name: t.name,
           draftOrder: t.draftOrder,
           userId: t.userId,
+          isBot: t.isBot,
         }))}
         rosterConfig={league.rosterConfig as unknown as RosterConfig}
       />

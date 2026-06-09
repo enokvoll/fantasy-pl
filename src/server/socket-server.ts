@@ -48,7 +48,14 @@ export function initSocketServer(httpServer: HttpServer): Server {
         draft.to(`draft:${draftRecord.leagueId}`).emit("draft:state", state)
         draft.to(`draft:${draftRecord.leagueId}`).emit("draft:started", { startedAt: new Date() })
 
-        startPickTimer(io, draftId, draftRecord.leagueId, draftRecord.league.draftPickTimeSeconds)
+        // If first pick is a bot, auto-pick immediately; otherwise start timer
+        await scheduleIfBot(io, draftId, draftRecord.leagueId, state.currentTeamId)
+        if (state.currentTeamId) {
+          const firstTeam = await prisma.team.findUnique({ where: { id: state.currentTeamId } })
+          if (!firstTeam?.isBot) {
+            startPickTimer(io, draftId, draftRecord.leagueId, draftRecord.league.draftPickTimeSeconds)
+          }
+        }
       } catch (e) {
         socket.emit("draft:error", { code: "START_ERROR", message: String(e) })
       }
@@ -73,7 +80,12 @@ export function initSocketServer(httpServer: HttpServer): Server {
         draft.to(`draft:${leagueId}`).emit("draft:state", state)
 
         if (result.nextTeamId) {
-          startPickTimer(io, draftId, leagueId, result.pickTimeSeconds)
+          // Check if next team is a bot — if so, schedule bot pick instead of human timer
+          await scheduleIfBot(io, draftId, leagueId, result.nextTeamId)
+          const nextTeam = await prisma.team.findUnique({ where: { id: result.nextTeamId } })
+          if (!nextTeam?.isBot) {
+            startPickTimer(io, draftId, leagueId, result.pickTimeSeconds)
+          }
         } else {
           draft.to(`draft:${leagueId}`).emit("draft:completed", { completedAt: new Date() })
         }
@@ -254,6 +266,64 @@ function clearPickTimer(draftId: string): void {
     clearTimeout(timer)
     draftTimers.delete(draftId)
   }
+}
+
+/** If the current-turn team is a bot, schedule an auto-pick after a short realistic delay. */
+async function scheduleIfBot(
+  io: Server,
+  draftId: string,
+  leagueId: string,
+  nextTeamId: string | null
+): Promise<void> {
+  if (!nextTeamId) return
+
+  const team = await prisma.team.findUnique({ where: { id: nextTeamId } })
+  if (!team?.isBot) return
+
+  // Small delay so it feels like the bot is "thinking"
+  const delay = 1200 + Math.random() * 1000  // 1.2–2.2s
+
+  setTimeout(async () => {
+    const draftRecord = await prisma.draft.findUnique({
+      where: { id: draftId },
+      include: { league: { include: { teams: { orderBy: { draftOrder: "asc" } } } } },
+    })
+    if (!draftRecord || draftRecord.status !== "IN_PROGRESS") return
+
+    const rosterConfig = draftRecord.league.rosterConfig as unknown as RosterConfig
+    const draftNs = io.of("/draft")
+
+    try {
+      const playerId = await getAutoPickPlayer(nextTeamId, draftId, rosterConfig)
+      const result = await makePick(draftId, nextTeamId, playerId, true)
+      clearPickTimer(draftId)
+
+      const state = await buildDraftState(leagueId)
+      const latestPick = state.picks[state.picks.length - 1]
+
+      draftNs.to(`draft:${leagueId}`).emit("draft:pick:auto", { pick: latestPick })
+      draftNs.to(`draft:${leagueId}`).emit("draft:pick:made", {
+        pick: latestPick,
+        nextTeamId: result.nextTeamId,
+        timeRemaining: result.pickTimeSeconds,
+      })
+      draftNs.to(`draft:${leagueId}`).emit("draft:state", state)
+
+      if (result.nextTeamId) {
+        // Check if the next-next team is also a bot (chain of bots)
+        await scheduleIfBot(io, draftId, leagueId, result.nextTeamId)
+        // Also start the human timer in case there are humans after
+        const nextNextTeam = await prisma.team.findUnique({ where: { id: result.nextTeamId } })
+        if (!nextNextTeam?.isBot) {
+          startPickTimer(io, draftId, leagueId, result.pickTimeSeconds)
+        }
+      } else {
+        draftNs.to(`draft:${leagueId}`).emit("draft:completed", { completedAt: new Date() })
+      }
+    } catch (e) {
+      console.error("Bot auto-pick error:", e)
+    }
+  }, delay)
 }
 
 async function buildDraftState(leagueId: string): Promise<DraftState> {

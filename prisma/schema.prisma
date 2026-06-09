@@ -266,6 +266,7 @@ model Team {
   ties         Int     @default(0)
   pointsFor    Float   @default(0)
   pointsAgainst Float  @default(0)
+  isBot        Boolean @default(false)
   createdAt    DateTime @default(now())
 
   user               User           @relation(fields: [userId], references: [id])
