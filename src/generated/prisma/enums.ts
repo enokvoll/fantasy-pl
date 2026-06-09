@@ -126,6 +126,23 @@ export const ClaimStatus = {
 export type ClaimStatus = (typeof ClaimStatus)[keyof typeof ClaimStatus]
 
 
+export const TradeParticipantRole = {
+  PROPOSER: 'PROPOSER',
+  RECIPIENT: 'RECIPIENT'
+} as const
+
+export type TradeParticipantRole = (typeof TradeParticipantRole)[keyof typeof TradeParticipantRole]
+
+
+export const TradeParticipantStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type TradeParticipantStatus = (typeof TradeParticipantStatus)[keyof typeof TradeParticipantStatus]
+
+
 export const TradeStatus = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',

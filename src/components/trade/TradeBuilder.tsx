@@ -1,0 +1,255 @@
+"use client"
+
+import { useState, useEffect, useCallback } from "react"
+import { cn } from "@/lib/utils"
+import { toast } from "sonner"
+import { TradeAnalyzer } from "./TradeAnalyzer"
+
+const POS_COLORS: Record<string, string> = {
+  GK: "bg-yellow-600/20 text-yellow-400",
+  DEF: "bg-blue-600/20 text-blue-400",
+  MID: "bg-emerald-600/20 text-emerald-400",
+  FWD: "bg-red-600/20 text-red-400",
+}
+
+interface TeamLite { id: string; name: string; isBot: boolean }
+interface AssetPlayer { playerId: number; name: string; position: string; club: string; totalPoints: number }
+interface AssetPick { id: string; label: string }
+interface TeamAssets { players: AssetPlayer[]; picks: AssetPick[] }
+
+// A selected asset, keyed uniquely
+interface SelectedAsset {
+  key: string
+  fromTeamId: string
+  toTeamId: string
+  kind: "player" | "pick"
+  refId: number | string
+  label: string
+  position?: string
+  points: number
+}
+
+interface TradeBuilderProps {
+  leagueId: string
+  myTeamId: string
+  teams: TeamLite[]
+  onClose: () => void
+  onSubmitted: () => void
+}
+
+export function TradeBuilder({ leagueId, myTeamId, teams, onClose, onSubmitted }: TradeBuilderProps) {
+  const otherTeams = teams.filter(t => t.id !== myTeamId)
+  const [involved, setInvolved] = useState<string[]>(
+    otherTeams.length > 0 ? [myTeamId, otherTeams[0].id] : [myTeamId]
+  )
+  const [assetsByTeam, setAssetsByTeam] = useState<Record<string, TeamAssets>>({})
+  const [selected, setSelected] = useState<SelectedAsset[]>([])
+  const [notes, setNotes] = useState("")
+  const [busy, setBusy] = useState(false)
+
+  const teamName = useCallback((id: string) => teams.find(t => t.id === id)?.name ?? "?", [teams])
+
+  // Fetch assets for any involved team we don't have yet
+  useEffect(() => {
+    involved.forEach(async (teamId) => {
+      if (assetsByTeam[teamId]) return
+      const res = await fetch(`/api/teams/${teamId}/assets`)
+      if (res.ok) {
+        const data = await res.json()
+        setAssetsByTeam(prev => ({ ...prev, [teamId]: { players: data.players, picks: data.picks } }))
+      }
+    })
+  }, [involved, assetsByTeam])
+
+  const isTwoTeam = involved.length === 2
+
+  function defaultDestination(fromTeamId: string): string {
+    if (isTwoTeam) return involved.find(id => id !== fromTeamId)!
+    // multi-team: default to first other involved team
+    return involved.find(id => id !== fromTeamId)!
+  }
+
+  function toggleAsset(fromTeamId: string, kind: "player" | "pick", refId: number | string, label: string, points: number, position?: string) {
+    const key = `${fromTeamId}:${kind}:${refId}`
+    setSelected(prev => {
+      const exists = prev.find(s => s.key === key)
+      if (exists) return prev.filter(s => s.key !== key)
+      return [...prev, { key, fromTeamId, toTeamId: defaultDestination(fromTeamId), kind, refId, label, points, position }]
+    })
+  }
+
+  function setDestination(key: string, toTeamId: string) {
+    setSelected(prev => prev.map(s => s.key === key ? { ...s, toTeamId } : s))
+  }
+
+  function addTeam(teamId: string) {
+    if (!involved.includes(teamId)) setInvolved(prev => [...prev, teamId])
+  }
+
+  function removeTeam(teamId: string) {
+    if (teamId === myTeamId) return
+    setInvolved(prev => prev.filter(id => id !== teamId))
+    setSelected(prev => prev.filter(s => s.fromTeamId !== teamId && s.toTeamId !== teamId))
+  }
+
+  async function submit() {
+    if (selected.length === 0) { toast.error("Add at least one player or pick"); return }
+    setBusy(true)
+    const assets = selected.map(s => ({
+      fromTeamId: s.fromTeamId,
+      toTeamId: s.toTeamId,
+      playerId: s.kind === "player" ? (s.refId as number) : null,
+      draftPickSlotId: s.kind === "pick" ? (s.refId as string) : null,
+    }))
+    const res = await fetch(`/api/trades/${leagueId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ participantTeamIds: involved.filter(id => id !== myTeamId), assets, notes: notes || undefined }),
+    })
+    setBusy(false)
+    const data = await res.json()
+    if (res.ok) {
+      toast.success("Trade proposed!")
+      onSubmitted()
+    } else {
+      toast.error(data.error ?? "Could not propose trade")
+    }
+  }
+
+  const availableToAdd = otherTeams.filter(t => !involved.includes(t.id))
+  const analyzerTeams = involved.map(id => ({ id, name: teamName(id) }))
+
+  return (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-4xl max-h-[88vh] flex flex-col" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-slate-800">
+          <h2 className="text-white font-bold text-lg">Propose a trade</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-white text-xl leading-none">×</button>
+        </div>
+
+        {/* Involved teams */}
+        <div className="px-4 py-3 border-b border-slate-800 flex items-center gap-2 flex-wrap">
+          <span className="text-slate-400 text-xs">Teams:</span>
+          {involved.map(id => (
+            <span key={id} className={cn("text-xs px-2 py-1 rounded-lg flex items-center gap-1",
+              id === myTeamId ? "bg-emerald-600/20 text-emerald-400" : "bg-slate-800 text-slate-300")}>
+              {teamName(id)}
+              {id !== myTeamId && (
+                <button onClick={() => removeTeam(id)} className="text-slate-500 hover:text-red-400 ml-0.5">×</button>
+              )}
+            </span>
+          ))}
+          {availableToAdd.length > 0 && (
+            <select
+              value=""
+              onChange={e => { if (e.target.value) addTeam(e.target.value) }}
+              className="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-slate-300 text-xs">
+              <option value="">+ Add team</option>
+              {availableToAdd.map(t => (
+                <option key={t.id} value={t.id}>{t.isBot ? "🤖 " : ""}{t.name}</option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        {/* Team asset panels */}
+        <div className="flex-1 overflow-y-auto p-4">
+          <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${Math.min(involved.length, 3)}, minmax(0, 1fr))` }}>
+            {involved.map(teamId => {
+              const ta = assetsByTeam[teamId]
+              return (
+                <div key={teamId} className="rounded-xl bg-slate-800/40 border border-slate-800 overflow-hidden">
+                  <div className={cn("px-3 py-2 text-xs font-semibold border-b border-slate-800",
+                    teamId === myTeamId ? "text-emerald-400" : "text-slate-300")}>
+                    {teamName(teamId)}
+                  </div>
+                  <div className="max-h-[300px] overflow-y-auto p-1.5 space-y-0.5">
+                    {!ta && <p className="text-slate-600 text-xs text-center py-3">Loading…</p>}
+                    {ta?.players.map(p => {
+                      const key = `${teamId}:player:${p.playerId}`
+                      const on = selected.some(s => s.key === key)
+                      return (
+                        <button key={p.playerId}
+                          onClick={() => toggleAsset(teamId, "player", p.playerId, p.name, p.totalPoints, p.position)}
+                          className={cn("w-full flex items-center gap-1.5 px-2 py-1 rounded text-xs text-left transition-colors",
+                            on ? "bg-emerald-600/20 ring-1 ring-emerald-600/40" : "hover:bg-slate-800")}>
+                          <span className={cn("text-[10px] px-1 rounded font-medium", POS_COLORS[p.position])}>{p.position}</span>
+                          <span className="text-slate-200 truncate flex-1">{p.name}</span>
+                          <span className="text-slate-500">{p.club}</span>
+                          <span className="text-slate-400 tabular-nums">{p.totalPoints}</span>
+                        </button>
+                      )
+                    })}
+                    {ta && ta.picks.length > 0 && (
+                      <p className="text-slate-600 text-[10px] uppercase tracking-wider px-2 pt-2 pb-0.5">Draft picks</p>
+                    )}
+                    {ta?.picks.map(pk => {
+                      const key = `${teamId}:pick:${pk.id}`
+                      const on = selected.some(s => s.key === key)
+                      return (
+                        <button key={pk.id}
+                          onClick={() => toggleAsset(teamId, "pick", pk.id, pk.label, 0)}
+                          className={cn("w-full flex items-center gap-1.5 px-2 py-1 rounded text-xs text-left transition-colors",
+                            on ? "bg-purple-600/20 ring-1 ring-purple-600/40" : "hover:bg-slate-800")}>
+                          <span className="text-[10px] px-1 rounded font-medium bg-purple-600/20 text-purple-400">PICK</span>
+                          <span className="text-slate-200 truncate flex-1">{pk.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Selected assets + destination routing */}
+          {selected.length > 0 && (
+            <div className="mt-4">
+              <p className="text-slate-400 text-xs font-medium mb-2">Selected ({selected.length})</p>
+              <div className="space-y-1">
+                {selected.map(s => (
+                  <div key={s.key} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/60 text-xs">
+                    {s.position && <span className={cn("text-[10px] px-1 rounded font-medium", POS_COLORS[s.position])}>{s.position}</span>}
+                    {s.kind === "pick" && <span className="text-[10px] px-1 rounded font-medium bg-purple-600/20 text-purple-400">PICK</span>}
+                    <span className="text-slate-200">{s.label}</span>
+                    <span className="text-slate-500">from {teamName(s.fromTeamId)}</span>
+                    <span className="text-slate-600 ml-auto">→</span>
+                    {isTwoTeam ? (
+                      <span className="text-emerald-400">{teamName(s.toTeamId)}</span>
+                    ) : (
+                      <select value={s.toTeamId} onChange={e => setDestination(s.key, e.target.value)}
+                        className="bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-emerald-400 text-xs">
+                        {involved.filter(id => id !== s.fromTeamId).map(id => (
+                          <option key={id} value={id}>{teamName(id)}</option>
+                        ))}
+                      </select>
+                    )}
+                    <button onClick={() => toggleAsset(s.fromTeamId, s.kind, s.refId, s.label, s.points, s.position)}
+                      className="text-slate-500 hover:text-red-400 ml-1">×</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer: analyzer + notes + submit */}
+        <div className="border-t border-slate-800 p-4 space-y-3">
+          {selected.length > 0 && (
+            <TradeAnalyzer teams={analyzerTeams} assets={selected.map(s => ({ fromTeamId: s.fromTeamId, toTeamId: s.toTeamId, points: s.points }))} compact />
+          )}
+          <input value={notes} onChange={e => setNotes(e.target.value)} placeholder="Add a note (optional)…"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm placeholder:text-slate-500" />
+          <div className="flex gap-2 justify-end">
+            <button onClick={onClose} className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm transition-colors">Cancel</button>
+            <button onClick={submit} disabled={busy || selected.length === 0}
+              className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+              {busy ? "Proposing…" : "Propose trade"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

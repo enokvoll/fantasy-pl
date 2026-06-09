@@ -406,6 +406,7 @@ export const ModelName = {
   WaiverRun: 'WaiverRun',
   WaiverClaim: 'WaiverClaim',
   Trade: 'Trade',
+  TradeParticipant: 'TradeParticipant',
   TradeAsset: 'TradeAsset',
   TradeVote: 'TradeVote',
   LeagueMessage: 'LeagueMessage'
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "trade" | "tradeAsset" | "tradeVote" | "leagueMessage"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "trade" | "tradeParticipant" | "tradeAsset" | "tradeVote" | "leagueMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2056,6 +2057,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TradeParticipant: {
+      payload: Prisma.$TradeParticipantPayload<ExtArgs>
+      fields: Prisma.TradeParticipantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TradeParticipantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TradeParticipantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>
+        }
+        findFirst: {
+          args: Prisma.TradeParticipantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TradeParticipantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>
+        }
+        findMany: {
+          args: Prisma.TradeParticipantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>[]
+        }
+        create: {
+          args: Prisma.TradeParticipantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>
+        }
+        createMany: {
+          args: Prisma.TradeParticipantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TradeParticipantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>[]
+        }
+        delete: {
+          args: Prisma.TradeParticipantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>
+        }
+        update: {
+          args: Prisma.TradeParticipantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>
+        }
+        deleteMany: {
+          args: Prisma.TradeParticipantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TradeParticipantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TradeParticipantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>[]
+        }
+        upsert: {
+          args: Prisma.TradeParticipantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeParticipantPayload>
+        }
+        aggregate: {
+          args: Prisma.TradeParticipantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTradeParticipant>
+        }
+        groupBy: {
+          args: Prisma.TradeParticipantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeParticipantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TradeParticipantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeParticipantCountAggregateOutputType> | number
+        }
+      }
+    }
     TradeAsset: {
       payload: Prisma.$TradeAssetPayload<ExtArgs>
       fields: Prisma.TradeAssetFieldRefs
@@ -2659,6 +2734,17 @@ export const TradeScalarFieldEnum = {
 export type TradeScalarFieldEnum = (typeof TradeScalarFieldEnum)[keyof typeof TradeScalarFieldEnum]
 
 
+export const TradeParticipantScalarFieldEnum = {
+  id: 'id',
+  tradeId: 'tradeId',
+  teamId: 'teamId',
+  role: 'role',
+  status: 'status'
+} as const
+
+export type TradeParticipantScalarFieldEnum = (typeof TradeParticipantScalarFieldEnum)[keyof typeof TradeParticipantScalarFieldEnum]
+
+
 export const TradeAssetScalarFieldEnum = {
   id: 'id',
   tradeId: 'tradeId',
@@ -3008,6 +3094,34 @@ export type ListEnumTradeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'TradeParticipantRole'
+ */
+export type EnumTradeParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeParticipantRole'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeParticipantRole[]'
+ */
+export type ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeParticipantRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeParticipantStatus'
+ */
+export type EnumTradeParticipantStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeParticipantStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeParticipantStatus[]'
+ */
+export type ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeParticipantStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'VoteChoice'
  */
 export type EnumVoteChoiceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VoteChoice'>
@@ -3152,6 +3266,7 @@ export type GlobalOmitConfig = {
   waiverRun?: Prisma.WaiverRunOmit
   waiverClaim?: Prisma.WaiverClaimOmit
   trade?: Prisma.TradeOmit
+  tradeParticipant?: Prisma.TradeParticipantOmit
   tradeAsset?: Prisma.TradeAssetOmit
   tradeVote?: Prisma.TradeVoteOmit
   leagueMessage?: Prisma.LeagueMessageOmit

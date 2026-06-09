@@ -569,6 +569,40 @@ export type EnumTradeStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumTradeStatusFilter<$PrismaModel>
 }
 
+export type EnumTradeParticipantRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantRole | Prisma.EnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantRoleFilter<$PrismaModel> | $Enums.TradeParticipantRole
+}
+
+export type EnumTradeParticipantStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantStatus | Prisma.EnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantStatusFilter<$PrismaModel> | $Enums.TradeParticipantStatus
+}
+
+export type EnumTradeParticipantRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantRole | Prisma.EnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantRoleWithAggregatesFilter<$PrismaModel> | $Enums.TradeParticipantRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeParticipantRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeParticipantRoleFilter<$PrismaModel>
+}
+
+export type EnumTradeParticipantStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantStatus | Prisma.EnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeParticipantStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeParticipantStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeParticipantStatusFilter<$PrismaModel>
+}
+
 export type EnumVoteChoiceFilter<$PrismaModel = never> = {
   equals?: $Enums.VoteChoice | Prisma.EnumVoteChoiceFieldRefInput<$PrismaModel>
   in?: $Enums.VoteChoice[] | Prisma.ListEnumVoteChoiceFieldRefInput<$PrismaModel>
@@ -1087,6 +1121,40 @@ export type NestedEnumTradeStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumTradeStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumTradeStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeParticipantRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantRole | Prisma.EnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantRoleFilter<$PrismaModel> | $Enums.TradeParticipantRole
+}
+
+export type NestedEnumTradeParticipantStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantStatus | Prisma.EnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantStatusFilter<$PrismaModel> | $Enums.TradeParticipantStatus
+}
+
+export type NestedEnumTradeParticipantRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantRole | Prisma.EnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantRole[] | Prisma.ListEnumTradeParticipantRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantRoleWithAggregatesFilter<$PrismaModel> | $Enums.TradeParticipantRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeParticipantRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeParticipantRoleFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeParticipantStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeParticipantStatus | Prisma.EnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeParticipantStatus[] | Prisma.ListEnumTradeParticipantStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeParticipantStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeParticipantStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeParticipantStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeParticipantStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumVoteChoiceFilter<$PrismaModel = never> = {

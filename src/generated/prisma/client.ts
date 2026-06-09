@@ -152,6 +152,11 @@ export type WaiverClaim = Prisma.WaiverClaimModel
  */
 export type Trade = Prisma.TradeModel
 /**
+ * Model TradeParticipant
+ * 
+ */
+export type TradeParticipant = Prisma.TradeParticipantModel
+/**
  * Model TradeAsset
  * 
  */

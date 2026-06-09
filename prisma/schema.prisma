@@ -278,6 +278,7 @@ model Team {
   tradesOffered      Trade[]        @relation("OfferingTeam")
   tradesReceived     Trade[]        @relation("ReceivingTeam")
   tradeVotes         TradeVote[]
+  tradeParticipations TradeParticipant[]
   ownedDraftPicks    DraftPick[]    @relation("PickOwner")
   originalDraftPicks DraftPick[]    @relation("OriginalOwner")
   draftPickSlots     DraftPickSlot[]
@@ -496,6 +497,31 @@ model Trade {
   receivingTeam Team        @relation("ReceivingTeam", fields: [receivingTeamId], references: [id])
   assets        TradeAsset[]
   votes         TradeVote[]
+  participants  TradeParticipant[]
+}
+
+model TradeParticipant {
+  id      String                 @id @default(cuid())
+  tradeId String
+  teamId  String
+  role    TradeParticipantRole   @default(RECIPIENT)
+  status  TradeParticipantStatus @default(PENDING)
+
+  trade Trade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  team  Team  @relation(fields: [teamId], references: [id])
+
+  @@unique([tradeId, teamId])
+}
+
+enum TradeParticipantRole {
+  PROPOSER
+  RECIPIENT
+}
+
+enum TradeParticipantStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 model TradeAsset {

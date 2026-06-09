@@ -73,6 +73,7 @@ export const ModelName = {
   WaiverRun: 'WaiverRun',
   WaiverClaim: 'WaiverClaim',
   Trade: 'Trade',
+  TradeParticipant: 'TradeParticipant',
   TradeAsset: 'TradeAsset',
   TradeVote: 'TradeVote',
   LeagueMessage: 'LeagueMessage'
@@ -434,6 +435,17 @@ export const TradeScalarFieldEnum = {
 } as const
 
 export type TradeScalarFieldEnum = (typeof TradeScalarFieldEnum)[keyof typeof TradeScalarFieldEnum]
+
+
+export const TradeParticipantScalarFieldEnum = {
+  id: 'id',
+  tradeId: 'tradeId',
+  teamId: 'teamId',
+  role: 'role',
+  status: 'status'
+} as const
+
+export type TradeParticipantScalarFieldEnum = (typeof TradeParticipantScalarFieldEnum)[keyof typeof TradeParticipantScalarFieldEnum]
 
 
 export const TradeAssetScalarFieldEnum = {

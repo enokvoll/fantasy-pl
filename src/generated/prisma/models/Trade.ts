@@ -301,6 +301,7 @@ export type TradeWhereInput = {
   receivingTeam?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
   assets?: Prisma.TradeAssetListRelationFilter
   votes?: Prisma.TradeVoteListRelationFilter
+  participants?: Prisma.TradeParticipantListRelationFilter
 }
 
 export type TradeOrderByWithRelationInput = {
@@ -323,6 +324,7 @@ export type TradeOrderByWithRelationInput = {
   receivingTeam?: Prisma.TeamOrderByWithRelationInput
   assets?: Prisma.TradeAssetOrderByRelationAggregateInput
   votes?: Prisma.TradeVoteOrderByRelationAggregateInput
+  participants?: Prisma.TradeParticipantOrderByRelationAggregateInput
 }
 
 export type TradeWhereUniqueInput = Prisma.AtLeast<{
@@ -348,6 +350,7 @@ export type TradeWhereUniqueInput = Prisma.AtLeast<{
   receivingTeam?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
   assets?: Prisma.TradeAssetListRelationFilter
   votes?: Prisma.TradeVoteListRelationFilter
+  participants?: Prisma.TradeParticipantListRelationFilter
 }, "id">
 
 export type TradeOrderByWithAggregationInput = {
@@ -409,6 +412,7 @@ export type TradeCreateInput = {
   receivingTeam: Prisma.TeamCreateNestedOneWithoutTradesReceivedInput
   assets?: Prisma.TradeAssetCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantCreateNestedManyWithoutTradeInput
 }
 
 export type TradeUncheckedCreateInput = {
@@ -428,6 +432,7 @@ export type TradeUncheckedCreateInput = {
   createdAt?: Date | string
   assets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantUncheckedCreateNestedManyWithoutTradeInput
 }
 
 export type TradeUpdateInput = {
@@ -447,6 +452,7 @@ export type TradeUpdateInput = {
   receivingTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesReceivedNestedInput
   assets?: Prisma.TradeAssetUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateInput = {
@@ -466,6 +472,7 @@ export type TradeUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.TradeAssetUncheckedUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUncheckedUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUncheckedUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeCreateManyInput = {
@@ -724,6 +731,20 @@ export type EnumTradeStatusFieldUpdateOperationsInput = {
   set?: $Enums.TradeStatus
 }
 
+export type TradeCreateNestedOneWithoutParticipantsInput = {
+  create?: Prisma.XOR<Prisma.TradeCreateWithoutParticipantsInput, Prisma.TradeUncheckedCreateWithoutParticipantsInput>
+  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutParticipantsInput
+  connect?: Prisma.TradeWhereUniqueInput
+}
+
+export type TradeUpdateOneRequiredWithoutParticipantsNestedInput = {
+  create?: Prisma.XOR<Prisma.TradeCreateWithoutParticipantsInput, Prisma.TradeUncheckedCreateWithoutParticipantsInput>
+  connectOrCreate?: Prisma.TradeCreateOrConnectWithoutParticipantsInput
+  upsert?: Prisma.TradeUpsertWithoutParticipantsInput
+  connect?: Prisma.TradeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TradeUpdateToOneWithWhereWithoutParticipantsInput, Prisma.TradeUpdateWithoutParticipantsInput>, Prisma.TradeUncheckedUpdateWithoutParticipantsInput>
+}
+
 export type TradeCreateNestedOneWithoutAssetsInput = {
   create?: Prisma.XOR<Prisma.TradeCreateWithoutAssetsInput, Prisma.TradeUncheckedCreateWithoutAssetsInput>
   connectOrCreate?: Prisma.TradeCreateOrConnectWithoutAssetsInput
@@ -768,6 +789,7 @@ export type TradeCreateWithoutLeagueInput = {
   receivingTeam: Prisma.TeamCreateNestedOneWithoutTradesReceivedInput
   assets?: Prisma.TradeAssetCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantCreateNestedManyWithoutTradeInput
 }
 
 export type TradeUncheckedCreateWithoutLeagueInput = {
@@ -786,6 +808,7 @@ export type TradeUncheckedCreateWithoutLeagueInput = {
   createdAt?: Date | string
   assets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantUncheckedCreateNestedManyWithoutTradeInput
 }
 
 export type TradeCreateOrConnectWithoutLeagueInput = {
@@ -850,6 +873,7 @@ export type TradeCreateWithoutOfferingTeamInput = {
   receivingTeam: Prisma.TeamCreateNestedOneWithoutTradesReceivedInput
   assets?: Prisma.TradeAssetCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantCreateNestedManyWithoutTradeInput
 }
 
 export type TradeUncheckedCreateWithoutOfferingTeamInput = {
@@ -868,6 +892,7 @@ export type TradeUncheckedCreateWithoutOfferingTeamInput = {
   createdAt?: Date | string
   assets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantUncheckedCreateNestedManyWithoutTradeInput
 }
 
 export type TradeCreateOrConnectWithoutOfferingTeamInput = {
@@ -896,6 +921,7 @@ export type TradeCreateWithoutReceivingTeamInput = {
   offeringTeam: Prisma.TeamCreateNestedOneWithoutTradesOfferedInput
   assets?: Prisma.TradeAssetCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantCreateNestedManyWithoutTradeInput
 }
 
 export type TradeUncheckedCreateWithoutReceivingTeamInput = {
@@ -914,6 +940,7 @@ export type TradeUncheckedCreateWithoutReceivingTeamInput = {
   createdAt?: Date | string
   assets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutTradeInput
   votes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantUncheckedCreateNestedManyWithoutTradeInput
 }
 
 export type TradeCreateOrConnectWithoutReceivingTeamInput = {
@@ -958,6 +985,98 @@ export type TradeUpdateManyWithWhereWithoutReceivingTeamInput = {
   data: Prisma.XOR<Prisma.TradeUpdateManyMutationInput, Prisma.TradeUncheckedUpdateManyWithoutReceivingTeamInput>
 }
 
+export type TradeCreateWithoutParticipantsInput = {
+  id?: string
+  status?: $Enums.TradeStatus
+  notes?: string | null
+  isMultiTeam?: boolean
+  votesRequired?: number
+  votesFor?: number
+  votesAgainst?: number
+  expiresAt?: Date | string | null
+  processedAt?: Date | string | null
+  adminOverride?: boolean
+  createdAt?: Date | string
+  league: Prisma.LeagueCreateNestedOneWithoutTradesInput
+  offeringTeam: Prisma.TeamCreateNestedOneWithoutTradesOfferedInput
+  receivingTeam: Prisma.TeamCreateNestedOneWithoutTradesReceivedInput
+  assets?: Prisma.TradeAssetCreateNestedManyWithoutTradeInput
+  votes?: Prisma.TradeVoteCreateNestedManyWithoutTradeInput
+}
+
+export type TradeUncheckedCreateWithoutParticipantsInput = {
+  id?: string
+  leagueId: string
+  offeringTeamId: string
+  receivingTeamId: string
+  status?: $Enums.TradeStatus
+  notes?: string | null
+  isMultiTeam?: boolean
+  votesRequired?: number
+  votesFor?: number
+  votesAgainst?: number
+  expiresAt?: Date | string | null
+  processedAt?: Date | string | null
+  adminOverride?: boolean
+  createdAt?: Date | string
+  assets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutTradeInput
+  votes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutTradeInput
+}
+
+export type TradeCreateOrConnectWithoutParticipantsInput = {
+  where: Prisma.TradeWhereUniqueInput
+  create: Prisma.XOR<Prisma.TradeCreateWithoutParticipantsInput, Prisma.TradeUncheckedCreateWithoutParticipantsInput>
+}
+
+export type TradeUpsertWithoutParticipantsInput = {
+  update: Prisma.XOR<Prisma.TradeUpdateWithoutParticipantsInput, Prisma.TradeUncheckedUpdateWithoutParticipantsInput>
+  create: Prisma.XOR<Prisma.TradeCreateWithoutParticipantsInput, Prisma.TradeUncheckedCreateWithoutParticipantsInput>
+  where?: Prisma.TradeWhereInput
+}
+
+export type TradeUpdateToOneWithWhereWithoutParticipantsInput = {
+  where?: Prisma.TradeWhereInput
+  data: Prisma.XOR<Prisma.TradeUpdateWithoutParticipantsInput, Prisma.TradeUncheckedUpdateWithoutParticipantsInput>
+}
+
+export type TradeUpdateWithoutParticipantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTradeStatusFieldUpdateOperationsInput | $Enums.TradeStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isMultiTeam?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  votesRequired?: Prisma.IntFieldUpdateOperationsInput | number
+  votesFor?: Prisma.IntFieldUpdateOperationsInput | number
+  votesAgainst?: Prisma.IntFieldUpdateOperationsInput | number
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  league?: Prisma.LeagueUpdateOneRequiredWithoutTradesNestedInput
+  offeringTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesOfferedNestedInput
+  receivingTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesReceivedNestedInput
+  assets?: Prisma.TradeAssetUpdateManyWithoutTradeNestedInput
+  votes?: Prisma.TradeVoteUpdateManyWithoutTradeNestedInput
+}
+
+export type TradeUncheckedUpdateWithoutParticipantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leagueId?: Prisma.StringFieldUpdateOperationsInput | string
+  offeringTeamId?: Prisma.StringFieldUpdateOperationsInput | string
+  receivingTeamId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTradeStatusFieldUpdateOperationsInput | $Enums.TradeStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isMultiTeam?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  votesRequired?: Prisma.IntFieldUpdateOperationsInput | number
+  votesFor?: Prisma.IntFieldUpdateOperationsInput | number
+  votesAgainst?: Prisma.IntFieldUpdateOperationsInput | number
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assets?: Prisma.TradeAssetUncheckedUpdateManyWithoutTradeNestedInput
+  votes?: Prisma.TradeVoteUncheckedUpdateManyWithoutTradeNestedInput
+}
+
 export type TradeCreateWithoutAssetsInput = {
   id?: string
   status?: $Enums.TradeStatus
@@ -974,6 +1093,7 @@ export type TradeCreateWithoutAssetsInput = {
   offeringTeam: Prisma.TeamCreateNestedOneWithoutTradesOfferedInput
   receivingTeam: Prisma.TeamCreateNestedOneWithoutTradesReceivedInput
   votes?: Prisma.TradeVoteCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantCreateNestedManyWithoutTradeInput
 }
 
 export type TradeUncheckedCreateWithoutAssetsInput = {
@@ -992,6 +1112,7 @@ export type TradeUncheckedCreateWithoutAssetsInput = {
   adminOverride?: boolean
   createdAt?: Date | string
   votes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantUncheckedCreateNestedManyWithoutTradeInput
 }
 
 export type TradeCreateOrConnectWithoutAssetsInput = {
@@ -1026,6 +1147,7 @@ export type TradeUpdateWithoutAssetsInput = {
   offeringTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesOfferedNestedInput
   receivingTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesReceivedNestedInput
   votes?: Prisma.TradeVoteUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateWithoutAssetsInput = {
@@ -1044,6 +1166,7 @@ export type TradeUncheckedUpdateWithoutAssetsInput = {
   adminOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   votes?: Prisma.TradeVoteUncheckedUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUncheckedUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeCreateWithoutVotesInput = {
@@ -1062,6 +1185,7 @@ export type TradeCreateWithoutVotesInput = {
   offeringTeam: Prisma.TeamCreateNestedOneWithoutTradesOfferedInput
   receivingTeam: Prisma.TeamCreateNestedOneWithoutTradesReceivedInput
   assets?: Prisma.TradeAssetCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantCreateNestedManyWithoutTradeInput
 }
 
 export type TradeUncheckedCreateWithoutVotesInput = {
@@ -1080,6 +1204,7 @@ export type TradeUncheckedCreateWithoutVotesInput = {
   adminOverride?: boolean
   createdAt?: Date | string
   assets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutTradeInput
+  participants?: Prisma.TradeParticipantUncheckedCreateNestedManyWithoutTradeInput
 }
 
 export type TradeCreateOrConnectWithoutVotesInput = {
@@ -1114,6 +1239,7 @@ export type TradeUpdateWithoutVotesInput = {
   offeringTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesOfferedNestedInput
   receivingTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesReceivedNestedInput
   assets?: Prisma.TradeAssetUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateWithoutVotesInput = {
@@ -1132,6 +1258,7 @@ export type TradeUncheckedUpdateWithoutVotesInput = {
   adminOverride?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.TradeAssetUncheckedUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUncheckedUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeCreateManyLeagueInput = {
@@ -1166,6 +1293,7 @@ export type TradeUpdateWithoutLeagueInput = {
   receivingTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesReceivedNestedInput
   assets?: Prisma.TradeAssetUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateWithoutLeagueInput = {
@@ -1184,6 +1312,7 @@ export type TradeUncheckedUpdateWithoutLeagueInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.TradeAssetUncheckedUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUncheckedUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUncheckedUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateManyWithoutLeagueInput = {
@@ -1250,6 +1379,7 @@ export type TradeUpdateWithoutOfferingTeamInput = {
   receivingTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesReceivedNestedInput
   assets?: Prisma.TradeAssetUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateWithoutOfferingTeamInput = {
@@ -1268,6 +1398,7 @@ export type TradeUncheckedUpdateWithoutOfferingTeamInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.TradeAssetUncheckedUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUncheckedUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUncheckedUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateManyWithoutOfferingTeamInput = {
@@ -1302,6 +1433,7 @@ export type TradeUpdateWithoutReceivingTeamInput = {
   offeringTeam?: Prisma.TeamUpdateOneRequiredWithoutTradesOfferedNestedInput
   assets?: Prisma.TradeAssetUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateWithoutReceivingTeamInput = {
@@ -1320,6 +1452,7 @@ export type TradeUncheckedUpdateWithoutReceivingTeamInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.TradeAssetUncheckedUpdateManyWithoutTradeNestedInput
   votes?: Prisma.TradeVoteUncheckedUpdateManyWithoutTradeNestedInput
+  participants?: Prisma.TradeParticipantUncheckedUpdateManyWithoutTradeNestedInput
 }
 
 export type TradeUncheckedUpdateManyWithoutReceivingTeamInput = {
@@ -1346,11 +1479,13 @@ export type TradeUncheckedUpdateManyWithoutReceivingTeamInput = {
 export type TradeCountOutputType = {
   assets: number
   votes: number
+  participants: number
 }
 
 export type TradeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assets?: boolean | TradeCountOutputTypeCountAssetsArgs
   votes?: boolean | TradeCountOutputTypeCountVotesArgs
+  participants?: boolean | TradeCountOutputTypeCountParticipantsArgs
 }
 
 /**
@@ -1377,6 +1512,13 @@ export type TradeCountOutputTypeCountVotesArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.TradeVoteWhereInput
 }
 
+/**
+ * TradeCountOutputType without action
+ */
+export type TradeCountOutputTypeCountParticipantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeParticipantWhereInput
+}
+
 
 export type TradeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1398,6 +1540,7 @@ export type TradeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   receivingTeam?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   assets?: boolean | Prisma.Trade$assetsArgs<ExtArgs>
   votes?: boolean | Prisma.Trade$votesArgs<ExtArgs>
+  participants?: boolean | Prisma.Trade$participantsArgs<ExtArgs>
   _count?: boolean | Prisma.TradeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trade"]>
 
@@ -1465,6 +1608,7 @@ export type TradeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   receivingTeam?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   assets?: boolean | Prisma.Trade$assetsArgs<ExtArgs>
   votes?: boolean | Prisma.Trade$votesArgs<ExtArgs>
+  participants?: boolean | Prisma.Trade$participantsArgs<ExtArgs>
   _count?: boolean | Prisma.TradeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TradeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1486,6 +1630,7 @@ export type $TradePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     receivingTeam: Prisma.$TeamPayload<ExtArgs>
     assets: Prisma.$TradeAssetPayload<ExtArgs>[]
     votes: Prisma.$TradeVotePayload<ExtArgs>[]
+    participants: Prisma.$TradeParticipantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1901,6 +2046,7 @@ export interface Prisma__TradeClient<T, Null = never, ExtArgs extends runtime.Ty
   receivingTeam<T extends Prisma.TeamDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TeamDefaultArgs<ExtArgs>>): Prisma.Prisma__TeamClient<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assets<T extends Prisma.Trade$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Trade$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   votes<T extends Prisma.Trade$votesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Trade$votesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  participants<T extends Prisma.Trade$participantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Trade$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2390,6 +2536,30 @@ export type Trade$votesArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.TradeVoteScalarFieldEnum | Prisma.TradeVoteScalarFieldEnum[]
+}
+
+/**
+ * Trade.participants
+ */
+export type Trade$participantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeParticipant
+   */
+  select?: Prisma.TradeParticipantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeParticipant
+   */
+  omit?: Prisma.TradeParticipantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeParticipantInclude<ExtArgs> | null
+  where?: Prisma.TradeParticipantWhereInput
+  orderBy?: Prisma.TradeParticipantOrderByWithRelationInput | Prisma.TradeParticipantOrderByWithRelationInput[]
+  cursor?: Prisma.TradeParticipantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeParticipantScalarFieldEnum | Prisma.TradeParticipantScalarFieldEnum[]
 }
 
 /**
