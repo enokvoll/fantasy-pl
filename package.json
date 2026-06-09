@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:socket": "node --env-file=.env --import tsx/esm server.ts",
+    "dev:socket": "npx tsx --env-file=.env server.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
