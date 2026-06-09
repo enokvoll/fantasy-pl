@@ -1,0 +1,556 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  passwordHash  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  teams         Team[]
+  draftMessages DraftMessage[]
+  leagueMessages LeagueMessage[]
+  tradeVotes    TradeVote[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── FPL SOURCE DATA ──────────────────────────────────────────────────────────
+
+model FplTeam {
+  id        Int    @id
+  name      String
+  shortName String
+  code      Int
+
+  players      Player[]
+  fixturesHome Fixture[] @relation("HomeTeam")
+  fixturesAway Fixture[] @relation("AwayTeam")
+}
+
+model Player {
+  id          Int          @id
+  webName     String
+  firstName   String?
+  lastName    String?
+  position    Position
+  fplTeamId   Int
+  nowCost     Int
+  status      PlayerStatus @default(AVAILABLE)
+  photo       String?
+  news        String?
+  chancePlayingNextRound Int?
+  totalPoints Int          @default(0)
+  form        String?      @default("0.0")
+  updatedAt   DateTime     @updatedAt
+
+  fplTeam       FplTeam              @relation(fields: [fplTeamId], references: [id])
+  gameweekStats PlayerGameweekStat[]
+  rosterSlots   RosterSlot[]
+  draftPicks    DraftPick[]
+  waiverTargets WaiverClaim[]        @relation("TargetPlayer")
+  waiverDrops   WaiverClaim[]        @relation("DropPlayer")
+  tradeAssets   TradeAsset[]
+}
+
+enum PlayerStatus {
+  AVAILABLE
+  DOUBTFUL
+  SUSPENDED
+  INJURED
+  UNAVAILABLE
+}
+
+enum Position {
+  GK
+  DEF
+  MID
+  FWD
+}
+
+model Fixture {
+  id            Int       @id
+  gameweekId    Int
+  kickoffTime   DateTime?
+  homeTeamId    Int
+  awayTeamId    Int
+  homeTeamScore Int?
+  awayTeamScore Int?
+  started       Boolean   @default(false)
+  finished      Boolean   @default(false)
+
+  gameweek GameWeek @relation(fields: [gameweekId], references: [id])
+  homeTeam FplTeam  @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam FplTeam  @relation("AwayTeam", fields: [awayTeamId], references: [id])
+}
+
+model GameWeek {
+  id           Int      @id
+  name         String
+  deadlineTime DateTime
+  finished     Boolean  @default(false)
+  dataChecked  Boolean  @default(false)
+  isCurrent    Boolean  @default(false)
+  isNext       Boolean  @default(false)
+
+  fixtures    Fixture[]
+  playerStats PlayerGameweekStat[]
+  matchups    Matchup[]
+  waiverRuns  WaiverRun[]
+}
+
+model PlayerGameweekStat {
+  id              String  @id @default(cuid())
+  playerId        Int
+  gameweekId      Int
+  minutes         Int     @default(0)
+  goalsScored     Int     @default(0)
+  assists         Int     @default(0)
+  cleanSheets     Int     @default(0)
+  goalsConceded   Int     @default(0)
+  ownGoals        Int     @default(0)
+  penaltiesSaved  Int     @default(0)
+  penaltiesMissed Int     @default(0)
+  yellowCards     Int     @default(0)
+  redCards        Int     @default(0)
+  saves           Int     @default(0)
+  bonus           Int     @default(0)
+  bps             Int     @default(0)
+  totalPoints     Int     @default(0)
+  inDreamteam     Boolean @default(false)
+  rawExplain      Json?
+
+  player   Player   @relation(fields: [playerId], references: [id])
+  gameweek GameWeek @relation(fields: [gameweekId], references: [id])
+
+  @@unique([playerId, gameweekId])
+}
+
+// ─── LEAGUE ───────────────────────────────────────────────────────────────────
+
+model League {
+  id          String       @id @default(cuid())
+  name        String
+  inviteCode  String       @unique @default(cuid())
+  type        LeagueType   @default(REDRAFT)
+  scoringType ScoringType  @default(H2H)
+  status      LeagueStatus @default(SETUP)
+  maxTeams    Int          @default(12)
+  season      String
+
+  draftType             DraftType @default(SNAKE)
+  draftDate             DateTime?
+  draftPickTimeSeconds  Int       @default(90)
+  slowDraftHoursPerPick Int?
+
+  // JSON: { GK: 1, DEF: 4, MID: 4, FWD: 2, BENCH: 5, FLEX: 0 }
+  rosterConfig  Json
+  scoringConfig Json?
+
+  waiverType        WaiverType @default(ROLLING)
+  faabBudget        Int?
+  waiverDay         Int?
+  waiverProcessTime String?
+
+  keeperSlots   Int     @default(0)
+  contractYears Boolean @default(false)
+
+  tradeDeadlineGameweek Int?
+  playoffStartGameweek  Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teams          Team[]
+  draft          Draft?
+  matchups       Matchup[]
+  trades         Trade[]
+  waiverRuns     WaiverRun[]
+  messages       LeagueMessage[]
+  draftPickSlots DraftPickSlot[]
+}
+
+enum LeagueType {
+  REDRAFT
+  KEEPER
+  DYNASTY
+}
+
+enum ScoringType {
+  H2H
+  ROTO
+  TOTAL_POINTS
+}
+
+enum LeagueStatus {
+  SETUP
+  DRAFTING
+  IN_SEASON
+  COMPLETED
+}
+
+enum DraftType {
+  SNAKE
+  AUCTION
+  SLOW
+}
+
+enum WaiverType {
+  FAAB
+  ROLLING
+  REVERSE_STANDINGS
+  CONTINUOUS
+  FREE_AGENT
+}
+
+// ─── TEAM ─────────────────────────────────────────────────────────────────────
+
+model Team {
+  id           String  @id @default(cuid())
+  name         String
+  abbreviation String  @default("")
+  userId       String
+  leagueId     String
+  draftOrder   Int?
+  waiverPriority Int?
+  faabBalance  Int?
+  wins         Int     @default(0)
+  losses       Int     @default(0)
+  ties         Int     @default(0)
+  pointsFor    Float   @default(0)
+  pointsAgainst Float  @default(0)
+  createdAt    DateTime @default(now())
+
+  user               User           @relation(fields: [userId], references: [id])
+  league             League         @relation(fields: [leagueId], references: [id])
+  rosterSlots        RosterSlot[]
+  homeMatchups       Matchup[]      @relation("HomeTeam")
+  awayMatchups       Matchup[]      @relation("AwayTeam")
+  waiverClaims       WaiverClaim[]
+  tradesOffered      Trade[]        @relation("OfferingTeam")
+  tradesReceived     Trade[]        @relation("ReceivingTeam")
+  tradeVotes         TradeVote[]
+  ownedDraftPicks    DraftPick[]    @relation("PickOwner")
+  originalDraftPicks DraftPick[]    @relation("OriginalOwner")
+  draftPickSlots     DraftPickSlot[]
+
+  @@unique([userId, leagueId])
+}
+
+model RosterSlot {
+  id             String      @id @default(cuid())
+  teamId         String
+  playerId       Int?
+  slotType       SlotType    @default(STARTER)
+  position       Position?
+  lineupPosition Int?
+  isStarting     Boolean     @default(false)
+  isOnTradeBlock Boolean     @default(false)
+  acquiredAt     DateTime    @default(now())
+  acquireType    AcquireType @default(DRAFT)
+  contractYear   Int?
+  keeperRound    Int?
+  dynastyYearsOwned Int?
+
+  team   Team    @relation(fields: [teamId], references: [id])
+  player Player? @relation(fields: [playerId], references: [id])
+}
+
+enum SlotType {
+  STARTER
+  BENCH
+  IR
+}
+
+enum AcquireType {
+  DRAFT
+  WAIVER
+  FREE_AGENT
+  TRADE
+}
+
+// ─── DRAFT ────────────────────────────────────────────────────────────────────
+
+model Draft {
+  id           String      @id @default(cuid())
+  leagueId     String      @unique
+  status       DraftStatus @default(PENDING)
+  currentPick  Int         @default(0)
+  currentRound Int         @default(1)
+  startedAt    DateTime?
+  completedAt  DateTime?
+
+  league League      @relation(fields: [leagueId], references: [id])
+  picks  DraftPick[]
+  queues DraftQueue[]
+}
+
+model DraftPick {
+  id             String    @id @default(cuid())
+  draftId        String
+  round          Int
+  pickInRound    Int
+  overallPick    Int
+  ownerTeamId    String
+  originalTeamId String
+  playerId       Int?
+  isAutoPick     Boolean   @default(false)
+  pickedAt       DateTime?
+
+  draft        Draft   @relation(fields: [draftId], references: [id])
+  ownerTeam    Team    @relation("PickOwner", fields: [ownerTeamId], references: [id])
+  originalTeam Team    @relation("OriginalOwner", fields: [originalTeamId], references: [id])
+  player       Player? @relation(fields: [playerId], references: [id])
+}
+
+model DraftPickSlot {
+  id            String  @id @default(cuid())
+  leagueId      String
+  teamId        String
+  season        String
+  round         Int
+  isConditional Boolean @default(false)
+  condition     String?
+
+  league      League      @relation(fields: [leagueId], references: [id])
+  team        Team        @relation(fields: [teamId], references: [id])
+  tradeAssets TradeAsset[]
+}
+
+model DraftQueue {
+  id       String @id @default(cuid())
+  draftId  String
+  teamId   String
+  playerId Int
+  priority Int
+
+  draft Draft @relation(fields: [draftId], references: [id])
+
+  @@unique([draftId, teamId, playerId])
+}
+
+model DraftMessage {
+  id        String   @id @default(cuid())
+  draftId   String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([draftId])
+}
+
+enum DraftStatus {
+  PENDING
+  IN_PROGRESS
+  PAUSED
+  COMPLETED
+}
+
+// ─── MATCHUP / SCORING ────────────────────────────────────────────────────────
+
+model Matchup {
+  id          String  @id @default(cuid())
+  leagueId    String
+  gameweekId  Int
+  homeTeamId  String
+  awayTeamId  String?
+  homeScore   Float   @default(0)
+  awayScore   Float   @default(0)
+  isCompleted Boolean @default(false)
+
+  league   League   @relation(fields: [leagueId], references: [id])
+  gameweek GameWeek @relation(fields: [gameweekId], references: [id])
+  homeTeam Team     @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam Team?    @relation("AwayTeam", fields: [awayTeamId], references: [id])
+
+  @@unique([leagueId, gameweekId, homeTeamId])
+}
+
+model TeamGameweekScore {
+  id          String @id @default(cuid())
+  teamId      String
+  gameweekId  Int
+  totalPoints Float  @default(0)
+  breakdown   Json?
+
+  @@unique([teamId, gameweekId])
+}
+
+// ─── WAIVERS ─────────────────────────────────────────────────────────────────
+
+model WaiverRun {
+  id          String          @id @default(cuid())
+  leagueId    String
+  gameweekId  Int
+  processedAt DateTime?
+  status      WaiverRunStatus @default(PENDING)
+
+  league   League        @relation(fields: [leagueId], references: [id])
+  gameweek GameWeek      @relation(fields: [gameweekId], references: [id])
+  claims   WaiverClaim[]
+}
+
+enum WaiverRunStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+}
+
+model WaiverClaim {
+  id             String      @id @default(cuid())
+  leagueId       String
+  teamId         String
+  waiverRunId    String?
+  targetPlayerId Int
+  dropPlayerId   Int?
+  faabBid        Int?
+  priority       Int?
+  status         ClaimStatus @default(PENDING)
+  processedAt    DateTime?
+  failReason     String?
+  createdAt      DateTime    @default(now())
+
+  team         Team       @relation(fields: [teamId], references: [id])
+  targetPlayer Player     @relation("TargetPlayer", fields: [targetPlayerId], references: [id])
+  dropPlayer   Player?    @relation("DropPlayer", fields: [dropPlayerId], references: [id])
+  waiverRun    WaiverRun? @relation(fields: [waiverRunId], references: [id])
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// ─── TRADES ───────────────────────────────────────────────────────────────────
+
+model Trade {
+  id              String      @id @default(cuid())
+  leagueId        String
+  offeringTeamId  String
+  receivingTeamId String
+  status          TradeStatus @default(PENDING)
+  notes           String?
+  isMultiTeam     Boolean     @default(false)
+  votesRequired   Int         @default(0)
+  votesFor        Int         @default(0)
+  votesAgainst    Int         @default(0)
+  expiresAt       DateTime?
+  processedAt     DateTime?
+  adminOverride   Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+
+  league        League      @relation(fields: [leagueId], references: [id])
+  offeringTeam  Team        @relation("OfferingTeam", fields: [offeringTeamId], references: [id])
+  receivingTeam Team        @relation("ReceivingTeam", fields: [receivingTeamId], references: [id])
+  assets        TradeAsset[]
+  votes         TradeVote[]
+}
+
+model TradeAsset {
+  id              String  @id @default(cuid())
+  tradeId         String
+  fromTeamId      String
+  toTeamId        String
+  playerId        Int?
+  draftPickSlotId String?
+
+  trade         Trade          @relation(fields: [tradeId], references: [id])
+  player        Player?        @relation(fields: [playerId], references: [id])
+  draftPickSlot DraftPickSlot? @relation(fields: [draftPickSlotId], references: [id])
+}
+
+model TradeVote {
+  id      String     @id @default(cuid())
+  tradeId String
+  userId  String
+  teamId  String
+  vote    VoteChoice
+  votedAt DateTime   @default(now())
+
+  trade Trade @relation(fields: [tradeId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  team  Team  @relation(fields: [teamId], references: [id])
+
+  @@unique([tradeId, userId])
+}
+
+enum TradeStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  VETOED
+  PROCESSING
+  COMPLETED
+}
+
+enum VoteChoice {
+  APPROVE
+  VETO
+}
+
+// ─── LEAGUE CHAT ──────────────────────────────────────────────────────────────
+
+model LeagueMessage {
+  id        String   @id @default(cuid())
+  leagueId  String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  league League @relation(fields: [leagueId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([leagueId, createdAt])
+}
