@@ -1,18 +1,11 @@
 import NextAuth from "next-auth"
-import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { compare } from "bcryptjs"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const adapter = PrismaAdapter(prisma as any)
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter,
   providers: [
-    Google,
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
@@ -41,10 +34,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  session: { strategy: "database" },
+  session: { strategy: "jwt" },
   callbacks: {
-    session({ session, user }) {
-      session.user.id = user.id
+    jwt({ token, user }) {
+      if (user) token.id = user.id
+      return token
+    },
+    session({ session, token }) {
+      if (token.id) session.user.id = token.id as string
       return session
     },
   },
