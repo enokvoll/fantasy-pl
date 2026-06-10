@@ -27,6 +27,8 @@ export default function CreateLeaguePage() {
     waiverType: "ROLLING",
     faabBudget: "1000",
     botCount: "0",
+    rookieDraftRounds: "3",
+    rookieDraftOrder: "REVERSE_STANDINGS",
     rosterConfig: { GK: 1, DEF: 4, MID: 4, FWD: 2, BENCH: 5, FLEX: 0 },
   })
 
@@ -45,6 +47,7 @@ export default function CreateLeaguePage() {
           maxTeams: parseInt(form.maxTeams),
           draftPickTimeSeconds: parseInt(form.draftPickTimeSeconds),
           faabBudget: form.waiverType === "FAAB" ? parseInt(form.faabBudget) : undefined,
+          rookieDraftRounds: parseInt(form.rookieDraftRounds),
         }),
       })
       if (!res.ok) {
@@ -155,6 +158,28 @@ export default function CreateLeaguePage() {
                   <span className="font-semibold text-white">Snake draft:</span> Teams pick in a serpentine order. Round 1 is 1→N, round 2 is N→1, etc. Each player can only be on one team.
                 </p>
               </div>
+
+              {form.type === "DYNASTY" && (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Field label="Rookie draft rounds">
+                      <SelectField value={form.rookieDraftRounds} onChange={v => set("rookieDraftRounds", v)}
+                        options={["1","2","3","4","5"].map(n => [n, `${n} round${n === "1" ? "" : "s"}`])} />
+                    </Field>
+                    <Field label="Rookie draft order">
+                      <SelectField value={form.rookieDraftOrder} onChange={v => set("rookieDraftOrder", v)}
+                        options={[
+                          ["REVERSE_STANDINGS","Reverse standings (linear)"],
+                          ["REVERSE_STANDINGS_SNAKE","Reverse standings (snake)"],
+                          ["KEEP_ORDER","Keep prior order"],
+                        ]} />
+                    </Field>
+                  </div>
+                  <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-700/50 text-sm text-slate-300">
+                    <strong className="text-emerald-400">Dynasty:</strong> Rosters carry over every season. Each new season runs only a short rookie draft of un-rostered players — worst teams pick first. Teams at their roster limit must cut a player to make room.
+                  </div>
+                </>
+              )}
             </>
           )}
 
@@ -206,6 +231,12 @@ export default function CreateLeaguePage() {
               <ReviewRow label="League name" value={form.name} />
               <ReviewRow label="Your team" value={form.teamName} />
               <ReviewRow label="League type" value={form.type} />
+              {form.type === "DYNASTY" && (
+                <>
+                  <ReviewRow label="Rookie draft" value={`${form.rookieDraftRounds} round${form.rookieDraftRounds === "1" ? "" : "s"}`} />
+                  <ReviewRow label="Rookie order" value={form.rookieDraftOrder.replace(/_/g, " ").toLowerCase()} />
+                </>
+              )}
               <ReviewRow label="Scoring" value={form.scoringType} />
               <ReviewRow label="Max teams" value={`${form.maxTeams} teams`} />
               <ReviewRow label="Draft format" value={form.draftType} />

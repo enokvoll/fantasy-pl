@@ -10,7 +10,7 @@ interface DraftChatProps {
   myTeamName: string
 }
 
-export function DraftChat({ messages, onSend, myTeamName }: DraftChatProps) {
+export function DraftChat({ messages, onSend }: DraftChatProps) {
   const [input, setInput] = useState("")
   const bottomRef = useRef<HTMLDivElement>(null)
 

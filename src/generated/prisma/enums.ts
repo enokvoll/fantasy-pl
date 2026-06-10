@@ -78,6 +78,15 @@ export const WaiverType = {
 export type WaiverType = (typeof WaiverType)[keyof typeof WaiverType]
 
 
+export const RookieDraftOrder = {
+  REVERSE_STANDINGS: 'REVERSE_STANDINGS',
+  REVERSE_STANDINGS_SNAKE: 'REVERSE_STANDINGS_SNAKE',
+  KEEP_ORDER: 'KEEP_ORDER'
+} as const
+
+export type RookieDraftOrder = (typeof RookieDraftOrder)[keyof typeof RookieDraftOrder]
+
+
 export const SlotType = {
   STARTER: 'STARTER',
   BENCH: 'BENCH',

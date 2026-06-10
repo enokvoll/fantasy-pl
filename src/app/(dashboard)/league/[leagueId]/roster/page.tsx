@@ -2,6 +2,8 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 import { RosterPitch } from "@/components/roster/RosterPitch"
+import { DynastyPanel } from "@/components/roster/DynastyPanel"
+import { getRosterSize } from "@/lib/dynasty-engine"
 import type { RosterConfig } from "@/types/draft"
 
 export default async function RosterPage({ params }: { params: Promise<{ leagueId: string }> }) {
@@ -82,6 +84,25 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
       </div>
 
       <RosterPitch teamId={myTeam.id} slots={pitchSlots} rosterConfig={rosterConfig} />
+
+      {league.type === "DYNASTY" && (
+        <DynastyPanel
+          teamId={myTeam.id}
+          rosterCap={getRosterSize(rosterConfig)}
+          canCut={league.status === "SETUP"}
+          players={slots
+            .filter(s => s.player)
+            .map(s => ({
+              slotId: s.id,
+              playerName: s.player!.webName,
+              position: s.player!.position,
+              clubShort: s.player!.fplTeam.shortName,
+              totalPoints: s.player!.totalPoints,
+              yearsOwned: s.dynastyYearsOwned ?? 0,
+              acquireType: s.acquireType,
+            }))}
+        />
+      )}
     </div>
   )
 }

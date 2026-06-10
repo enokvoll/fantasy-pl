@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 import { DraftRoom } from "@/components/draft/DraftRoom"
+import { shuffle } from "@/lib/draft-engine"
 import type { RosterConfig } from "@/types/draft"
 
 export default async function DraftPage({
@@ -28,8 +29,8 @@ export default async function DraftPage({
   // Ensure draft row exists
   let draft = await prisma.draft.findFirst({ where: { leagueId } })
   if (!draft) {
-    // Assign draft order
-    const shuffled = [...league.teams].sort(() => Math.random() - 0.5)
+    // Assign a random draft order
+    const shuffled = shuffle(league.teams)
     for (let i = 0; i < shuffled.length; i++) {
       await prisma.team.update({ where: { id: shuffled[i].id }, data: { draftOrder: i + 1 } })
     }

@@ -1,4 +1,3 @@
-import type { Player, Team } from "@/generated/prisma/client"
 
 export interface DraftState {
   draftId: string

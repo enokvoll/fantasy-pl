@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -66,32 +67,32 @@ export function WaiverManager(props: WaiverManagerProps) {
   const isInstant = waiverType === "FREE_AGENT" || waiverType === "CONTINUOUS"
 
   const [tab, setTab] = useState<"add" | "claims" | "order">("add")
-  const [players, setPlayers] = useState<FreeAgent[]>([])
   const [search, setSearch] = useState("")
   const [posFilter, setPosFilter] = useState("ALL")
   const [sortBy, setSortBy] = useState<"totalPoints" | "form">("totalPoints")
-  const [ctx, setCtx] = useState<WaiverContext | null>(null)
   const [selected, setSelected] = useState<FreeAgent | null>(null)
   const [dropId, setDropId] = useState<number | null>(null)
   const [faabBid, setFaabBid] = useState("")
   const [busy, setBusy] = useState(false)
 
-  const fetchContext = useCallback(async () => {
-    const res = await fetch(`/api/waivers/${leagueId}`)
-    if (res.ok) setCtx(await res.json())
-  }, [leagueId])
+  const { data: ctx, refetch: fetchContext } = useQuery({
+    queryKey: ["waiver-ctx", leagueId],
+    queryFn: async (): Promise<WaiverContext | null> => {
+      const res = await fetch(`/api/waivers/${leagueId}`)
+      return res.ok ? await res.json() : null
+    },
+  })
 
-  const fetchPlayers = useCallback(async () => {
-    const posParam = posFilter !== "ALL" ? `&position=${posFilter}` : ""
-    const res = await fetch(`/api/players?leagueId=${leagueId}&available=true&sortBy=${sortBy}&limit=100${posParam}`)
-    if (res.ok) {
+  const { data: players = [], refetch: fetchPlayers } = useQuery({
+    queryKey: ["waiver-players", leagueId, posFilter, sortBy],
+    queryFn: async (): Promise<FreeAgent[]> => {
+      const posParam = posFilter !== "ALL" ? `&position=${posFilter}` : ""
+      const res = await fetch(`/api/players?leagueId=${leagueId}&available=true&sortBy=${sortBy}&limit=100${posParam}`)
+      if (!res.ok) return []
       const data = await res.json()
-      setPlayers(data.players ?? [])
-    }
-  }, [leagueId, posFilter, sortBy])
-
-  useEffect(() => { fetchContext() }, [fetchContext])
-  useEffect(() => { fetchPlayers() }, [fetchPlayers])
+      return data.players ?? []
+    },
+  })
 
   const filtered = players.filter(p =>
     search === "" ||

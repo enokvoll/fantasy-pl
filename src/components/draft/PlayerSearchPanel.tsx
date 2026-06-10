@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
@@ -30,21 +31,21 @@ interface PlayerSearchPanelProps {
 }
 
 export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, picksMade }: PlayerSearchPanelProps) {
-  const [players, setPlayers] = useState<Player[]>([])
   const [search, setSearch] = useState("")
   const [posFilter, setPosFilter] = useState<string>("ALL")
   const [picking, setPicking] = useState<number | null>(null)
 
-  const fetchPlayers = useCallback(async () => {
-    const posParam = posFilter !== "ALL" ? `&position=${posFilter}` : ""
-    const res = await fetch(`/api/players?leagueId=${leagueId}&available=true&limit=100${posParam}`)
-    if (res.ok) {
+  // `picksMade` is part of the key so the list refetches whenever a pick lands.
+  const { data: players = [], refetch } = useQuery({
+    queryKey: ["draft-players", leagueId, posFilter, picksMade],
+    queryFn: async (): Promise<Player[]> => {
+      const posParam = posFilter !== "ALL" ? `&position=${posFilter}` : ""
+      const res = await fetch(`/api/players?leagueId=${leagueId}&available=true&limit=100${posParam}`)
+      if (!res.ok) return []
       const data = await res.json()
-      setPlayers(data.players ?? [])
-    }
-  }, [leagueId, posFilter])
-
-  useEffect(() => { fetchPlayers() }, [fetchPlayers, picksMade])
+      return data.players ?? []
+    },
+  })
 
   const filtered = players.filter(p =>
     search === "" || p.webName.toLowerCase().includes(search.toLowerCase()) ||
@@ -56,7 +57,7 @@ export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, pi
     onPick(playerId)
     await new Promise(r => setTimeout(r, 800))
     setPicking(null)
-    fetchPlayers()
+    refetch()
   }
 
   return (

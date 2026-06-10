@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState } from "react"
 import {
   DndContext, DragOverlay, PointerSensor, useSensor, useSensors,
   type DragEndEvent, type DragStartEvent,
@@ -108,7 +108,7 @@ function PitchRow({ label, slots, allIds, selected, onSelect }: {
   )
 }
 
-export function RosterPitch({ teamId, slots: initialSlots, rosterConfig }: RosterPitchProps) {
+export function RosterPitch({ teamId, slots: initialSlots }: RosterPitchProps) {
   const [slots, setSlots] = useState(initialSlots)
   const [activeId, setActiveId] = useState<number | null>(null)
   const [selected, setSelected] = useState<number | null>(null)

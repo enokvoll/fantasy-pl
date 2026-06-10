@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
 import type { StandingRow, GameweekResult } from "@/lib/sim-runner"
 
@@ -26,41 +26,23 @@ export default function SimulatePage() {
   const params = useParams<{ leagueId: string }>()
   const leagueId = params.leagueId
 
-  const [simState, setSimState] = useState<SimState | null>(null)
-  const [gwSyncStatus, setGwSyncStatus] = useState<GwSyncStatus[]>([])
   const [loading, setLoading] = useState<string | null>(null)
   const [lastGwResult, setLastGwResult] = useState<GameweekResult | null>(null)
 
-  const fetchState = useCallback(async () => {
-    const [simRes, syncRes] = await Promise.all([
-      fetch(`/api/simulate/${leagueId}`),
-      fetch("/api/sync/all-historical"),
-    ])
-    if (simRes.ok) setSimState(await simRes.json())
-    if (syncRes.ok) {
-      const data = await syncRes.json()
-      setGwSyncStatus(data.gameweeks ?? [])
-    }
-  }, [leagueId])
-
-  useEffect(() => { fetchState() }, [fetchState])
-
-  async function syncHistorical() {
-    setLoading("sync")
-    const res = await fetch("/api/sync/all-historical", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET ?? ""}` },
-    })
-    const data = await res.json()
-    if (data.ok) {
-      toast.success(`Synced ${data.synced?.length ?? 0} gameweeks of stats`)
-    } else {
-      // Client can't use CRON_SECRET — instruct user
-      toast.info("Run from terminal: see instructions below")
-    }
-    setLoading(null)
-    fetchState()
-  }
+  const { data, refetch: fetchState } = useQuery({
+    queryKey: ["sim-state", leagueId],
+    queryFn: async (): Promise<{ simState: SimState | null; gwSyncStatus: GwSyncStatus[] }> => {
+      const [simRes, syncRes] = await Promise.all([
+        fetch(`/api/simulate/${leagueId}`),
+        fetch("/api/sync/all-historical"),
+      ])
+      const simState = simRes.ok ? await simRes.json() : null
+      const syncData = syncRes.ok ? await syncRes.json() : {}
+      return { simState, gwSyncStatus: syncData.gameweeks ?? [] }
+    },
+  })
+  const simState = data?.simState ?? null
+  const gwSyncStatus = data?.gwSyncStatus ?? []
 
   async function runDraft() {
     setLoading("draft")

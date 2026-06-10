@@ -346,6 +346,13 @@ export type EnumWaiverTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumWaiverTypeFilter<$PrismaModel> | $Enums.WaiverType
 }
 
+export type EnumRookieDraftOrderFilter<$PrismaModel = never> = {
+  equals?: $Enums.RookieDraftOrder | Prisma.EnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  in?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRookieDraftOrderFilter<$PrismaModel> | $Enums.RookieDraftOrder
+}
+
 export type EnumLeagueTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.LeagueType | Prisma.EnumLeagueTypeFieldRefInput<$PrismaModel>
   in?: $Enums.LeagueType[] | Prisma.ListEnumLeagueTypeFieldRefInput<$PrismaModel>
@@ -421,6 +428,16 @@ export type EnumWaiverTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumWaiverTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumWaiverTypeFilter<$PrismaModel>
+}
+
+export type EnumRookieDraftOrderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RookieDraftOrder | Prisma.EnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  in?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRookieDraftOrderWithAggregatesFilter<$PrismaModel> | $Enums.RookieDraftOrder
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRookieDraftOrderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRookieDraftOrderFilter<$PrismaModel>
 }
 
 export type FloatFilter<$PrismaModel = never> = {
@@ -914,6 +931,13 @@ export type NestedEnumWaiverTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumWaiverTypeFilter<$PrismaModel> | $Enums.WaiverType
 }
 
+export type NestedEnumRookieDraftOrderFilter<$PrismaModel = never> = {
+  equals?: $Enums.RookieDraftOrder | Prisma.EnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  in?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRookieDraftOrderFilter<$PrismaModel> | $Enums.RookieDraftOrder
+}
+
 export type NestedEnumLeagueTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.LeagueType | Prisma.EnumLeagueTypeFieldRefInput<$PrismaModel>
   in?: $Enums.LeagueType[] | Prisma.ListEnumLeagueTypeFieldRefInput<$PrismaModel>
@@ -986,6 +1010,16 @@ export type NestedEnumWaiverTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumWaiverTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumWaiverTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumRookieDraftOrderWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RookieDraftOrder | Prisma.EnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  in?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RookieDraftOrder[] | Prisma.ListEnumRookieDraftOrderFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRookieDraftOrderWithAggregatesFilter<$PrismaModel> | $Enums.RookieDraftOrder
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRookieDraftOrderFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRookieDraftOrderFilter<$PrismaModel>
 }
 
 export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {

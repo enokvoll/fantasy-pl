@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
@@ -29,17 +30,17 @@ interface Ctx {
 
 export function TradeCenter({ leagueId }: { leagueId: string }) {
   const router = useRouter()
-  const [ctx, setCtx] = useState<Ctx | null>(null)
   const [tab, setTab] = useState<"active" | "block" | "history">("active")
   const [builderOpen, setBuilderOpen] = useState(false)
   const [busy, setBusy] = useState(false)
 
-  const fetchCtx = useCallback(async () => {
-    const res = await fetch(`/api/trades/${leagueId}`)
-    if (res.ok) setCtx(await res.json())
-  }, [leagueId])
-
-  useEffect(() => { fetchCtx() }, [fetchCtx])
+  const { data: ctx, refetch: fetchCtx } = useQuery({
+    queryKey: ["trade-ctx", leagueId],
+    queryFn: async (): Promise<Ctx | null> => {
+      const res = await fetch(`/api/trades/${leagueId}`)
+      return res.ok ? await res.json() : null
+    },
+  })
 
   async function act(url: string, method: string, body?: object, successMsg?: string) {
     setBusy(true)

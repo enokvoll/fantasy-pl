@@ -2,7 +2,7 @@ import { Server } from "socket.io"
 import type { Server as HttpServer } from "http"
 import { prisma } from "@/lib/prisma"
 import { makePick, getAutoPickPlayer, getTeamForPick } from "@/lib/draft-engine"
-import type { ServerToClientEvents, ClientToServerEvents, DraftState, RosterConfig } from "@/types/draft"
+import type { DraftState, RosterConfig } from "@/types/draft"
 
 const draftTimers = new Map<string, ReturnType<typeof setTimeout>>()
 
@@ -235,7 +235,8 @@ function startPickTimer(
       if (!draftRecord || draftRecord.status !== "IN_PROGRESS") return
 
       const teamIds = draftRecord.league.teams.map((t) => t.id)
-      const currentTeamId = getTeamForPick(teamIds, draftRecord.currentPick)
+      const snake = !draftRecord.isRookieDraft || draftRecord.league.rookieDraftOrder !== "REVERSE_STANDINGS"
+      const currentTeamId = getTeamForPick(teamIds, draftRecord.currentPick, snake)
       const rosterConfig = draftRecord.league.rosterConfig as unknown as RosterConfig
 
       const playerId = await getAutoPickPlayer(currentTeamId, draftId, rosterConfig)
@@ -341,9 +342,10 @@ async function buildDraftState(leagueId: string): Promise<DraftState> {
   const teams = draft.league.teams
   const teamIds = teams.map((t) => t.id)
 
+  const snake = !draft.isRookieDraft || draft.league.rookieDraftOrder !== "REVERSE_STANDINGS"
   const currentTeamId =
     draft.status === "IN_PROGRESS"
-      ? getTeamForPick(teamIds, draft.currentPick)
+      ? getTeamForPick(teamIds, draft.currentPick, snake)
       : null
 
   const timer = draftTimers.get(draft.id)

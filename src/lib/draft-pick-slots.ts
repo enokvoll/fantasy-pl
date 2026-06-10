@@ -13,9 +13,12 @@ export function nextSeason(season: string): string {
 
 /**
  * Ensure each team in the league has tradeable future draft-pick slots
- * for the next season (one per round = total roster size). Idempotent.
+ * for the next season. Idempotent.
+ *
+ * @param rounds Number of pick slots per team. Defaults to the full roster size
+ *   (one per round). Dynasty rookie drafts pass a smaller round count.
  */
-export async function ensureDraftPickSlots(leagueId: string): Promise<void> {
+export async function ensureDraftPickSlots(leagueId: string, rounds?: number): Promise<void> {
   const league = await prisma.league.findUniqueOrThrow({
     where: { id: leagueId },
     include: { teams: { select: { id: true } } },
@@ -27,10 +30,10 @@ export async function ensureDraftPickSlots(leagueId: string): Promise<void> {
   if (existing > 0) return
 
   const rc = league.rosterConfig as unknown as RosterConfig
-  const rounds = rc.GK + rc.DEF + rc.MID + rc.FWD + rc.FLEX + rc.BENCH
+  const totalRounds = rounds ?? rc.GK + rc.DEF + rc.MID + rc.FWD + rc.FLEX + rc.BENCH
 
   const data = league.teams.flatMap(team =>
-    Array.from({ length: rounds }, (_, i) => ({
+    Array.from({ length: totalRounds }, (_, i) => ({
       leagueId,
       teamId: team.id,
       season,

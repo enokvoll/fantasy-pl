@@ -2,6 +2,19 @@ import { prisma } from "@/lib/prisma"
 import type { RosterConfig } from "@/types/draft"
 import type { Position } from "@/generated/prisma/client"
 
+/**
+ * Fisher–Yates shuffle returning a new array. Kept in this module (not inline in
+ * a component) so the `Math.random` call stays out of React render.
+ */
+export function shuffle<T>(items: readonly T[]): T[] {
+  const arr = [...items]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
 /** Returns the team IDs in pick order for a given overall pick number (0-indexed). */
 export function getPickOrder(teamIds: string[], totalRounds: number): string[] {
   const order: string[] = []
@@ -12,12 +25,17 @@ export function getPickOrder(teamIds: string[], totalRounds: number): string[] {
   return order
 }
 
-/** Returns the teamId whose turn it is for a given overall pick index (0-indexed). */
-export function getTeamForPick(teamIds: string[], pickIndex: number): string {
+/**
+ * Returns the teamId whose turn it is for a given overall pick index (0-indexed).
+ * `snake` (default) reverses order each round; pass `false` for a linear order
+ * (used by dynasty rookie drafts with REVERSE_STANDINGS).
+ */
+export function getTeamForPick(teamIds: string[], pickIndex: number, snake = true): string {
   const n = teamIds.length
   const round = Math.floor(pickIndex / n)
   const posInRound = pickIndex % n
-  return round % 2 === 0 ? teamIds[posInRound] : teamIds[n - 1 - posInRound]
+  if (snake && round % 2 === 1) return teamIds[n - 1 - posInRound]
+  return teamIds[posInRound]
 }
 
 export async function makePick(
@@ -37,15 +55,43 @@ export async function makePick(
 
     if (draft.status !== "IN_PROGRESS") throw new Error("Draft is not in progress")
 
+    const isRookie = draft.isRookieDraft
+    const snake = !isRookie || draft.league.rookieDraftOrder !== "REVERSE_STANDINGS"
+
     const teamIds = draft.league.teams.map((t) => t.id)
-    const expectedTeamId = getTeamForPick(teamIds, draft.currentPick)
+    const expectedTeamId = getTeamForPick(teamIds, draft.currentPick, snake)
     if (expectedTeamId !== teamId) throw new Error("It is not your turn to pick")
 
-    // Check player not already taken
+    // Check player not already taken in this draft
     const alreadyPicked = await tx.draftPick.findFirst({
       where: { draftId, playerId },
     })
     if (alreadyPicked) throw new Error("Player already drafted")
+
+    // In a rookie draft, rosters carry over — reject players already on a roster
+    // in this league, and enforce the roster cap (team must cut to make room).
+    const rosterConfig = draft.league.rosterConfig as unknown as RosterConfig
+    if (isRookie) {
+      const onRoster = await tx.rosterSlot.findFirst({
+        where: { playerId, team: { leagueId: draft.leagueId } },
+      })
+      if (onRoster) throw new Error("Player is already on a roster")
+
+      const rosterCount = await tx.rosterSlot.count({
+        where: { teamId, playerId: { not: null } },
+      })
+      if (rosterCount >= totalRounds(rosterConfig)) {
+        if (!isAutoPick) {
+          throw new Error("Roster is full — cut a player before drafting")
+        }
+        // Auto-pick: make room by cutting the lowest-scoring rostered player.
+        const lowest = await tx.rosterSlot.findFirst({
+          where: { teamId, playerId: { not: null } },
+          orderBy: { player: { totalPoints: "asc" } },
+        })
+        if (lowest) await tx.rosterSlot.delete({ where: { id: lowest.id } })
+      }
+    }
 
     const n = teamIds.length
     const round = Math.floor(draft.currentPick / n) + 1
@@ -65,13 +111,13 @@ export async function makePick(
       },
     })
 
-    // Add player to team's roster
-    const rosterConfig = draft.league.rosterConfig as unknown as RosterConfig
+    // Add player to team's roster. Rookie picks always land on the bench
+    // (starters carried over from last season).
     const player = await tx.player.findUniqueOrThrow({ where: { id: playerId } })
     const existingStarters = await tx.rosterSlot.count({
       where: { teamId, slotType: "STARTER", isStarting: true },
     })
-    const isStarting = existingStarters < totalStarterSlots(rosterConfig)
+    const isStarting = !isRookie && existingStarters < totalStarterSlots(rosterConfig)
 
     await tx.rosterSlot.create({
       data: {
@@ -86,9 +132,10 @@ export async function makePick(
 
     // Advance draft
     const nextPick = draft.currentPick + 1
-    const totalPicks = n * totalRounds(rosterConfig)
+    const roundsThisDraft = isRookie ? draft.league.rookieDraftRounds : totalRounds(rosterConfig)
+    const totalPicks = n * roundsThisDraft
     const isComplete = nextPick >= totalPicks
-    const nextTeamId = isComplete ? null : getTeamForPick(teamIds, nextPick)
+    const nextTeamId = isComplete ? null : getTeamForPick(teamIds, nextPick, snake)
 
     await tx.draft.update({
       where: { id: draftId },
@@ -114,15 +161,27 @@ export async function getAutoPickPlayer(
   draftId: string,
   rosterConfig: RosterConfig
 ): Promise<number> {
-  const draft = await prisma.draft.findUniqueOrThrow({ where: { id: draftId } })
+  const draft = await prisma.draft.findUniqueOrThrow({
+    where: { id: draftId },
+    include: { league: { select: { id: true } } },
+  })
 
-  // Get already drafted player IDs in this league
+  // Get already drafted player IDs in this draft
   const pickedPlayerIds = (
     await prisma.draftPick.findMany({
       where: { draftId, playerId: { not: null } },
       select: { playerId: true },
     })
   ).map((p) => p.playerId as number)
+
+  // In a rookie draft, also exclude every player already on a roster in the league.
+  if (draft.isRookieDraft) {
+    const rostered = await prisma.rosterSlot.findMany({
+      where: { playerId: { not: null }, team: { leagueId: draft.league.id } },
+      select: { playerId: true },
+    })
+    for (const r of rostered) if (r.playerId != null) pickedPlayerIds.push(r.playerId)
+  }
 
   // Check team's queue first
   const queue = await prisma.draftQueue.findMany({

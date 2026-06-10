@@ -52,7 +52,6 @@ export default async function MatchupsPage({ params }: { params: Promise<{ leagu
       {gwIds.map(gwId => {
         const gws = byGW.get(gwId)!
         const gw = gws[0].gameweek
-        const myMatchup = myTeam ? gws.find(m => m.homeTeamId === myTeam.id || m.awayTeamId === myTeam.id) : null
 
         return (
           <div key={gwId}>
@@ -67,7 +66,6 @@ export default async function MatchupsPage({ params }: { params: Promise<{ leagu
                 const isMyGame = myTeam && (m.homeTeamId === myTeam.id || m.awayTeamId === myTeam.id)
                 const homeWon = m.homeScore > m.awayScore
                 const awayWon = m.awayScore > m.homeScore
-                const tied = m.homeScore === m.awayScore && m.isCompleted
 
                 return (
                   <Link key={m.id} href={`/league/${leagueId}/matchups/${gwId}`}>

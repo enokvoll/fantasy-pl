@@ -1,7 +1,6 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
-import Link from "next/link"
 import { LeagueSidebar } from "@/components/layout/league-sidebar"
 
 export default async function LeagueLayout({

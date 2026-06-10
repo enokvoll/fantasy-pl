@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import type { DraftState, DraftTeamInfo, DraftPickSummary } from "@/types/draft"
+import type { DraftState, DraftPickSummary } from "@/types/draft"
 
 const POS_COLORS: Record<string, string> = {
   GK: "bg-yellow-600/20 text-yellow-400",

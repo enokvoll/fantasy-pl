@@ -30,7 +30,6 @@ export function DraftRoom({
   myTeamName,
   isCommissioner,
   teams,
-  rosterConfig,
 }: DraftRoomProps) {
   const botTeamIds = teams.filter(t => t.isBot).map(t => t.id)
   const {

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { BotControls } from "./BotControls"
+import { RolloverButton } from "./RolloverButton"
 
 export default async function LeagueOverviewPage({ params }: { params: Promise<{ leagueId: string }> }) {
   const { leagueId } = await params
@@ -44,6 +45,9 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
           <Link href={`/league/${leagueId}/draft`} className={cn(buttonVariants(), "bg-emerald-500 hover:bg-emerald-400 text-white font-semibold")}>
             {isCommissioner ? "Start draft" : "Draft room"}
           </Link>
+        )}
+        {league.status === "COMPLETED" && league.type === "DYNASTY" && isCommissioner && (
+          <RolloverButton leagueId={leagueId} />
         )}
       </div>
 
@@ -100,6 +104,12 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
               ["Season", league.season],
               ["Draft format", `${league.draftType} draft`],
               ["Pick time", `${league.draftPickTimeSeconds}s per pick`],
+              ...(league.type === "DYNASTY"
+                ? ([
+                    ["Rookie draft", `${league.rookieDraftRounds} round${league.rookieDraftRounds === 1 ? "" : "s"}`],
+                    ["Rookie order", league.rookieDraftOrder.replace(/_/g, " ").toLowerCase()],
+                  ] as [string, string][])
+                : []),
               ["Scoring", league.scoringType],
               ["Waivers", league.waiverType],
               ["Max teams", league.maxTeams.toString()],

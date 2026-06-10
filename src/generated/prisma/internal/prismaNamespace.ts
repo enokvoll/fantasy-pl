@@ -2547,6 +2547,8 @@ export const LeagueScalarFieldEnum = {
   waiverProcessTime: 'waiverProcessTime',
   keeperSlots: 'keeperSlots',
   contractYears: 'contractYears',
+  rookieDraftRounds: 'rookieDraftRounds',
+  rookieDraftOrder: 'rookieDraftOrder',
   tradeDeadlineGameweek: 'tradeDeadlineGameweek',
   playoffStartGameweek: 'playoffStartGameweek',
   createdAt: 'createdAt',
@@ -2600,6 +2602,7 @@ export const DraftScalarFieldEnum = {
   id: 'id',
   leagueId: 'leagueId',
   status: 'status',
+  isRookieDraft: 'isRookieDraft',
   currentPick: 'currentPick',
   currentRound: 'currentRound',
   startedAt: 'startedAt',
@@ -2992,6 +2995,20 @@ export type EnumWaiverTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'WaiverType[]'
  */
 export type ListEnumWaiverTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WaiverType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'RookieDraftOrder'
+ */
+export type EnumRookieDraftOrderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RookieDraftOrder'>
+    
+
+
+/**
+ * Reference to a field of type 'RookieDraftOrder[]'
+ */
+export type ListEnumRookieDraftOrderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RookieDraftOrder[]'>
     
 
 

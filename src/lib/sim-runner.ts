@@ -102,12 +102,15 @@ export async function runAutoDraft(leagueId: string): Promise<{ picks: number }>
   })
   const teamIds = teamsOrdered.map(t => t.id)
 
+  // Rookie drafts (dynasty offseason) use a configurable, possibly linear order.
+  const snake = !draft.isRookieDraft || league.rookieDraftOrder !== "REVERSE_STANDINGS"
+
   // Loop until all picks are made
   while (true) {
     const currentDraft = await prisma.draft.findUniqueOrThrow({ where: { id: draft.id } })
     if (currentDraft.status === "COMPLETED" || currentDraft.currentPick >= totalPicks) break
 
-    const currentTeamId = getTeamForPick(teamIds, currentDraft.currentPick)
+    const currentTeamId = getTeamForPick(teamIds, currentDraft.currentPick, snake)
 
     try {
       const playerId = await getAutoPickPlayer(currentTeamId, draft.id, rosterConfig)
@@ -180,8 +183,6 @@ export async function autoSetBestLineup(teamId: string, gameweekId: number): Pro
       .sort((a, b) => b.points - a.points)
     remaining.slice(0, flexNeeded).forEach(p => starting.add(p.playerId))
   }
-
-  const totalStarting = rosterConfig.GK + rosterConfig.DEF + rosterConfig.MID + rosterConfig.FWD + rosterConfig.FLEX
 
   // Reset all to bench, then set starters
   await prisma.rosterSlot.updateMany({ where: { teamId }, data: { isStarting: false } })
@@ -270,8 +271,6 @@ export async function simulateGameweek(leagueId: string, gameweekId: number): Pr
 
 /** Recompute standings from scratch (idempotent). */
 export async function updateStandings(leagueId: string): Promise<StandingRow[]> {
-  const teams = await prisma.team.findMany({ where: { leagueId }, orderBy: { wins: "desc" } })
-
   // Reset all counters
   await prisma.team.updateMany({
     where: { leagueId },

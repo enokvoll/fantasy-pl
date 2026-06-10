@@ -202,6 +202,10 @@ model League {
   keeperSlots   Int     @default(0)
   contractYears Boolean @default(false)
 
+  // Dynasty: each new season runs a rookie draft of un-rostered players only.
+  rookieDraftRounds Int              @default(3)
+  rookieDraftOrder  RookieDraftOrder @default(REVERSE_STANDINGS)
+
   tradeDeadlineGameweek Int?
   playoffStartGameweek  Int?
 
@@ -248,6 +252,12 @@ enum WaiverType {
   REVERSE_STANDINGS
   CONTINUOUS
   FREE_AGENT
+}
+
+enum RookieDraftOrder {
+  REVERSE_STANDINGS // worst team picks 1st every round (linear)
+  REVERSE_STANDINGS_SNAKE // worst picks 1st, order reverses each round
+  KEEP_ORDER // reuse existing team.draftOrder unchanged
 }
 
 // ─── TEAM ─────────────────────────────────────────────────────────────────────
@@ -323,9 +333,10 @@ enum AcquireType {
 model Draft {
   id           String      @id @default(cuid())
   leagueId     String      @unique
-  status       DraftStatus @default(PENDING)
-  currentPick  Int         @default(0)
-  currentRound Int         @default(1)
+  status        DraftStatus @default(PENDING)
+  isRookieDraft Boolean     @default(false)
+  currentPick   Int         @default(0)
+  currentRound  Int         @default(1)
   startedAt    DateTime?
   completedAt  DateTime?
 

@@ -23,6 +23,8 @@ const createLeagueSchema = z.object({
   waiverType: z.enum(["FAAB", "ROLLING", "REVERSE_STANDINGS", "CONTINUOUS", "FREE_AGENT"]).default("ROLLING"),
   faabBudget: z.number().int().optional(),
   keeperSlots: z.number().int().default(0),
+  rookieDraftRounds: z.number().int().min(1).max(10).default(3),
+  rookieDraftOrder: z.enum(["REVERSE_STANDINGS", "REVERSE_STANDINGS_SNAKE", "KEEP_ORDER"]).default("REVERSE_STANDINGS"),
   teamName: z.string().min(2).max(30),
 })
 
@@ -67,6 +69,8 @@ export async function POST(req: Request) {
       waiverType: data.waiverType,
       faabBudget: data.faabBudget,
       keeperSlots: data.keeperSlots,
+      rookieDraftRounds: data.rookieDraftRounds,
+      rookieDraftOrder: data.rookieDraftOrder,
       teams: {
         create: {
           name: data.teamName,
