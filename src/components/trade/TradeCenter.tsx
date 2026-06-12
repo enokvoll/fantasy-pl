@@ -9,10 +9,10 @@ import { TradeCard, type TradeView } from "./TradeCard"
 import { TradeBuilder } from "./TradeBuilder"
 
 const POS_COLORS: Record<string, string> = {
-  GK: "bg-yellow-600/20 text-yellow-400",
-  DEF: "bg-blue-600/20 text-blue-400",
-  MID: "bg-emerald-600/20 text-emerald-400",
-  FWD: "bg-red-600/20 text-red-400",
+  GK: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
+  DEF: "bg-sky-500/15 text-sky-600 dark:text-sky-300",
+  MID: "bg-violet-500/15 text-violet-600 dark:text-violet-300",
+  FWD: "bg-rose-500/15 text-rose-600 dark:text-rose-300",
 }
 
 interface TeamLite { id: string; name: string; isBot: boolean; userId: string }
@@ -32,6 +32,7 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
   const router = useRouter()
   const [tab, setTab] = useState<"active" | "block" | "history">("active")
   const [builderOpen, setBuilderOpen] = useState(false)
+  const [counterOf, setCounterOf] = useState<{ tradeId: string; participantTeamIds: string[] } | null>(null)
   const [busy, setBusy] = useState(false)
 
   const { data: ctx, refetch: fetchCtx } = useQuery({
@@ -64,7 +65,7 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
     await act(`/api/trades/${leagueId}/block`, "POST", { playerId, on }, on ? "Added to trade block" : "Removed from trade block")
   }
 
-  if (!ctx) return <div className="text-slate-500 text-sm py-12 text-center">Loading…</div>
+  if (!ctx) return <div className="text-muted-foreground text-sm py-12 text-center">Loading…</div>
 
   const ACTIVE = ["PENDING", "ACCEPTED", "PROCESSING"]
   const active = ctx.trades.filter(t => ACTIVE.includes(t.status))
@@ -83,6 +84,10 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
     onAccept: () => act(`/api/trades/${leagueId}/${t.id}`, "POST", { action: "accept" }, "Trade accepted"),
     onReject: () => act(`/api/trades/${leagueId}/${t.id}`, "POST", { action: "reject" }, "Trade rejected"),
     onCancel: () => act(`/api/trades/${leagueId}/${t.id}`, "POST", { action: "cancel" }, "Trade cancelled"),
+    onCounter: () => {
+      setCounterOf({ tradeId: t.id, participantTeamIds: t.participants.map(p => p.teamId).filter(id => id !== ctx.myTeamId) })
+      setBuilderOpen(true)
+    },
     onForce: () => act(`/api/trades/${leagueId}/${t.id}/force`, "POST", undefined, "Trade forced through"),
     onCommishCancel: () => act(`/api/trades/${leagueId}/${t.id}`, "DELETE", undefined, "Trade cancelled"),
   })
@@ -90,15 +95,15 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-black text-white">Trades</h1>
-        <button onClick={() => setBuilderOpen(true)}
-          className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold transition-colors">
+        <h1 className="text-2xl font-bold text-foreground">Trades</h1>
+        <button onClick={() => { setCounterOf(null); setBuilderOpen(true) }}
+          className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-semibold transition-colors">
           + New Trade
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-slate-800">
+      <div className="flex gap-1 border-b border-border">
         {[
           ["active", `Active${active.length ? ` (${active.length})` : ""}`],
           ["block", `Trade Block${ctx.tradeBlock.length ? ` (${ctx.tradeBlock.length})` : ""}`],
@@ -106,7 +111,7 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
         ].map(([id, label]) => (
           <button key={id} onClick={() => setTab(id as typeof tab)}
             className={cn("px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
-              tab === id ? "border-emerald-500 text-emerald-400" : "border-transparent text-slate-400 hover:text-slate-200")}>
+              tab === id ? "border-primary/40 text-primary" : "border-transparent text-muted-foreground hover:text-foreground")}>
             {label}
           </button>
         ))}
@@ -117,20 +122,20 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
         <div className="space-y-4">
           {incoming.length > 0 && (
             <div>
-              <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">Awaiting your response</p>
+              <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-2">Awaiting your response</p>
               <div className="space-y-3">{incoming.map(t => <TradeCard key={t.id} {...tradeCardProps(t)} />)}</div>
             </div>
           )}
           {others.length > 0 && (
             <div>
-              <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">In progress</p>
+              <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-2">In progress</p>
               <div className="space-y-3">{others.map(t => <TradeCard key={t.id} {...tradeCardProps(t)} />)}</div>
             </div>
           )}
           {active.length === 0 && (
             <div className="text-center py-12">
               <p className="text-4xl mb-3">🔀</p>
-              <p className="text-slate-400 text-sm">No active trades. Click <span className="text-emerald-400">+ New Trade</span> to propose one.</p>
+              <p className="text-muted-foreground text-sm">No active trades. Click <span className="text-primary">+ New Trade</span> to propose one.</p>
             </div>
           )}
         </div>
@@ -141,17 +146,17 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
         <div className="space-y-6">
           {/* My roster toggles */}
           <div>
-            <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">Your players — toggle onto the block</p>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
+            <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-2">Your players — toggle onto the block</p>
+            <div className="bg-card border border-border rounded-xl p-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
               {ctx.myRoster.map(p => (
                 <button key={p.playerId} onClick={() => toggleBlock(p.playerId, !p.isOnTradeBlock)}
                   className={cn("flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs text-left transition-colors",
-                    p.isOnTradeBlock ? "bg-emerald-600/15 ring-1 ring-emerald-600/30" : "hover:bg-slate-800")}>
+                    p.isOnTradeBlock ? "bg-primary/15 ring-1 ring-primary/30" : "hover:bg-muted")}>
                   <span className={cn("text-[10px] px-1 rounded font-medium", POS_COLORS[p.position])}>{p.position}</span>
-                  <span className="text-slate-200 truncate flex-1">{p.name}</span>
-                  <span className="text-slate-500">{p.club}</span>
-                  <span className="text-slate-400 tabular-nums">{p.totalPoints}</span>
-                  <span className={cn("text-[10px]", p.isOnTradeBlock ? "text-emerald-400" : "text-slate-600")}>
+                  <span className="text-foreground truncate flex-1">{p.name}</span>
+                  <span className="text-muted-foreground">{p.club}</span>
+                  <span className="text-muted-foreground tabular-nums">{p.totalPoints}</span>
+                  <span className={cn("text-[10px]", p.isOnTradeBlock ? "text-primary" : "text-muted-foreground")}>
                     {p.isOnTradeBlock ? "● listed" : "○ list"}
                   </span>
                 </button>
@@ -161,20 +166,20 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
 
           {/* League-wide block */}
           <div>
-            <p className="text-slate-400 text-xs font-medium uppercase tracking-wider mb-2">Available around the league</p>
+            <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-2">Available around the league</p>
             {ctx.tradeBlock.filter(b => b.teamId !== ctx.myTeamId).length === 0 ? (
-              <p className="text-slate-500 text-sm py-4 text-center">No other managers have listed players yet.</p>
+              <p className="text-muted-foreground text-sm py-4 text-center">No other managers have listed players yet.</p>
             ) : (
-              <div className="bg-slate-900 border border-slate-800 rounded-xl divide-y divide-slate-800/50">
+              <div className="bg-card border border-border rounded-xl divide-y divide-border">
                 {ctx.tradeBlock.filter(b => b.teamId !== ctx.myTeamId).map(b => (
                   <div key={`${b.teamId}-${b.playerId}`} className="flex items-center gap-2 px-3 py-2 text-xs">
                     <span className={cn("text-[10px] px-1 rounded font-medium", POS_COLORS[b.position])}>{b.position}</span>
-                    <span className="text-slate-200 font-medium">{b.name}</span>
-                    <span className="text-slate-500">{b.club}</span>
-                    <span className="text-slate-400 tabular-nums">{b.totalPoints}pts</span>
-                    <span className="text-slate-500 ml-auto">{b.teamName}</span>
+                    <span className="text-foreground font-medium">{b.name}</span>
+                    <span className="text-muted-foreground">{b.club}</span>
+                    <span className="text-muted-foreground tabular-nums">{b.totalPoints}pts</span>
+                    <span className="text-muted-foreground ml-auto">{b.teamName}</span>
                     <button onClick={() => setBuilderOpen(true)}
-                      className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition-colors">
+                      className="px-2 py-0.5 rounded bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors">
                       Propose
                     </button>
                   </div>
@@ -189,7 +194,7 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
       {tab === "history" && (
         <div className="space-y-3">
           {history.length === 0 ? (
-            <p className="text-slate-500 text-sm py-12 text-center">No completed or rejected trades yet.</p>
+            <p className="text-muted-foreground text-sm py-12 text-center">No completed or rejected trades yet.</p>
           ) : history.map(t => <TradeCard key={t.id} {...tradeCardProps(t)} />)}
         </div>
       )}
@@ -199,8 +204,9 @@ export function TradeCenter({ leagueId }: { leagueId: string }) {
           leagueId={leagueId}
           myTeamId={ctx.myTeamId}
           teams={ctx.teams}
-          onClose={() => setBuilderOpen(false)}
-          onSubmitted={() => { setBuilderOpen(false); fetchCtx() }}
+          counterOf={counterOf ?? undefined}
+          onClose={() => { setBuilderOpen(false); setCounterOf(null) }}
+          onSubmitted={() => { setBuilderOpen(false); setCounterOf(null); fetchCtx() }}
         />
       )}
     </div>

@@ -39,3 +39,35 @@ export function validateLineup(
 
   return { valid: errors.length === 0, errors }
 }
+
+/**
+ * Live-substitution legality. Once a gameweek is in-flight, a player whose club
+ * has kicked off is locked: their starting/bench status may not change. This
+ * compares the requested starting XI against the currently persisted lineup and
+ * rejects any change that would move a locked player into or out of the XI.
+ *
+ * Pre-deadline lineup edits skip this check entirely.
+ */
+export function validateLiveSubstitution(
+  currentSlots: SlotWithPlayer[],
+  newStarterIds: number[],
+  lockedPlayerIds: Set<number>
+): ValidationResult {
+  const errors: string[] = []
+  const newStarters = new Set(newStarterIds)
+
+  for (const slot of currentSlots) {
+    if (slot.playerId === null || !lockedPlayerIds.has(slot.playerId)) continue
+    const willStart = newStarters.has(slot.playerId)
+    if (willStart !== slot.isStarting) {
+      const name = slot.player?.webName ?? `Player ${slot.playerId}`
+      errors.push(
+        slot.isStarting
+          ? `${name} has already played and cannot be moved to the bench`
+          : `${name} has already played and cannot be moved into the lineup`
+      )
+    }
+  }
+
+  return { valid: errors.length === 0, errors }
+}

@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
+import { DEFAULT_FORMATION_BOOSTS } from "@/lib/formation-boosts"
+import type { Prisma } from "@/generated/prisma/client"
 import { z } from "zod"
 
 const createLeagueSchema = z.object({
@@ -20,11 +22,12 @@ const createLeagueSchema = z.object({
     BENCH: z.number().default(5),
     FLEX: z.number().default(0),
   }).default({ GK: 1, DEF: 4, MID: 4, FWD: 2, BENCH: 5, FLEX: 0 }),
-  waiverType: z.enum(["FAAB", "ROLLING", "REVERSE_STANDINGS", "CONTINUOUS", "FREE_AGENT"]).default("ROLLING"),
+  waiverType: z.enum(["FAAB", "ROLLING", "REVERSE_STANDINGS", "CONTINUOUS", "FREE_AGENT", "MARKETPLACE"]).default("ROLLING"),
   faabBudget: z.number().int().optional(),
   keeperSlots: z.number().int().default(0),
   rookieDraftRounds: z.number().int().min(1).max(10).default(3),
   rookieDraftOrder: z.enum(["REVERSE_STANDINGS", "REVERSE_STANDINGS_SNAKE", "KEEP_ORDER"]).default("REVERSE_STANDINGS"),
+  formationBoosts: z.boolean().default(true),
   teamName: z.string().min(2).max(30),
 })
 
@@ -66,6 +69,9 @@ export async function POST(req: Request) {
       draftPickTimeSeconds: data.draftPickTimeSeconds,
       slowDraftHoursPerPick: data.slowDraftHoursPerPick,
       rosterConfig: data.rosterConfig,
+      formationBoostConfig: data.formationBoosts
+        ? (DEFAULT_FORMATION_BOOSTS as unknown as Prisma.InputJsonValue)
+        : undefined,
       waiverType: data.waiverType,
       faabBudget: data.faabBudget,
       keeperSlots: data.keeperSlots,
@@ -75,7 +81,10 @@ export async function POST(req: Request) {
         create: {
           name: data.teamName,
           userId: session.user.id,
-          faabBalance: data.waiverType === "FAAB" ? (data.faabBudget ?? 1000) : null,
+          faabBalance:
+            data.waiverType === "FAAB" || data.waiverType === "MARKETPLACE"
+              ? (data.faabBudget ?? 1000)
+              : null,
           waiverPriority: 1,
         },
       },

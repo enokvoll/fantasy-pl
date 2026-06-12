@@ -90,6 +90,48 @@ export async function proposeTrade(
 }
 
 /**
+ * Counter a pending trade with a revised offer. The original trade is marked
+ * COUNTERED and a brand-new PENDING trade is created (proposed by the countering
+ * team) linked back via `counterOfTradeId`. The countering team must be a
+ * non-proposer participant of the original trade.
+ */
+export async function counterTrade(
+  originalTradeId: string,
+  byTeamId: string,
+  participantTeamIds: string[],
+  assets: TradeAssetInput[],
+  notes?: string,
+  expiresAt?: Date
+): Promise<string> {
+  const original = await prisma.trade.findUniqueOrThrow({
+    where: { id: originalTradeId },
+    include: { participants: true },
+  })
+  if (original.status !== "PENDING") throw new Error("Only a pending trade can be countered")
+
+  const me = original.participants.find((p) => p.teamId === byTeamId)
+  if (!me) throw new Error("Your team is not part of this trade")
+  if (me.role === "PROPOSER") throw new Error("The proposer cannot counter their own trade")
+
+  // Build the counter as a fresh proposal from the countering team.
+  const newTradeId = await proposeTrade(
+    original.leagueId,
+    byTeamId,
+    participantTeamIds,
+    assets,
+    notes,
+    expiresAt
+  )
+
+  await prisma.$transaction([
+    prisma.trade.update({ where: { id: newTradeId }, data: { counterOfTradeId: originalTradeId } }),
+    prisma.trade.update({ where: { id: originalTradeId }, data: { status: "COUNTERED" } }),
+  ])
+
+  return newTradeId
+}
+
+/**
  * A team accepts or rejects a trade.
  * - Reject by anyone → trade REJECTED.
  * - When all non-proposer participants have ACCEPTED → execute.

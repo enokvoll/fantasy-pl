@@ -72,7 +72,8 @@ export const WaiverType = {
   ROLLING: 'ROLLING',
   REVERSE_STANDINGS: 'REVERSE_STANDINGS',
   CONTINUOUS: 'CONTINUOUS',
-  FREE_AGENT: 'FREE_AGENT'
+  FREE_AGENT: 'FREE_AGENT',
+  MARKETPLACE: 'MARKETPLACE'
 } as const
 
 export type WaiverType = (typeof WaiverType)[keyof typeof WaiverType]
@@ -135,6 +136,15 @@ export const ClaimStatus = {
 export type ClaimStatus = (typeof ClaimStatus)[keyof typeof ClaimStatus]
 
 
+export const AuctionStatus = {
+  OPEN: 'OPEN',
+  SETTLED: 'SETTLED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type AuctionStatus = (typeof AuctionStatus)[keyof typeof AuctionStatus]
+
+
 export const TradeParticipantRole = {
   PROPOSER: 'PROPOSER',
   RECIPIENT: 'RECIPIENT'
@@ -157,6 +167,7 @@ export const TradeStatus = {
   ACCEPTED: 'ACCEPTED',
   REJECTED: 'REJECTED',
   CANCELLED: 'CANCELLED',
+  COUNTERED: 'COUNTERED',
   VETOED: 'VETOED',
   PROCESSING: 'PROCESSING',
   COMPLETED: 'COMPLETED'

@@ -32,6 +32,9 @@ export type LeagueAvgAggregateOutputType = {
   slowDraftHoursPerPick: number | null
   faabBudget: number | null
   waiverDay: number | null
+  auctionWindowHours: number | null
+  auctionAntiSnipeMinutes: number | null
+  auctionMinIncrement: number | null
   keeperSlots: number | null
   rookieDraftRounds: number | null
   tradeDeadlineGameweek: number | null
@@ -44,6 +47,9 @@ export type LeagueSumAggregateOutputType = {
   slowDraftHoursPerPick: number | null
   faabBudget: number | null
   waiverDay: number | null
+  auctionWindowHours: number | null
+  auctionAntiSnipeMinutes: number | null
+  auctionMinIncrement: number | null
   keeperSlots: number | null
   rookieDraftRounds: number | null
   tradeDeadlineGameweek: number | null
@@ -67,6 +73,9 @@ export type LeagueMinAggregateOutputType = {
   faabBudget: number | null
   waiverDay: number | null
   waiverProcessTime: string | null
+  auctionWindowHours: number | null
+  auctionAntiSnipeMinutes: number | null
+  auctionMinIncrement: number | null
   keeperSlots: number | null
   contractYears: boolean | null
   rookieDraftRounds: number | null
@@ -94,6 +103,9 @@ export type LeagueMaxAggregateOutputType = {
   faabBudget: number | null
   waiverDay: number | null
   waiverProcessTime: string | null
+  auctionWindowHours: number | null
+  auctionAntiSnipeMinutes: number | null
+  auctionMinIncrement: number | null
   keeperSlots: number | null
   contractYears: boolean | null
   rookieDraftRounds: number | null
@@ -119,10 +131,14 @@ export type LeagueCountAggregateOutputType = {
   slowDraftHoursPerPick: number
   rosterConfig: number
   scoringConfig: number
+  formationBoostConfig: number
   waiverType: number
   faabBudget: number
   waiverDay: number
   waiverProcessTime: number
+  auctionWindowHours: number
+  auctionAntiSnipeMinutes: number
+  auctionMinIncrement: number
   keeperSlots: number
   contractYears: number
   rookieDraftRounds: number
@@ -141,6 +157,9 @@ export type LeagueAvgAggregateInputType = {
   slowDraftHoursPerPick?: true
   faabBudget?: true
   waiverDay?: true
+  auctionWindowHours?: true
+  auctionAntiSnipeMinutes?: true
+  auctionMinIncrement?: true
   keeperSlots?: true
   rookieDraftRounds?: true
   tradeDeadlineGameweek?: true
@@ -153,6 +172,9 @@ export type LeagueSumAggregateInputType = {
   slowDraftHoursPerPick?: true
   faabBudget?: true
   waiverDay?: true
+  auctionWindowHours?: true
+  auctionAntiSnipeMinutes?: true
+  auctionMinIncrement?: true
   keeperSlots?: true
   rookieDraftRounds?: true
   tradeDeadlineGameweek?: true
@@ -176,6 +198,9 @@ export type LeagueMinAggregateInputType = {
   faabBudget?: true
   waiverDay?: true
   waiverProcessTime?: true
+  auctionWindowHours?: true
+  auctionAntiSnipeMinutes?: true
+  auctionMinIncrement?: true
   keeperSlots?: true
   contractYears?: true
   rookieDraftRounds?: true
@@ -203,6 +228,9 @@ export type LeagueMaxAggregateInputType = {
   faabBudget?: true
   waiverDay?: true
   waiverProcessTime?: true
+  auctionWindowHours?: true
+  auctionAntiSnipeMinutes?: true
+  auctionMinIncrement?: true
   keeperSlots?: true
   contractYears?: true
   rookieDraftRounds?: true
@@ -228,10 +256,14 @@ export type LeagueCountAggregateInputType = {
   slowDraftHoursPerPick?: true
   rosterConfig?: true
   scoringConfig?: true
+  formationBoostConfig?: true
   waiverType?: true
   faabBudget?: true
   waiverDay?: true
   waiverProcessTime?: true
+  auctionWindowHours?: true
+  auctionAntiSnipeMinutes?: true
+  auctionMinIncrement?: true
   keeperSlots?: true
   contractYears?: true
   rookieDraftRounds?: true
@@ -344,10 +376,14 @@ export type LeagueGroupByOutputType = {
   slowDraftHoursPerPick: number | null
   rosterConfig: runtime.JsonValue
   scoringConfig: runtime.JsonValue | null
+  formationBoostConfig: runtime.JsonValue | null
   waiverType: $Enums.WaiverType
   faabBudget: number | null
   waiverDay: number | null
   waiverProcessTime: string | null
+  auctionWindowHours: number
+  auctionAntiSnipeMinutes: number
+  auctionMinIncrement: number
   keeperSlots: number
   contractYears: boolean
   rookieDraftRounds: number
@@ -396,10 +432,14 @@ export type LeagueWhereInput = {
   slowDraftHoursPerPick?: Prisma.IntNullableFilter<"League"> | number | null
   rosterConfig?: Prisma.JsonFilter<"League">
   scoringConfig?: Prisma.JsonNullableFilter<"League">
+  formationBoostConfig?: Prisma.JsonNullableFilter<"League">
   waiverType?: Prisma.EnumWaiverTypeFilter<"League"> | $Enums.WaiverType
   faabBudget?: Prisma.IntNullableFilter<"League"> | number | null
   waiverDay?: Prisma.IntNullableFilter<"League"> | number | null
   waiverProcessTime?: Prisma.StringNullableFilter<"League"> | string | null
+  auctionWindowHours?: Prisma.IntFilter<"League"> | number
+  auctionAntiSnipeMinutes?: Prisma.IntFilter<"League"> | number
+  auctionMinIncrement?: Prisma.IntFilter<"League"> | number
   keeperSlots?: Prisma.IntFilter<"League"> | number
   contractYears?: Prisma.BoolFilter<"League"> | boolean
   rookieDraftRounds?: Prisma.IntFilter<"League"> | number
@@ -415,6 +455,7 @@ export type LeagueWhereInput = {
   waiverRuns?: Prisma.WaiverRunListRelationFilter
   messages?: Prisma.LeagueMessageListRelationFilter
   draftPickSlots?: Prisma.DraftPickSlotListRelationFilter
+  transferAuctions?: Prisma.TransferAuctionListRelationFilter
 }
 
 export type LeagueOrderByWithRelationInput = {
@@ -432,10 +473,14 @@ export type LeagueOrderByWithRelationInput = {
   slowDraftHoursPerPick?: Prisma.SortOrderInput | Prisma.SortOrder
   rosterConfig?: Prisma.SortOrder
   scoringConfig?: Prisma.SortOrderInput | Prisma.SortOrder
+  formationBoostConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   waiverType?: Prisma.SortOrder
   faabBudget?: Prisma.SortOrderInput | Prisma.SortOrder
   waiverDay?: Prisma.SortOrderInput | Prisma.SortOrder
   waiverProcessTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  auctionWindowHours?: Prisma.SortOrder
+  auctionAntiSnipeMinutes?: Prisma.SortOrder
+  auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
@@ -451,6 +496,7 @@ export type LeagueOrderByWithRelationInput = {
   waiverRuns?: Prisma.WaiverRunOrderByRelationAggregateInput
   messages?: Prisma.LeagueMessageOrderByRelationAggregateInput
   draftPickSlots?: Prisma.DraftPickSlotOrderByRelationAggregateInput
+  transferAuctions?: Prisma.TransferAuctionOrderByRelationAggregateInput
 }
 
 export type LeagueWhereUniqueInput = Prisma.AtLeast<{
@@ -471,10 +517,14 @@ export type LeagueWhereUniqueInput = Prisma.AtLeast<{
   slowDraftHoursPerPick?: Prisma.IntNullableFilter<"League"> | number | null
   rosterConfig?: Prisma.JsonFilter<"League">
   scoringConfig?: Prisma.JsonNullableFilter<"League">
+  formationBoostConfig?: Prisma.JsonNullableFilter<"League">
   waiverType?: Prisma.EnumWaiverTypeFilter<"League"> | $Enums.WaiverType
   faabBudget?: Prisma.IntNullableFilter<"League"> | number | null
   waiverDay?: Prisma.IntNullableFilter<"League"> | number | null
   waiverProcessTime?: Prisma.StringNullableFilter<"League"> | string | null
+  auctionWindowHours?: Prisma.IntFilter<"League"> | number
+  auctionAntiSnipeMinutes?: Prisma.IntFilter<"League"> | number
+  auctionMinIncrement?: Prisma.IntFilter<"League"> | number
   keeperSlots?: Prisma.IntFilter<"League"> | number
   contractYears?: Prisma.BoolFilter<"League"> | boolean
   rookieDraftRounds?: Prisma.IntFilter<"League"> | number
@@ -490,6 +540,7 @@ export type LeagueWhereUniqueInput = Prisma.AtLeast<{
   waiverRuns?: Prisma.WaiverRunListRelationFilter
   messages?: Prisma.LeagueMessageListRelationFilter
   draftPickSlots?: Prisma.DraftPickSlotListRelationFilter
+  transferAuctions?: Prisma.TransferAuctionListRelationFilter
 }, "id" | "inviteCode">
 
 export type LeagueOrderByWithAggregationInput = {
@@ -507,10 +558,14 @@ export type LeagueOrderByWithAggregationInput = {
   slowDraftHoursPerPick?: Prisma.SortOrderInput | Prisma.SortOrder
   rosterConfig?: Prisma.SortOrder
   scoringConfig?: Prisma.SortOrderInput | Prisma.SortOrder
+  formationBoostConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   waiverType?: Prisma.SortOrder
   faabBudget?: Prisma.SortOrderInput | Prisma.SortOrder
   waiverDay?: Prisma.SortOrderInput | Prisma.SortOrder
   waiverProcessTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  auctionWindowHours?: Prisma.SortOrder
+  auctionAntiSnipeMinutes?: Prisma.SortOrder
+  auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
@@ -544,10 +599,14 @@ export type LeagueScalarWhereWithAggregatesInput = {
   slowDraftHoursPerPick?: Prisma.IntNullableWithAggregatesFilter<"League"> | number | null
   rosterConfig?: Prisma.JsonWithAggregatesFilter<"League">
   scoringConfig?: Prisma.JsonNullableWithAggregatesFilter<"League">
+  formationBoostConfig?: Prisma.JsonNullableWithAggregatesFilter<"League">
   waiverType?: Prisma.EnumWaiverTypeWithAggregatesFilter<"League"> | $Enums.WaiverType
   faabBudget?: Prisma.IntNullableWithAggregatesFilter<"League"> | number | null
   waiverDay?: Prisma.IntNullableWithAggregatesFilter<"League"> | number | null
   waiverProcessTime?: Prisma.StringNullableWithAggregatesFilter<"League"> | string | null
+  auctionWindowHours?: Prisma.IntWithAggregatesFilter<"League"> | number
+  auctionAntiSnipeMinutes?: Prisma.IntWithAggregatesFilter<"League"> | number
+  auctionMinIncrement?: Prisma.IntWithAggregatesFilter<"League"> | number
   keeperSlots?: Prisma.IntWithAggregatesFilter<"League"> | number
   contractYears?: Prisma.BoolWithAggregatesFilter<"League"> | boolean
   rookieDraftRounds?: Prisma.IntWithAggregatesFilter<"League"> | number
@@ -573,10 +632,14 @@ export type LeagueCreateInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -592,6 +655,7 @@ export type LeagueCreateInput = {
   waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateInput = {
@@ -609,10 +673,14 @@ export type LeagueUncheckedCreateInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -628,6 +696,7 @@ export type LeagueUncheckedCreateInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUpdateInput = {
@@ -645,10 +714,14 @@ export type LeagueUpdateInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -664,6 +737,7 @@ export type LeagueUpdateInput = {
   waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateInput = {
@@ -681,10 +755,14 @@ export type LeagueUncheckedUpdateInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -700,6 +778,7 @@ export type LeagueUncheckedUpdateInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateManyInput = {
@@ -717,10 +796,14 @@ export type LeagueCreateManyInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -746,10 +829,14 @@ export type LeagueUpdateManyMutationInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -775,10 +862,14 @@ export type LeagueUncheckedUpdateManyInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -804,10 +895,14 @@ export type LeagueCountOrderByAggregateInput = {
   slowDraftHoursPerPick?: Prisma.SortOrder
   rosterConfig?: Prisma.SortOrder
   scoringConfig?: Prisma.SortOrder
+  formationBoostConfig?: Prisma.SortOrder
   waiverType?: Prisma.SortOrder
   faabBudget?: Prisma.SortOrder
   waiverDay?: Prisma.SortOrder
   waiverProcessTime?: Prisma.SortOrder
+  auctionWindowHours?: Prisma.SortOrder
+  auctionAntiSnipeMinutes?: Prisma.SortOrder
+  auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
@@ -824,6 +919,9 @@ export type LeagueAvgOrderByAggregateInput = {
   slowDraftHoursPerPick?: Prisma.SortOrder
   faabBudget?: Prisma.SortOrder
   waiverDay?: Prisma.SortOrder
+  auctionWindowHours?: Prisma.SortOrder
+  auctionAntiSnipeMinutes?: Prisma.SortOrder
+  auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrder
@@ -847,6 +945,9 @@ export type LeagueMaxOrderByAggregateInput = {
   faabBudget?: Prisma.SortOrder
   waiverDay?: Prisma.SortOrder
   waiverProcessTime?: Prisma.SortOrder
+  auctionWindowHours?: Prisma.SortOrder
+  auctionAntiSnipeMinutes?: Prisma.SortOrder
+  auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
@@ -874,6 +975,9 @@ export type LeagueMinOrderByAggregateInput = {
   faabBudget?: Prisma.SortOrder
   waiverDay?: Prisma.SortOrder
   waiverProcessTime?: Prisma.SortOrder
+  auctionWindowHours?: Prisma.SortOrder
+  auctionAntiSnipeMinutes?: Prisma.SortOrder
+  auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
@@ -890,6 +994,9 @@ export type LeagueSumOrderByAggregateInput = {
   slowDraftHoursPerPick?: Prisma.SortOrder
   faabBudget?: Prisma.SortOrder
   waiverDay?: Prisma.SortOrder
+  auctionWindowHours?: Prisma.SortOrder
+  auctionAntiSnipeMinutes?: Prisma.SortOrder
+  auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrder
@@ -995,6 +1102,20 @@ export type LeagueUpdateOneRequiredWithoutWaiverRunsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LeagueUpdateToOneWithWhereWithoutWaiverRunsInput, Prisma.LeagueUpdateWithoutWaiverRunsInput>, Prisma.LeagueUncheckedUpdateWithoutWaiverRunsInput>
 }
 
+export type LeagueCreateNestedOneWithoutTransferAuctionsInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutTransferAuctionsInput, Prisma.LeagueUncheckedCreateWithoutTransferAuctionsInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutTransferAuctionsInput
+  connect?: Prisma.LeagueWhereUniqueInput
+}
+
+export type LeagueUpdateOneRequiredWithoutTransferAuctionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutTransferAuctionsInput, Prisma.LeagueUncheckedCreateWithoutTransferAuctionsInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutTransferAuctionsInput
+  upsert?: Prisma.LeagueUpsertWithoutTransferAuctionsInput
+  connect?: Prisma.LeagueWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeagueUpdateToOneWithWhereWithoutTransferAuctionsInput, Prisma.LeagueUpdateWithoutTransferAuctionsInput>, Prisma.LeagueUncheckedUpdateWithoutTransferAuctionsInput>
+}
+
 export type LeagueCreateNestedOneWithoutTradesInput = {
   create?: Prisma.XOR<Prisma.LeagueCreateWithoutTradesInput, Prisma.LeagueUncheckedCreateWithoutTradesInput>
   connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutTradesInput
@@ -1038,10 +1159,14 @@ export type LeagueCreateWithoutTeamsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1056,6 +1181,7 @@ export type LeagueCreateWithoutTeamsInput = {
   waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutTeamsInput = {
@@ -1073,10 +1199,14 @@ export type LeagueUncheckedCreateWithoutTeamsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1091,6 +1221,7 @@ export type LeagueUncheckedCreateWithoutTeamsInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutTeamsInput = {
@@ -1124,10 +1255,14 @@ export type LeagueUpdateWithoutTeamsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1142,6 +1277,7 @@ export type LeagueUpdateWithoutTeamsInput = {
   waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutTeamsInput = {
@@ -1159,10 +1295,14 @@ export type LeagueUncheckedUpdateWithoutTeamsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1177,6 +1317,7 @@ export type LeagueUncheckedUpdateWithoutTeamsInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutDraftInput = {
@@ -1194,10 +1335,14 @@ export type LeagueCreateWithoutDraftInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1212,6 +1357,7 @@ export type LeagueCreateWithoutDraftInput = {
   waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutDraftInput = {
@@ -1229,10 +1375,14 @@ export type LeagueUncheckedCreateWithoutDraftInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1247,6 +1397,7 @@ export type LeagueUncheckedCreateWithoutDraftInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutDraftInput = {
@@ -1280,10 +1431,14 @@ export type LeagueUpdateWithoutDraftInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1298,6 +1453,7 @@ export type LeagueUpdateWithoutDraftInput = {
   waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutDraftInput = {
@@ -1315,10 +1471,14 @@ export type LeagueUncheckedUpdateWithoutDraftInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1333,6 +1493,7 @@ export type LeagueUncheckedUpdateWithoutDraftInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutDraftPickSlotsInput = {
@@ -1350,10 +1511,14 @@ export type LeagueCreateWithoutDraftPickSlotsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1368,6 +1533,7 @@ export type LeagueCreateWithoutDraftPickSlotsInput = {
   trades?: Prisma.TradeCreateNestedManyWithoutLeagueInput
   waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutDraftPickSlotsInput = {
@@ -1385,10 +1551,14 @@ export type LeagueUncheckedCreateWithoutDraftPickSlotsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1403,6 +1573,7 @@ export type LeagueUncheckedCreateWithoutDraftPickSlotsInput = {
   trades?: Prisma.TradeUncheckedCreateNestedManyWithoutLeagueInput
   waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutDraftPickSlotsInput = {
@@ -1436,10 +1607,14 @@ export type LeagueUpdateWithoutDraftPickSlotsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1454,6 +1629,7 @@ export type LeagueUpdateWithoutDraftPickSlotsInput = {
   trades?: Prisma.TradeUpdateManyWithoutLeagueNestedInput
   waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutDraftPickSlotsInput = {
@@ -1471,10 +1647,14 @@ export type LeagueUncheckedUpdateWithoutDraftPickSlotsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1489,6 +1669,7 @@ export type LeagueUncheckedUpdateWithoutDraftPickSlotsInput = {
   trades?: Prisma.TradeUncheckedUpdateManyWithoutLeagueNestedInput
   waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutMatchupsInput = {
@@ -1506,10 +1687,14 @@ export type LeagueCreateWithoutMatchupsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1524,6 +1709,7 @@ export type LeagueCreateWithoutMatchupsInput = {
   waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutMatchupsInput = {
@@ -1541,10 +1727,14 @@ export type LeagueUncheckedCreateWithoutMatchupsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1559,6 +1749,7 @@ export type LeagueUncheckedCreateWithoutMatchupsInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutMatchupsInput = {
@@ -1592,10 +1783,14 @@ export type LeagueUpdateWithoutMatchupsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1610,6 +1805,7 @@ export type LeagueUpdateWithoutMatchupsInput = {
   waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutMatchupsInput = {
@@ -1627,10 +1823,14 @@ export type LeagueUncheckedUpdateWithoutMatchupsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1645,6 +1845,7 @@ export type LeagueUncheckedUpdateWithoutMatchupsInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutWaiverRunsInput = {
@@ -1662,10 +1863,14 @@ export type LeagueCreateWithoutWaiverRunsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1680,6 +1885,7 @@ export type LeagueCreateWithoutWaiverRunsInput = {
   trades?: Prisma.TradeCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutWaiverRunsInput = {
@@ -1697,10 +1903,14 @@ export type LeagueUncheckedCreateWithoutWaiverRunsInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1715,6 +1925,7 @@ export type LeagueUncheckedCreateWithoutWaiverRunsInput = {
   trades?: Prisma.TradeUncheckedCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutWaiverRunsInput = {
@@ -1748,10 +1959,14 @@ export type LeagueUpdateWithoutWaiverRunsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1766,6 +1981,7 @@ export type LeagueUpdateWithoutWaiverRunsInput = {
   trades?: Prisma.TradeUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutWaiverRunsInput = {
@@ -1783,10 +1999,14 @@ export type LeagueUncheckedUpdateWithoutWaiverRunsInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1799,6 +2019,183 @@ export type LeagueUncheckedUpdateWithoutWaiverRunsInput = {
   draft?: Prisma.DraftUncheckedUpdateOneWithoutLeagueNestedInput
   matchups?: Prisma.MatchupUncheckedUpdateManyWithoutLeagueNestedInput
   trades?: Prisma.TradeUncheckedUpdateManyWithoutLeagueNestedInput
+  messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueCreateWithoutTransferAuctionsInput = {
+  id?: string
+  name: string
+  inviteCode?: string
+  type?: $Enums.LeagueType
+  scoringType?: $Enums.ScoringType
+  status?: $Enums.LeagueStatus
+  maxTeams?: number
+  season: string
+  draftType?: $Enums.DraftType
+  draftDate?: Date | string | null
+  draftPickTimeSeconds?: number
+  slowDraftHoursPerPick?: number | null
+  rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  waiverType?: $Enums.WaiverType
+  faabBudget?: number | null
+  waiverDay?: number | null
+  waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
+  keeperSlots?: number
+  contractYears?: boolean
+  rookieDraftRounds?: number
+  rookieDraftOrder?: $Enums.RookieDraftOrder
+  tradeDeadlineGameweek?: number | null
+  playoffStartGameweek?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teams?: Prisma.TeamCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftCreateNestedOneWithoutLeagueInput
+  matchups?: Prisma.MatchupCreateNestedManyWithoutLeagueInput
+  trades?: Prisma.TradeCreateNestedManyWithoutLeagueInput
+  waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
+  messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
+  draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueUncheckedCreateWithoutTransferAuctionsInput = {
+  id?: string
+  name: string
+  inviteCode?: string
+  type?: $Enums.LeagueType
+  scoringType?: $Enums.ScoringType
+  status?: $Enums.LeagueStatus
+  maxTeams?: number
+  season: string
+  draftType?: $Enums.DraftType
+  draftDate?: Date | string | null
+  draftPickTimeSeconds?: number
+  slowDraftHoursPerPick?: number | null
+  rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  waiverType?: $Enums.WaiverType
+  faabBudget?: number | null
+  waiverDay?: number | null
+  waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
+  keeperSlots?: number
+  contractYears?: boolean
+  rookieDraftRounds?: number
+  rookieDraftOrder?: $Enums.RookieDraftOrder
+  tradeDeadlineGameweek?: number | null
+  playoffStartGameweek?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teams?: Prisma.TeamUncheckedCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftUncheckedCreateNestedOneWithoutLeagueInput
+  matchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutLeagueInput
+  trades?: Prisma.TradeUncheckedCreateNestedManyWithoutLeagueInput
+  waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
+  messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
+  draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueCreateOrConnectWithoutTransferAuctionsInput = {
+  where: Prisma.LeagueWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutTransferAuctionsInput, Prisma.LeagueUncheckedCreateWithoutTransferAuctionsInput>
+}
+
+export type LeagueUpsertWithoutTransferAuctionsInput = {
+  update: Prisma.XOR<Prisma.LeagueUpdateWithoutTransferAuctionsInput, Prisma.LeagueUncheckedUpdateWithoutTransferAuctionsInput>
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutTransferAuctionsInput, Prisma.LeagueUncheckedCreateWithoutTransferAuctionsInput>
+  where?: Prisma.LeagueWhereInput
+}
+
+export type LeagueUpdateToOneWithWhereWithoutTransferAuctionsInput = {
+  where?: Prisma.LeagueWhereInput
+  data: Prisma.XOR<Prisma.LeagueUpdateWithoutTransferAuctionsInput, Prisma.LeagueUncheckedUpdateWithoutTransferAuctionsInput>
+}
+
+export type LeagueUpdateWithoutTransferAuctionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumLeagueTypeFieldUpdateOperationsInput | $Enums.LeagueType
+  scoringType?: Prisma.EnumScoringTypeFieldUpdateOperationsInput | $Enums.ScoringType
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  maxTeams?: Prisma.IntFieldUpdateOperationsInput | number
+  season?: Prisma.StringFieldUpdateOperationsInput | string
+  draftType?: Prisma.EnumDraftTypeFieldUpdateOperationsInput | $Enums.DraftType
+  draftDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  draftPickTimeSeconds?: Prisma.IntFieldUpdateOperationsInput | number
+  slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
+  faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
+  keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
+  rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teams?: Prisma.TeamUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUpdateOneWithoutLeagueNestedInput
+  matchups?: Prisma.MatchupUpdateManyWithoutLeagueNestedInput
+  trades?: Prisma.TradeUpdateManyWithoutLeagueNestedInput
+  waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
+  messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
+  draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueUncheckedUpdateWithoutTransferAuctionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  inviteCode?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumLeagueTypeFieldUpdateOperationsInput | $Enums.LeagueType
+  scoringType?: Prisma.EnumScoringTypeFieldUpdateOperationsInput | $Enums.ScoringType
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  maxTeams?: Prisma.IntFieldUpdateOperationsInput | number
+  season?: Prisma.StringFieldUpdateOperationsInput | string
+  draftType?: Prisma.EnumDraftTypeFieldUpdateOperationsInput | $Enums.DraftType
+  draftDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  draftPickTimeSeconds?: Prisma.IntFieldUpdateOperationsInput | number
+  slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
+  faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
+  keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
+  rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teams?: Prisma.TeamUncheckedUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUncheckedUpdateOneWithoutLeagueNestedInput
+  matchups?: Prisma.MatchupUncheckedUpdateManyWithoutLeagueNestedInput
+  trades?: Prisma.TradeUncheckedUpdateManyWithoutLeagueNestedInput
+  waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
 }
@@ -1818,10 +2215,14 @@ export type LeagueCreateWithoutTradesInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1836,6 +2237,7 @@ export type LeagueCreateWithoutTradesInput = {
   waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutTradesInput = {
@@ -1853,10 +2255,14 @@ export type LeagueUncheckedCreateWithoutTradesInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1871,6 +2277,7 @@ export type LeagueUncheckedCreateWithoutTradesInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
   messages?: Prisma.LeagueMessageUncheckedCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutTradesInput = {
@@ -1904,10 +2311,14 @@ export type LeagueUpdateWithoutTradesInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1922,6 +2333,7 @@ export type LeagueUpdateWithoutTradesInput = {
   waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutTradesInput = {
@@ -1939,10 +2351,14 @@ export type LeagueUncheckedUpdateWithoutTradesInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1957,6 +2373,7 @@ export type LeagueUncheckedUpdateWithoutTradesInput = {
   waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   messages?: Prisma.LeagueMessageUncheckedUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutMessagesInput = {
@@ -1974,10 +2391,14 @@ export type LeagueCreateWithoutMessagesInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -1992,6 +2413,7 @@ export type LeagueCreateWithoutMessagesInput = {
   trades?: Prisma.TradeCreateNestedManyWithoutLeagueInput
   waiverRuns?: Prisma.WaiverRunCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutMessagesInput = {
@@ -2009,10 +2431,14 @@ export type LeagueUncheckedCreateWithoutMessagesInput = {
   slowDraftHoursPerPick?: number | null
   rosterConfig: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: $Enums.WaiverType
   faabBudget?: number | null
   waiverDay?: number | null
   waiverProcessTime?: string | null
+  auctionWindowHours?: number
+  auctionAntiSnipeMinutes?: number
+  auctionMinIncrement?: number
   keeperSlots?: number
   contractYears?: boolean
   rookieDraftRounds?: number
@@ -2027,6 +2453,7 @@ export type LeagueUncheckedCreateWithoutMessagesInput = {
   trades?: Prisma.TradeUncheckedCreateNestedManyWithoutLeagueInput
   waiverRuns?: Prisma.WaiverRunUncheckedCreateNestedManyWithoutLeagueInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedCreateNestedManyWithoutLeagueInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutMessagesInput = {
@@ -2060,10 +2487,14 @@ export type LeagueUpdateWithoutMessagesInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2078,6 +2509,7 @@ export type LeagueUpdateWithoutMessagesInput = {
   trades?: Prisma.TradeUpdateManyWithoutLeagueNestedInput
   waiverRuns?: Prisma.WaiverRunUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutMessagesInput = {
@@ -2095,10 +2527,14 @@ export type LeagueUncheckedUpdateWithoutMessagesInput = {
   slowDraftHoursPerPick?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rosterConfig?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   scoringConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  formationBoostConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   waiverType?: Prisma.EnumWaiverTypeFieldUpdateOperationsInput | $Enums.WaiverType
   faabBudget?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   waiverProcessTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auctionWindowHours?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionAntiSnipeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  auctionMinIncrement?: Prisma.IntFieldUpdateOperationsInput | number
   keeperSlots?: Prisma.IntFieldUpdateOperationsInput | number
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2113,6 +2549,7 @@ export type LeagueUncheckedUpdateWithoutMessagesInput = {
   trades?: Prisma.TradeUncheckedUpdateManyWithoutLeagueNestedInput
   waiverRuns?: Prisma.WaiverRunUncheckedUpdateManyWithoutLeagueNestedInput
   draftPickSlots?: Prisma.DraftPickSlotUncheckedUpdateManyWithoutLeagueNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 
@@ -2127,6 +2564,7 @@ export type LeagueCountOutputType = {
   waiverRuns: number
   messages: number
   draftPickSlots: number
+  transferAuctions: number
 }
 
 export type LeagueCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2136,6 +2574,7 @@ export type LeagueCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   waiverRuns?: boolean | LeagueCountOutputTypeCountWaiverRunsArgs
   messages?: boolean | LeagueCountOutputTypeCountMessagesArgs
   draftPickSlots?: boolean | LeagueCountOutputTypeCountDraftPickSlotsArgs
+  transferAuctions?: boolean | LeagueCountOutputTypeCountTransferAuctionsArgs
 }
 
 /**
@@ -2190,6 +2629,13 @@ export type LeagueCountOutputTypeCountDraftPickSlotsArgs<ExtArgs extends runtime
   where?: Prisma.DraftPickSlotWhereInput
 }
 
+/**
+ * LeagueCountOutputType without action
+ */
+export type LeagueCountOutputTypeCountTransferAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferAuctionWhereInput
+}
+
 
 export type LeagueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2206,10 +2652,14 @@ export type LeagueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   slowDraftHoursPerPick?: boolean
   rosterConfig?: boolean
   scoringConfig?: boolean
+  formationBoostConfig?: boolean
   waiverType?: boolean
   faabBudget?: boolean
   waiverDay?: boolean
   waiverProcessTime?: boolean
+  auctionWindowHours?: boolean
+  auctionAntiSnipeMinutes?: boolean
+  auctionMinIncrement?: boolean
   keeperSlots?: boolean
   contractYears?: boolean
   rookieDraftRounds?: boolean
@@ -2225,6 +2675,7 @@ export type LeagueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   waiverRuns?: boolean | Prisma.League$waiverRunsArgs<ExtArgs>
   messages?: boolean | Prisma.League$messagesArgs<ExtArgs>
   draftPickSlots?: boolean | Prisma.League$draftPickSlotsArgs<ExtArgs>
+  transferAuctions?: boolean | Prisma.League$transferAuctionsArgs<ExtArgs>
   _count?: boolean | Prisma.LeagueCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["league"]>
 
@@ -2243,10 +2694,14 @@ export type LeagueSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slowDraftHoursPerPick?: boolean
   rosterConfig?: boolean
   scoringConfig?: boolean
+  formationBoostConfig?: boolean
   waiverType?: boolean
   faabBudget?: boolean
   waiverDay?: boolean
   waiverProcessTime?: boolean
+  auctionWindowHours?: boolean
+  auctionAntiSnipeMinutes?: boolean
+  auctionMinIncrement?: boolean
   keeperSlots?: boolean
   contractYears?: boolean
   rookieDraftRounds?: boolean
@@ -2272,10 +2727,14 @@ export type LeagueSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slowDraftHoursPerPick?: boolean
   rosterConfig?: boolean
   scoringConfig?: boolean
+  formationBoostConfig?: boolean
   waiverType?: boolean
   faabBudget?: boolean
   waiverDay?: boolean
   waiverProcessTime?: boolean
+  auctionWindowHours?: boolean
+  auctionAntiSnipeMinutes?: boolean
+  auctionMinIncrement?: boolean
   keeperSlots?: boolean
   contractYears?: boolean
   rookieDraftRounds?: boolean
@@ -2301,10 +2760,14 @@ export type LeagueSelectScalar = {
   slowDraftHoursPerPick?: boolean
   rosterConfig?: boolean
   scoringConfig?: boolean
+  formationBoostConfig?: boolean
   waiverType?: boolean
   faabBudget?: boolean
   waiverDay?: boolean
   waiverProcessTime?: boolean
+  auctionWindowHours?: boolean
+  auctionAntiSnipeMinutes?: boolean
+  auctionMinIncrement?: boolean
   keeperSlots?: boolean
   contractYears?: boolean
   rookieDraftRounds?: boolean
@@ -2315,7 +2778,7 @@ export type LeagueSelectScalar = {
   updatedAt?: boolean
 }
 
-export type LeagueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "type" | "scoringType" | "status" | "maxTeams" | "season" | "draftType" | "draftDate" | "draftPickTimeSeconds" | "slowDraftHoursPerPick" | "rosterConfig" | "scoringConfig" | "waiverType" | "faabBudget" | "waiverDay" | "waiverProcessTime" | "keeperSlots" | "contractYears" | "rookieDraftRounds" | "rookieDraftOrder" | "tradeDeadlineGameweek" | "playoffStartGameweek" | "createdAt" | "updatedAt", ExtArgs["result"]["league"]>
+export type LeagueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "type" | "scoringType" | "status" | "maxTeams" | "season" | "draftType" | "draftDate" | "draftPickTimeSeconds" | "slowDraftHoursPerPick" | "rosterConfig" | "scoringConfig" | "formationBoostConfig" | "waiverType" | "faabBudget" | "waiverDay" | "waiverProcessTime" | "auctionWindowHours" | "auctionAntiSnipeMinutes" | "auctionMinIncrement" | "keeperSlots" | "contractYears" | "rookieDraftRounds" | "rookieDraftOrder" | "tradeDeadlineGameweek" | "playoffStartGameweek" | "createdAt" | "updatedAt", ExtArgs["result"]["league"]>
 export type LeagueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teams?: boolean | Prisma.League$teamsArgs<ExtArgs>
   draft?: boolean | Prisma.League$draftArgs<ExtArgs>
@@ -2324,6 +2787,7 @@ export type LeagueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   waiverRuns?: boolean | Prisma.League$waiverRunsArgs<ExtArgs>
   messages?: boolean | Prisma.League$messagesArgs<ExtArgs>
   draftPickSlots?: boolean | Prisma.League$draftPickSlotsArgs<ExtArgs>
+  transferAuctions?: boolean | Prisma.League$transferAuctionsArgs<ExtArgs>
   _count?: boolean | Prisma.LeagueCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LeagueIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2339,6 +2803,7 @@ export type $LeaguePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     waiverRuns: Prisma.$WaiverRunPayload<ExtArgs>[]
     messages: Prisma.$LeagueMessagePayload<ExtArgs>[]
     draftPickSlots: Prisma.$DraftPickSlotPayload<ExtArgs>[]
+    transferAuctions: Prisma.$TransferAuctionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2355,10 +2820,14 @@ export type $LeaguePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     slowDraftHoursPerPick: number | null
     rosterConfig: runtime.JsonValue
     scoringConfig: runtime.JsonValue | null
+    formationBoostConfig: runtime.JsonValue | null
     waiverType: $Enums.WaiverType
     faabBudget: number | null
     waiverDay: number | null
     waiverProcessTime: string | null
+    auctionWindowHours: number
+    auctionAntiSnipeMinutes: number
+    auctionMinIncrement: number
     keeperSlots: number
     contractYears: boolean
     rookieDraftRounds: number
@@ -2768,6 +3237,7 @@ export interface Prisma__LeagueClient<T, Null = never, ExtArgs extends runtime.T
   waiverRuns<T extends Prisma.League$waiverRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$waiverRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WaiverRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messages<T extends Prisma.League$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeagueMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   draftPickSlots<T extends Prisma.League$draftPickSlotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$draftPickSlotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DraftPickSlotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferAuctions<T extends Prisma.League$transferAuctionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$transferAuctionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferAuctionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2811,10 +3281,14 @@ export interface LeagueFieldRefs {
   readonly slowDraftHoursPerPick: Prisma.FieldRef<"League", 'Int'>
   readonly rosterConfig: Prisma.FieldRef<"League", 'Json'>
   readonly scoringConfig: Prisma.FieldRef<"League", 'Json'>
+  readonly formationBoostConfig: Prisma.FieldRef<"League", 'Json'>
   readonly waiverType: Prisma.FieldRef<"League", 'WaiverType'>
   readonly faabBudget: Prisma.FieldRef<"League", 'Int'>
   readonly waiverDay: Prisma.FieldRef<"League", 'Int'>
   readonly waiverProcessTime: Prisma.FieldRef<"League", 'String'>
+  readonly auctionWindowHours: Prisma.FieldRef<"League", 'Int'>
+  readonly auctionAntiSnipeMinutes: Prisma.FieldRef<"League", 'Int'>
+  readonly auctionMinIncrement: Prisma.FieldRef<"League", 'Int'>
   readonly keeperSlots: Prisma.FieldRef<"League", 'Int'>
   readonly contractYears: Prisma.FieldRef<"League", 'Boolean'>
   readonly rookieDraftRounds: Prisma.FieldRef<"League", 'Int'>
@@ -3376,6 +3850,30 @@ export type League$draftPickSlotsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.DraftPickSlotScalarFieldEnum | Prisma.DraftPickSlotScalarFieldEnum[]
+}
+
+/**
+ * League.transferAuctions
+ */
+export type League$transferAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferAuction
+   */
+  select?: Prisma.TransferAuctionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferAuction
+   */
+  omit?: Prisma.TransferAuctionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferAuctionInclude<ExtArgs> | null
+  where?: Prisma.TransferAuctionWhereInput
+  orderBy?: Prisma.TransferAuctionOrderByWithRelationInput | Prisma.TransferAuctionOrderByWithRelationInput[]
+  cursor?: Prisma.TransferAuctionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferAuctionScalarFieldEnum | Prisma.TransferAuctionScalarFieldEnum[]
 }
 
 /**

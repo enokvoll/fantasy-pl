@@ -311,6 +311,7 @@ export type PlayerWhereInput = {
   waiverTargets?: Prisma.WaiverClaimListRelationFilter
   waiverDrops?: Prisma.WaiverClaimListRelationFilter
   tradeAssets?: Prisma.TradeAssetListRelationFilter
+  transferAuctions?: Prisma.TransferAuctionListRelationFilter
 }
 
 export type PlayerOrderByWithRelationInput = {
@@ -335,6 +336,7 @@ export type PlayerOrderByWithRelationInput = {
   waiverTargets?: Prisma.WaiverClaimOrderByRelationAggregateInput
   waiverDrops?: Prisma.WaiverClaimOrderByRelationAggregateInput
   tradeAssets?: Prisma.TradeAssetOrderByRelationAggregateInput
+  transferAuctions?: Prisma.TransferAuctionOrderByRelationAggregateInput
 }
 
 export type PlayerWhereUniqueInput = Prisma.AtLeast<{
@@ -362,6 +364,7 @@ export type PlayerWhereUniqueInput = Prisma.AtLeast<{
   waiverTargets?: Prisma.WaiverClaimListRelationFilter
   waiverDrops?: Prisma.WaiverClaimListRelationFilter
   tradeAssets?: Prisma.TradeAssetListRelationFilter
+  transferAuctions?: Prisma.TransferAuctionListRelationFilter
 }, "id">
 
 export type PlayerOrderByWithAggregationInput = {
@@ -427,6 +430,7 @@ export type PlayerCreateInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateInput = {
@@ -450,6 +454,7 @@ export type PlayerUncheckedCreateInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUpdateInput = {
@@ -473,6 +478,7 @@ export type PlayerUpdateInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateInput = {
@@ -496,6 +502,7 @@ export type PlayerUncheckedUpdateInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateManyInput = {
@@ -761,6 +768,20 @@ export type PlayerUpdateOneWithoutWaiverDropsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlayerUpdateToOneWithWhereWithoutWaiverDropsInput, Prisma.PlayerUpdateWithoutWaiverDropsInput>, Prisma.PlayerUncheckedUpdateWithoutWaiverDropsInput>
 }
 
+export type PlayerCreateNestedOneWithoutTransferAuctionsInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutTransferAuctionsInput, Prisma.PlayerUncheckedCreateWithoutTransferAuctionsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutTransferAuctionsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+}
+
+export type PlayerUpdateOneRequiredWithoutTransferAuctionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutTransferAuctionsInput, Prisma.PlayerUncheckedCreateWithoutTransferAuctionsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutTransferAuctionsInput
+  upsert?: Prisma.PlayerUpsertWithoutTransferAuctionsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlayerUpdateToOneWithWhereWithoutTransferAuctionsInput, Prisma.PlayerUpdateWithoutTransferAuctionsInput>, Prisma.PlayerUncheckedUpdateWithoutTransferAuctionsInput>
+}
+
 export type PlayerCreateNestedOneWithoutTradeAssetsInput = {
   create?: Prisma.XOR<Prisma.PlayerCreateWithoutTradeAssetsInput, Prisma.PlayerUncheckedCreateWithoutTradeAssetsInput>
   connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutTradeAssetsInput
@@ -797,6 +818,7 @@ export type PlayerCreateWithoutFplTeamInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutFplTeamInput = {
@@ -819,6 +841,7 @@ export type PlayerUncheckedCreateWithoutFplTeamInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutFplTeamInput = {
@@ -887,6 +910,7 @@ export type PlayerCreateWithoutGameweekStatsInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutGameweekStatsInput = {
@@ -909,6 +933,7 @@ export type PlayerUncheckedCreateWithoutGameweekStatsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutGameweekStatsInput = {
@@ -947,6 +972,7 @@ export type PlayerUpdateWithoutGameweekStatsInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutGameweekStatsInput = {
@@ -969,6 +995,7 @@ export type PlayerUncheckedUpdateWithoutGameweekStatsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutRosterSlotsInput = {
@@ -991,6 +1018,7 @@ export type PlayerCreateWithoutRosterSlotsInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutRosterSlotsInput = {
@@ -1013,6 +1041,7 @@ export type PlayerUncheckedCreateWithoutRosterSlotsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutRosterSlotsInput = {
@@ -1051,6 +1080,7 @@ export type PlayerUpdateWithoutRosterSlotsInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutRosterSlotsInput = {
@@ -1073,6 +1103,7 @@ export type PlayerUncheckedUpdateWithoutRosterSlotsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutDraftPicksInput = {
@@ -1095,6 +1126,7 @@ export type PlayerCreateWithoutDraftPicksInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutDraftPicksInput = {
@@ -1117,6 +1149,7 @@ export type PlayerUncheckedCreateWithoutDraftPicksInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutDraftPicksInput = {
@@ -1155,6 +1188,7 @@ export type PlayerUpdateWithoutDraftPicksInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
@@ -1177,6 +1211,7 @@ export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutWaiverTargetsInput = {
@@ -1199,6 +1234,7 @@ export type PlayerCreateWithoutWaiverTargetsInput = {
   draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutWaiverTargetsInput = {
@@ -1221,6 +1257,7 @@ export type PlayerUncheckedCreateWithoutWaiverTargetsInput = {
   draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutWaiverTargetsInput = {
@@ -1248,6 +1285,7 @@ export type PlayerCreateWithoutWaiverDropsInput = {
   draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutWaiverDropsInput = {
@@ -1270,6 +1308,7 @@ export type PlayerUncheckedCreateWithoutWaiverDropsInput = {
   draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutWaiverDropsInput = {
@@ -1308,6 +1347,7 @@ export type PlayerUpdateWithoutWaiverTargetsInput = {
   draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutWaiverTargetsInput = {
@@ -1330,6 +1370,7 @@ export type PlayerUncheckedUpdateWithoutWaiverTargetsInput = {
   draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUpsertWithoutWaiverDropsInput = {
@@ -1363,6 +1404,7 @@ export type PlayerUpdateWithoutWaiverDropsInput = {
   draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutWaiverDropsInput = {
@@ -1384,6 +1426,115 @@ export type PlayerUncheckedUpdateWithoutWaiverDropsInput = {
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
   draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerCreateWithoutTransferAuctionsInput = {
+  id: number
+  webName: string
+  firstName?: string | null
+  lastName?: string | null
+  position: $Enums.Position
+  nowCost: number
+  status?: $Enums.PlayerStatus
+  photo?: string | null
+  news?: string | null
+  chancePlayingNextRound?: number | null
+  totalPoints?: number
+  form?: string | null
+  updatedAt?: Date | string
+  fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
+  gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
+  rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutPlayerInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
+  waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
+  waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerUncheckedCreateWithoutTransferAuctionsInput = {
+  id: number
+  webName: string
+  firstName?: string | null
+  lastName?: string | null
+  position: $Enums.Position
+  fplTeamId: number
+  nowCost: number
+  status?: $Enums.PlayerStatus
+  photo?: string | null
+  news?: string | null
+  chancePlayingNextRound?: number | null
+  totalPoints?: number
+  form?: string | null
+  updatedAt?: Date | string
+  gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
+  rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
+  waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
+  waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerCreateOrConnectWithoutTransferAuctionsInput = {
+  where: Prisma.PlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutTransferAuctionsInput, Prisma.PlayerUncheckedCreateWithoutTransferAuctionsInput>
+}
+
+export type PlayerUpsertWithoutTransferAuctionsInput = {
+  update: Prisma.XOR<Prisma.PlayerUpdateWithoutTransferAuctionsInput, Prisma.PlayerUncheckedUpdateWithoutTransferAuctionsInput>
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutTransferAuctionsInput, Prisma.PlayerUncheckedCreateWithoutTransferAuctionsInput>
+  where?: Prisma.PlayerWhereInput
+}
+
+export type PlayerUpdateToOneWithWhereWithoutTransferAuctionsInput = {
+  where?: Prisma.PlayerWhereInput
+  data: Prisma.XOR<Prisma.PlayerUpdateWithoutTransferAuctionsInput, Prisma.PlayerUncheckedUpdateWithoutTransferAuctionsInput>
+}
+
+export type PlayerUpdateWithoutTransferAuctionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  webName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
+  nowCost?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
+  gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
+  rosterSlots?: Prisma.RosterSlotUpdateManyWithoutPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
+  waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
+  waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerUncheckedUpdateWithoutTransferAuctionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  webName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
+  fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
+  nowCost?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
+  rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
+  waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
+  waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
@@ -1407,6 +1558,7 @@ export type PlayerCreateWithoutTradeAssetsInput = {
   draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
@@ -1429,6 +1581,7 @@ export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
   draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutTradeAssetsInput = {
@@ -1467,6 +1620,7 @@ export type PlayerUpdateWithoutTradeAssetsInput = {
   draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
@@ -1489,6 +1643,7 @@ export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
   draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateManyFplTeamInput = {
@@ -1527,6 +1682,7 @@ export type PlayerUpdateWithoutFplTeamInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutFplTeamInput = {
@@ -1549,6 +1705,7 @@ export type PlayerUncheckedUpdateWithoutFplTeamInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateManyWithoutFplTeamInput = {
@@ -1579,6 +1736,7 @@ export type PlayerCountOutputType = {
   waiverTargets: number
   waiverDrops: number
   tradeAssets: number
+  transferAuctions: number
 }
 
 export type PlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1588,6 +1746,7 @@ export type PlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   waiverTargets?: boolean | PlayerCountOutputTypeCountWaiverTargetsArgs
   waiverDrops?: boolean | PlayerCountOutputTypeCountWaiverDropsArgs
   tradeAssets?: boolean | PlayerCountOutputTypeCountTradeAssetsArgs
+  transferAuctions?: boolean | PlayerCountOutputTypeCountTransferAuctionsArgs
 }
 
 /**
@@ -1642,6 +1801,13 @@ export type PlayerCountOutputTypeCountTradeAssetsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.TradeAssetWhereInput
 }
 
+/**
+ * PlayerCountOutputType without action
+ */
+export type PlayerCountOutputTypeCountTransferAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransferAuctionWhereInput
+}
+
 
 export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1665,6 +1831,7 @@ export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   waiverTargets?: boolean | Prisma.Player$waiverTargetsArgs<ExtArgs>
   waiverDrops?: boolean | Prisma.Player$waiverDropsArgs<ExtArgs>
   tradeAssets?: boolean | Prisma.Player$tradeAssetsArgs<ExtArgs>
+  transferAuctions?: boolean | Prisma.Player$transferAuctionsArgs<ExtArgs>
   _count?: boolean | Prisma.PlayerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["player"]>
 
@@ -1730,6 +1897,7 @@ export type PlayerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   waiverTargets?: boolean | Prisma.Player$waiverTargetsArgs<ExtArgs>
   waiverDrops?: boolean | Prisma.Player$waiverDropsArgs<ExtArgs>
   tradeAssets?: boolean | Prisma.Player$tradeAssetsArgs<ExtArgs>
+  transferAuctions?: boolean | Prisma.Player$transferAuctionsArgs<ExtArgs>
   _count?: boolean | Prisma.PlayerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PlayerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1749,6 +1917,7 @@ export type $PlayerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     waiverTargets: Prisma.$WaiverClaimPayload<ExtArgs>[]
     waiverDrops: Prisma.$WaiverClaimPayload<ExtArgs>[]
     tradeAssets: Prisma.$TradeAssetPayload<ExtArgs>[]
+    transferAuctions: Prisma.$TransferAuctionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -2166,6 +2335,7 @@ export interface Prisma__PlayerClient<T, Null = never, ExtArgs extends runtime.T
   waiverTargets<T extends Prisma.Player$waiverTargetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$waiverTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WaiverClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   waiverDrops<T extends Prisma.Player$waiverDropsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$waiverDropsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WaiverClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tradeAssets<T extends Prisma.Player$tradeAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$tradeAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transferAuctions<T extends Prisma.Player$transferAuctionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$transferAuctionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferAuctionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2751,6 +2921,30 @@ export type Player$tradeAssetsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.TradeAssetScalarFieldEnum | Prisma.TradeAssetScalarFieldEnum[]
+}
+
+/**
+ * Player.transferAuctions
+ */
+export type Player$transferAuctionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransferAuction
+   */
+  select?: Prisma.TransferAuctionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TransferAuction
+   */
+  omit?: Prisma.TransferAuctionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransferAuctionInclude<ExtArgs> | null
+  where?: Prisma.TransferAuctionWhereInput
+  orderBy?: Prisma.TransferAuctionOrderByWithRelationInput | Prisma.TransferAuctionOrderByWithRelationInput[]
+  cursor?: Prisma.TransferAuctionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransferAuctionScalarFieldEnum | Prisma.TransferAuctionScalarFieldEnum[]
 }
 
 /**

@@ -4,6 +4,9 @@ import { notFound, redirect } from "next/navigation"
 import { RosterPitch } from "@/components/roster/RosterPitch"
 import { DynastyPanel } from "@/components/roster/DynastyPanel"
 import { getRosterSize } from "@/lib/dynasty-engine"
+import { getLockedPlayerIds, isGameweekLive } from "@/lib/lineup-lock"
+import { getFormationKey, resolveFormationBoost } from "@/lib/formation-boosts"
+import type { Position } from "@/generated/prisma/client"
 import type { RosterConfig } from "@/types/draft"
 
 export default async function RosterPage({ params }: { params: Promise<{ leagueId: string }> }) {
@@ -18,7 +21,7 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
   if (!myTeam) {
     return (
       <div className="text-center py-20">
-        <p className="text-slate-400">You don&apos;t have a team in this league.</p>
+        <p className="text-muted-foreground">You don&apos;t have a team in this league.</p>
       </div>
     )
   }
@@ -50,13 +53,28 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
     return (
       <div className="text-center py-20">
         <p className="text-4xl mb-4">📋</p>
-        <h2 className="text-xl font-bold text-white mb-2">No roster yet</h2>
-        <p className="text-slate-400">Complete the draft first to see your players here.</p>
+        <h2 className="text-xl font-bold text-foreground mb-2">No roster yet</h2>
+        <p className="text-muted-foreground">Complete the draft first to see your players here.</p>
       </div>
     )
   }
 
   const rosterConfig = league.rosterConfig as unknown as RosterConfig
+
+  // Live-substitution locking: while the gameweek is in-flight, players whose
+  // club has kicked off can no longer be subbed.
+  const { gameweekId, live } = await isGameweekLive()
+  const lockedPlayerIds =
+    live && gameweekId !== null
+      ? Array.from(await getLockedPlayerIds(myTeam.id, gameweekId))
+      : []
+
+  // Current formation + its active boost (driven by the saved starting XI).
+  const startingPositions = slots
+    .filter(s => s.isStarting && s.player)
+    .map(s => ({ position: s.player!.position as Position }))
+  const formationKey = getFormationKey(startingPositions)
+  const formationBoost = resolveFormationBoost(formationKey, league.formationBoostConfig)
 
   const pitchSlots = slots
     .filter(s => s.player)
@@ -75,15 +93,33 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-black text-white">{myTeam.name}</h1>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h1 className="text-2xl font-bold text-foreground">{myTeam.name}</h1>
+          <p className="text-muted-foreground text-sm mt-0.5">
             {pitchSlots.filter(s => s.isStarting).length} starters · {pitchSlots.filter(s => !s.isStarting).length} bench
-            {activeGW && <span className="ml-2 text-slate-500">· {activeGW.name}</span>}
+            {activeGW && <span className="ml-2 text-muted-foreground">· {activeGW.name}</span>}
           </p>
         </div>
       </div>
 
-      <RosterPitch teamId={myTeam.id} slots={pitchSlots} rosterConfig={rosterConfig} />
+      {formationBoost && (
+        <div className="mb-4 flex items-start gap-3 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3">
+          <span className="font-mono text-lg font-bold text-primary">{formationKey}</span>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-foreground">{formationBoost.label}</p>
+            {formationBoost.description && (
+              <p className="text-xs text-foreground mt-0.5">{formationBoost.description}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <RosterPitch
+        teamId={myTeam.id}
+        slots={pitchSlots}
+        rosterConfig={rosterConfig}
+        lockedPlayerIds={lockedPlayerIds}
+        live={live}
+      />
 
       {league.type === "DYNASTY" && (
         <DynastyPanel

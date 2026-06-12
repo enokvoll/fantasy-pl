@@ -72,6 +72,8 @@ export const ModelName = {
   TeamGameweekScore: 'TeamGameweekScore',
   WaiverRun: 'WaiverRun',
   WaiverClaim: 'WaiverClaim',
+  TransferAuction: 'TransferAuction',
+  TransferBid: 'TransferBid',
   Trade: 'Trade',
   TradeParticipant: 'TradeParticipant',
   TradeAsset: 'TradeAsset',
@@ -244,10 +246,14 @@ export const LeagueScalarFieldEnum = {
   slowDraftHoursPerPick: 'slowDraftHoursPerPick',
   rosterConfig: 'rosterConfig',
   scoringConfig: 'scoringConfig',
+  formationBoostConfig: 'formationBoostConfig',
   waiverType: 'waiverType',
   faabBudget: 'faabBudget',
   waiverDay: 'waiverDay',
   waiverProcessTime: 'waiverProcessTime',
+  auctionWindowHours: 'auctionWindowHours',
+  auctionAntiSnipeMinutes: 'auctionAntiSnipeMinutes',
+  auctionMinIncrement: 'auctionMinIncrement',
   keeperSlots: 'keeperSlots',
   contractYears: 'contractYears',
   rookieDraftRounds: 'rookieDraftRounds',
@@ -420,6 +426,36 @@ export const WaiverClaimScalarFieldEnum = {
 export type WaiverClaimScalarFieldEnum = (typeof WaiverClaimScalarFieldEnum)[keyof typeof WaiverClaimScalarFieldEnum]
 
 
+export const TransferAuctionScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  playerId: 'playerId',
+  status: 'status',
+  startedByTeamId: 'startedByTeamId',
+  currentBid: 'currentBid',
+  currentBidTeamId: 'currentBidTeamId',
+  minIncrement: 'minIncrement',
+  endsAt: 'endsAt',
+  settledAt: 'settledAt',
+  failReason: 'failReason',
+  createdAt: 'createdAt'
+} as const
+
+export type TransferAuctionScalarFieldEnum = (typeof TransferAuctionScalarFieldEnum)[keyof typeof TransferAuctionScalarFieldEnum]
+
+
+export const TransferBidScalarFieldEnum = {
+  id: 'id',
+  auctionId: 'auctionId',
+  teamId: 'teamId',
+  amount: 'amount',
+  dropPlayerId: 'dropPlayerId',
+  createdAt: 'createdAt'
+} as const
+
+export type TransferBidScalarFieldEnum = (typeof TransferBidScalarFieldEnum)[keyof typeof TransferBidScalarFieldEnum]
+
+
 export const TradeScalarFieldEnum = {
   id: 'id',
   leagueId: 'leagueId',
@@ -434,6 +470,7 @@ export const TradeScalarFieldEnum = {
   expiresAt: 'expiresAt',
   processedAt: 'processedAt',
   adminOverride: 'adminOverride',
+  counterOfTradeId: 'counterOfTradeId',
   createdAt: 'createdAt'
 } as const
 

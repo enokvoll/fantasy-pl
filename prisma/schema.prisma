@@ -98,6 +98,7 @@ model Player {
   waiverTargets WaiverClaim[]        @relation("TargetPlayer")
   waiverDrops   WaiverClaim[]        @relation("DropPlayer")
   tradeAssets   TradeAsset[]
+  transferAuctions TransferAuction[]
 }
 
 enum PlayerStatus {
@@ -194,10 +195,19 @@ model League {
   rosterConfig  Json
   scoringConfig Json?
 
+  // JSON keyed by "DEF-MID-FWD" → FormationBoost (see lib/formation-boosts.ts).
+  // Null disables tactical formation boosts for the league.
+  formationBoostConfig Json?
+
   waiverType        WaiverType @default(ROLLING)
   faabBudget        Int?
   waiverDay         Int?
   waiverProcessTime String?
+
+  // Transfer-market (MARKETPLACE waiver type) auction settings.
+  auctionWindowHours      Int @default(24)
+  auctionAntiSnipeMinutes Int @default(5)
+  auctionMinIncrement     Int @default(1)
 
   keeperSlots   Int     @default(0)
   contractYears Boolean @default(false)
@@ -219,6 +229,7 @@ model League {
   waiverRuns     WaiverRun[]
   messages       LeagueMessage[]
   draftPickSlots DraftPickSlot[]
+  transferAuctions TransferAuction[]
 }
 
 enum LeagueType {
@@ -252,6 +263,7 @@ enum WaiverType {
   REVERSE_STANDINGS
   CONTINUOUS
   FREE_AGENT
+  MARKETPLACE
 }
 
 enum RookieDraftOrder {
@@ -292,6 +304,8 @@ model Team {
   ownedDraftPicks    DraftPick[]    @relation("PickOwner")
   originalDraftPicks DraftPick[]    @relation("OriginalOwner")
   draftPickSlots     DraftPickSlot[]
+  transferAuctions   TransferAuction[]
+  transferBids       TransferBid[]
 
   @@unique([userId, leagueId])
 }
@@ -485,6 +499,50 @@ enum ClaimStatus {
   CANCELLED
 }
 
+// ─── TRANSFER MARKET (MARKETPLACE) ─────────────────────────────────────────────
+
+enum AuctionStatus {
+  OPEN
+  SETTLED
+  CANCELLED
+}
+
+model TransferAuction {
+  id               String        @id @default(cuid())
+  leagueId         String
+  playerId         Int           // target free agent
+  status           AuctionStatus @default(OPEN)
+  startedByTeamId  String
+  currentBid       Int
+  currentBidTeamId String?       // highest bidder (scalar; resolved manually)
+  minIncrement     Int           @default(1)
+  endsAt           DateTime      // extended by anti-snipe on late bids
+  settledAt        DateTime?
+  failReason       String?
+  createdAt        DateTime      @default(now())
+
+  league        League        @relation(fields: [leagueId], references: [id])
+  player        Player        @relation(fields: [playerId], references: [id])
+  startedByTeam Team          @relation(fields: [startedByTeamId], references: [id])
+  bids          TransferBid[]
+
+  @@index([leagueId, status])
+}
+
+model TransferBid {
+  id           String   @id @default(cuid())
+  auctionId    String
+  teamId       String
+  amount       Int
+  dropPlayerId Int?     // player to drop if the winner's roster is full
+  createdAt    DateTime @default(now())
+
+  auction TransferAuction @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+  team    Team            @relation(fields: [teamId], references: [id])
+
+  @@index([auctionId])
+}
+
 // ─── TRADES ───────────────────────────────────────────────────────────────────
 
 model Trade {
@@ -501,6 +559,8 @@ model Trade {
   expiresAt       DateTime?
   processedAt     DateTime?
   adminOverride   Boolean     @default(false)
+  // When set, this trade is a counter-offer that superseded another trade.
+  counterOfTradeId String?
   createdAt       DateTime    @default(now())
 
   league        League      @relation(fields: [leagueId], references: [id])
@@ -509,6 +569,8 @@ model Trade {
   assets        TradeAsset[]
   votes         TradeVote[]
   participants  TradeParticipant[]
+  counterOf     Trade?      @relation("TradeCounter", fields: [counterOfTradeId], references: [id])
+  counters      Trade[]     @relation("TradeCounter")
 }
 
 model TradeParticipant {
@@ -568,6 +630,7 @@ enum TradeStatus {
   ACCEPTED
   REJECTED
   CANCELLED
+  COUNTERED
   VETOED
   PROCESSING
   COMPLETED

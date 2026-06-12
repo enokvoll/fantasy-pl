@@ -123,6 +123,16 @@ export type WaiverRun = Prisma.WaiverRunModel
  */
 export type WaiverClaim = Prisma.WaiverClaimModel
 /**
+ * Model TransferAuction
+ * 
+ */
+export type TransferAuction = Prisma.TransferAuctionModel
+/**
+ * Model TransferBid
+ * 
+ */
+export type TransferBid = Prisma.TransferBidModel
+/**
  * Model Trade
  * 
  */

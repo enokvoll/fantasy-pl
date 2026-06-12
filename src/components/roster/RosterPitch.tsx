@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   DndContext, DragOverlay, PointerSensor, useSensor, useSensors,
   type DragEndEvent, type DragStartEvent,
@@ -20,19 +20,24 @@ interface PlayerSlot {
   totalPoints: number
   gwPoints: number | null
   isStarting: boolean
+  locked?: boolean
 }
 
 interface RosterPitchProps {
   teamId: string
   slots: PlayerSlot[]
   rosterConfig: RosterConfig
+  /** Player ids locked because their club has kicked off (live gameweek). */
+  lockedPlayerIds?: number[]
+  /** True when the gameweek is in-flight, enabling live-sub locking + polling. */
+  live?: boolean
 }
 
 const POS_COLORS: Record<string, string> = {
-  GK: "bg-yellow-500/20 border-yellow-500/40 text-yellow-300",
-  DEF: "bg-blue-500/20 border-blue-500/40 text-blue-300",
-  MID: "bg-emerald-500/20 border-emerald-500/40 text-emerald-300",
-  FWD: "bg-red-500/20 border-red-500/40 text-red-300",
+  GK: "bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-300",
+  DEF: "bg-sky-500/15 border-sky-500/30 text-sky-600 dark:text-sky-300",
+  MID: "bg-violet-500/15 border-violet-500/30 text-violet-600 dark:text-violet-300",
+  FWD: "bg-rose-500/15 border-rose-500/30 text-rose-600 dark:text-rose-300",
 }
 
 function PlayerCard({
@@ -48,20 +53,24 @@ function PlayerCard({
 }) {
   return (
     <div
-      onClick={onClick}
+      onClick={slot.locked ? undefined : onClick}
+      title={slot.locked ? "Locked — this player's match has kicked off" : undefined}
       className={cn(
-        "flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg border cursor-grab text-center select-none transition-all",
+        "relative flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg border text-center select-none transition-all",
         "min-w-[80px] max-w-[96px]",
+        slot.locked ? "cursor-not-allowed opacity-60 grayscale" : "cursor-grab hover:brightness-110",
         isDragging ? "opacity-50" : "",
-        isSelected ? "ring-2 ring-emerald-400 ring-offset-1 ring-offset-slate-950" : "",
-        POS_COLORS[slot.position] ?? "bg-slate-700/50 border-slate-600 text-slate-300",
-        "hover:brightness-110"
+        isSelected ? "ring-2 ring-primary ring-offset-1 ring-offset-background" : "",
+        POS_COLORS[slot.position] ?? "bg-muted/50 border-border text-foreground"
       )}>
+      {slot.locked && (
+        <span className="absolute top-0.5 right-1 text-[10px] leading-none" aria-label="locked">🔒</span>
+      )}
       <span className="text-[10px] font-bold uppercase opacity-70">{slot.position}</span>
-      <span className="text-xs font-semibold text-white leading-tight truncate w-full">{slot.playerName}</span>
+      <span className="text-xs font-semibold text-foreground leading-tight truncate w-full">{slot.playerName}</span>
       <span className="text-[10px] opacity-60">{slot.clubShort}</span>
       {slot.gwPoints !== null ? (
-        <span className="text-xs font-bold text-white">{slot.gwPoints}pts</span>
+        <span className="text-xs font-bold text-foreground">{slot.gwPoints}pts</span>
       ) : (
         <span className="text-[10px] opacity-50">{slot.totalPoints}tot</span>
       )}
@@ -70,13 +79,16 @@ function PlayerCard({
 }
 
 function SortablePlayerCard({ slot, isSelected, onClick }: { slot: PlayerSlot; isSelected: boolean; onClick: () => void }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: slot.playerId })
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: slot.playerId,
+    disabled: slot.locked,
+  })
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   }
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style} {...(slot.locked ? {} : { ...attributes, ...listeners })}>
       <PlayerCard slot={slot} isDragging={isDragging} isSelected={isSelected} onClick={onClick} />
     </div>
   )
@@ -91,7 +103,7 @@ function PitchRow({ label, slots, allIds, selected, onSelect }: {
 }) {
   return (
     <div className="flex flex-col items-center gap-1">
-      <span className="text-slate-500 text-[10px] font-medium uppercase tracking-wider">{label}</span>
+      <span className="text-muted-foreground text-[10px] font-medium uppercase tracking-wider">{label}</span>
       <SortableContext items={allIds} strategy={rectSortingStrategy}>
         <div className="flex gap-2 justify-center flex-wrap">
           {slots.map(slot => (
@@ -108,14 +120,42 @@ function PitchRow({ label, slots, allIds, selected, onSelect }: {
   )
 }
 
-export function RosterPitch({ teamId, slots: initialSlots }: RosterPitchProps) {
-  const [slots, setSlots] = useState(initialSlots)
+export function RosterPitch({
+  teamId,
+  slots: initialSlots,
+  lockedPlayerIds = [],
+  live = false,
+}: RosterPitchProps) {
+  const [lockedSet, setLockedSet] = useState<Set<number>>(() => new Set(lockedPlayerIds))
+  const [slots, setSlots] = useState(() =>
+    initialSlots.map(s => ({ ...s, locked: lockedSet.has(s.playerId) }))
+  )
   const [activeId, setActiveId] = useState<number | null>(null)
   const [selected, setSelected] = useState<number | null>(null)
   const [saving, setSaving] = useState(false)
   const [dirty, setDirty] = useState(false)
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
+
+  // While the gameweek is live, poll the lineup endpoint so locks refresh as more
+  // fixtures kick off. Only the locked set is updated — the manager's unsaved
+  // lineup edits are preserved.
+  useEffect(() => {
+    if (!live) return
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/roster/${teamId}/lineup`)
+        if (!res.ok) return
+        const data = await res.json()
+        const nextLocked = new Set<number>(data.lockedPlayerIds ?? [])
+        setLockedSet(nextLocked)
+        setSlots(prev => prev.map(s => ({ ...s, locked: nextLocked.has(s.playerId) })))
+      } catch {
+        /* transient — next tick retries */
+      }
+    }, 30_000)
+    return () => clearInterval(interval)
+  }, [live, teamId])
 
   const starters = slots.filter(s => s.isStarting)
   const bench = slots.filter(s => !s.isStarting)
@@ -143,6 +183,10 @@ export function RosterPitch({ teamId, slots: initialSlots }: RosterPitchProps) {
   }
 
   function swapPlayers(aId: number, bId: number) {
+    if (lockedSet.has(aId) || lockedSet.has(bId)) {
+      toast.error("That player's match has kicked off — they're locked for this gameweek")
+      return
+    }
     setSlots(prev => {
       const next = [...prev]
       const ai = next.findIndex(s => s.playerId === aId)
@@ -193,25 +237,30 @@ export function RosterPitch({ teamId, slots: initialSlots }: RosterPitchProps) {
       <div className="space-y-4">
         {/* Save bar */}
         <div className="flex items-center justify-between">
-          <p className="text-slate-400 text-sm">
+          <p className="text-muted-foreground text-sm">
+            {live && (
+              <span className="mr-2 inline-flex items-center gap-1 rounded bg-danger/15 px-1.5 py-0.5 text-[10px] font-bold uppercase text-danger">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" /> Live · 🔒 = locked
+              </span>
+            )}
             {selected !== null
-              ? <span className="text-emerald-400">✓ Player selected — click another to swap</span>
+              ? <span className="text-primary">✓ Player selected — click another to swap</span>
               : "Drag players or click to select & swap"}
           </p>
           <button
             onClick={saveLineup}
             disabled={!dirty || saving}
-            className="px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors">
+            className="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-sm font-semibold transition-colors">
             {saving ? "Saving…" : dirty ? "Save lineup" : "Saved ✓"}
           </button>
         </div>
 
         {/* Pitch */}
-        <div className="relative rounded-2xl overflow-hidden border border-slate-800">
+        <div className="relative rounded-2xl overflow-hidden border border-border">
           {/* Grass background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-emerald-950/40 to-slate-950/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-emerald-600/20 to-emerald-700/10 dark:from-emerald-800/30 dark:to-emerald-950/20" />
           <div className="absolute inset-0" style={{
-            backgroundImage: "repeating-linear-gradient(180deg, transparent, transparent 48px, rgba(255,255,255,0.03) 48px, rgba(255,255,255,0.03) 49px)",
+            backgroundImage: "repeating-linear-gradient(180deg, transparent, transparent 48px, color-mix(in oklch, var(--foreground) 4%, transparent) 48px, color-mix(in oklch, var(--foreground) 4%, transparent) 49px)",
           }} />
 
           <div className="relative z-10 py-6 px-4 space-y-6">
@@ -222,9 +271,9 @@ export function RosterPitch({ teamId, slots: initialSlots }: RosterPitchProps) {
 
             {/* Bench divider */}
             <div className="relative flex items-center gap-3 py-1">
-              <div className="flex-1 border-t border-slate-600/50 border-dashed" />
-              <span className="text-slate-500 text-xs font-medium uppercase tracking-wider">Bench</span>
-              <div className="flex-1 border-t border-slate-600/50 border-dashed" />
+              <div className="flex-1 border-t border-border border-dashed" />
+              <span className="text-muted-foreground text-xs font-medium uppercase tracking-wider">Bench</span>
+              <div className="flex-1 border-t border-border border-dashed" />
             </div>
 
             <div className="flex gap-2 justify-center flex-wrap">
@@ -241,7 +290,7 @@ export function RosterPitch({ teamId, slots: initialSlots }: RosterPitchProps) {
         </div>
 
         {/* Legend */}
-        <div className="flex gap-3 text-[10px] text-slate-500 justify-center flex-wrap">
+        <div className="flex gap-3 text-[10px] text-muted-foreground justify-center flex-wrap">
           {["GK", "DEF", "MID", "FWD"].map(pos => (
             <span key={pos} className={cn("px-2 py-0.5 rounded border", POS_COLORS[pos])}>{pos}</span>
           ))}

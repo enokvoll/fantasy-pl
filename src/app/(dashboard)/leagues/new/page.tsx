@@ -29,6 +29,7 @@ export default function CreateLeaguePage() {
     botCount: "0",
     rookieDraftRounds: "3",
     rookieDraftOrder: "REVERSE_STANDINGS",
+    formationBoosts: true,
     rosterConfig: { GK: 1, DEF: 4, MID: 4, FWD: 2, BENCH: 5, FLEX: 0 },
   })
 
@@ -46,7 +47,7 @@ export default function CreateLeaguePage() {
           ...form,
           maxTeams: parseInt(form.maxTeams),
           draftPickTimeSeconds: parseInt(form.draftPickTimeSeconds),
-          faabBudget: form.waiverType === "FAAB" ? parseInt(form.faabBudget) : undefined,
+          faabBudget: form.waiverType === "FAAB" || form.waiverType === "MARKETPLACE" ? parseInt(form.faabBudget) : undefined,
           rookieDraftRounds: parseInt(form.rookieDraftRounds),
         }),
       })
@@ -71,36 +72,36 @@ export default function CreateLeaguePage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-white mb-2">Create a league</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Create a league</h1>
         {/* Step indicator */}
         <div className="flex items-center gap-2 mt-4">
           {STEPS.map((s, i) => (
             <div key={i} className="flex items-center gap-2">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors
-                ${i < step ? "bg-emerald-600 text-white" : i === step ? "bg-emerald-500 text-white" : "bg-slate-800 text-slate-500"}`}>
+                ${i < step ? "bg-primary text-primary-foreground" : i === step ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
                 {i < step ? "✓" : i + 1}
               </div>
-              {i < STEPS.length - 1 && <div className={`h-0.5 w-8 ${i < step ? "bg-emerald-600" : "bg-slate-800"}`} />}
+              {i < STEPS.length - 1 && <div className={`h-0.5 w-8 ${i < step ? "bg-primary" : "bg-muted"}`} />}
             </div>
           ))}
         </div>
-        <p className="text-slate-400 text-sm mt-3">Step {step + 1} of {STEPS.length}: {STEPS[step]}</p>
+        <p className="text-muted-foreground text-sm mt-3">Step {step + 1} of {STEPS.length}: {STEPS[step]}</p>
       </div>
 
-      <Card className="bg-slate-900 border-slate-800">
+      <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="text-white">{STEPS[step]}</CardTitle>
+          <CardTitle className="text-foreground">{STEPS[step]}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
           {step === 0 && (
             <>
               <Field label="League name">
                 <Input value={form.name} onChange={e => set("name", e.target.value)}
-                  placeholder="e.g. The Gaffer's Cup" className="bg-slate-800 border-slate-700 text-white" />
+                  placeholder="e.g. The Gaffer's Cup" className="bg-muted border-border text-foreground" />
               </Field>
               <Field label="Your team name">
                 <Input value={form.teamName} onChange={e => set("teamName", e.target.value)}
-                  placeholder="e.g. Salah's Saviors" className="bg-slate-800 border-slate-700 text-white" />
+                  placeholder="e.g. Salah's Saviors" className="bg-muted border-border text-foreground" />
               </Field>
               <div className="grid grid-cols-2 gap-4">
                 <Field label="League type">
@@ -134,7 +135,7 @@ export default function CreateLeaguePage() {
                     ])}
                   />
                   {parseInt(form.botCount) > 0 && (
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-muted-foreground">
                       Bots auto-pick using best-available-player logic. Great for testing or filling empty spots.
                     </p>
                   )}
@@ -153,9 +154,9 @@ export default function CreateLeaguePage() {
                 <SelectField value={form.draftPickTimeSeconds} onChange={v => set("draftPickTimeSeconds", v)}
                   options={[["30","30s"],["60","60s"],["90","90s (default)"],["120","2 min"],["180","3 min"]]} />
               </Field>
-              <div className="p-3 rounded-lg bg-slate-800/50 border border-slate-700">
-                <p className="text-slate-300 text-sm">
-                  <span className="font-semibold text-white">Snake draft:</span> Teams pick in a serpentine order. Round 1 is 1→N, round 2 is N→1, etc. Each player can only be on one team.
+              <div className="p-3 rounded-lg bg-muted/50 border border-border">
+                <p className="text-foreground text-sm">
+                  <span className="font-semibold text-foreground">Snake draft:</span> Teams pick in a serpentine order. Round 1 is 1→N, round 2 is N→1, etc. Each player can only be on one team.
                 </p>
               </div>
 
@@ -175,8 +176,8 @@ export default function CreateLeaguePage() {
                         ]} />
                     </Field>
                   </div>
-                  <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-700/50 text-sm text-slate-300">
-                    <strong className="text-emerald-400">Dynasty:</strong> Rosters carry over every season. Each new season runs only a short rookie draft of un-rostered players — worst teams pick first. Teams at their roster limit must cut a player to make room.
+                  <div className="p-3 rounded-lg bg-primary/10 border border-primary/40 text-sm text-foreground">
+                    <strong className="text-primary">Dynasty:</strong> Rosters carry over every season. Each new season runs only a short rookie draft of un-rostered players — worst teams pick first. Teams at their roster limit must cut a player to make room.
                   </div>
                 </>
               )}
@@ -185,20 +186,35 @@ export default function CreateLeaguePage() {
 
           {step === 2 && (
             <>
-              <p className="text-slate-400 text-sm">Default FPL roster: 1 GK, 4 DEF, 4 MID, 2 FWD + 5 bench</p>
+              <p className="text-muted-foreground text-sm">Default FPL roster: 1 GK, 4 DEF, 4 MID, 2 FWD + 5 bench</p>
               <div className="grid grid-cols-3 gap-4">
                 {(["GK","DEF","MID","FWD","BENCH"] as const).map(pos => (
                   <Field key={pos} label={pos === "BENCH" ? "Bench spots" : `${pos} starters`}>
                     <Input type="number" min={pos === "GK" ? 1 : 0} max={10}
                       value={form.rosterConfig[pos]}
                       onChange={e => setForm(f => ({ ...f, rosterConfig: { ...f.rosterConfig, [pos]: parseInt(e.target.value) || 0 } }))}
-                      className="bg-slate-800 border-slate-700 text-white" />
+                      className="bg-muted border-border text-foreground" />
                   </Field>
                 ))}
               </div>
-              <div className="p-3 rounded-lg bg-slate-800/50 border border-slate-700 text-sm text-slate-300">
-                Scoring uses the official <span className="text-white font-medium">FPL points system</span> — goals, assists, clean sheets, bonus points, etc.
+              <div className="p-3 rounded-lg bg-muted/50 border border-border text-sm text-foreground">
+                Scoring uses the official <span className="text-foreground font-medium">FPL points system</span> — goals, assists, clean sheets, bonus points, etc.
               </div>
+
+              <button
+                type="button"
+                onClick={() => setForm(f => ({ ...f, formationBoosts: !f.formationBoosts }))}
+                className="w-full flex items-center justify-between gap-3 p-3 rounded-lg bg-muted/50 border border-border text-left hover:bg-muted transition-colors">
+                <div>
+                  <p className="text-sm font-medium text-foreground">Tactical formation boosts</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Reward formations — e.g. 3-4-3 gives forwards +10% on goals, 4-4-2 gives all starters +3%.
+                  </p>
+                </div>
+                <span className={`shrink-0 w-11 h-6 rounded-full p-0.5 transition-colors ${form.formationBoosts ? "bg-primary" : "bg-muted"}`}>
+                  <span className={`block w-5 h-5 rounded-full bg-white transition-transform ${form.formationBoosts ? "translate-x-5" : ""}`} />
+                </span>
+              </button>
             </>
           )}
 
@@ -212,16 +228,21 @@ export default function CreateLeaguePage() {
                     ["REVERSE_STANDINGS","Reverse standings"],
                     ["CONTINUOUS","Continuous waivers"],
                     ["FREE_AGENT","Free agents (no waivers)"],
+                    ["MARKETPLACE","Transfer market (live auctions)"],
                   ]} />
               </Field>
-              {form.waiverType === "FAAB" && (
+              {(form.waiverType === "FAAB" || form.waiverType === "MARKETPLACE") && (
                 <Field label="FAAB budget per team (£)">
                   <Input type="number" min={100} value={form.faabBudget} onChange={e => set("faabBudget", e.target.value)}
-                    className="bg-slate-800 border-slate-700 text-white" />
+                    className="bg-muted border-border text-foreground" />
                 </Field>
               )}
-              <div className="p-3 rounded-lg bg-slate-800/50 border border-slate-700 text-sm text-slate-300">
-                <strong className="text-white">Rolling waivers:</strong> Priority order rotates — teams who win a claim move to last place.
+              <div className="p-3 rounded-lg bg-muted/50 border border-border text-sm text-foreground">
+                {form.waiverType === "MARKETPLACE" ? (
+                  <><strong className="text-foreground">Transfer market:</strong> Free agents go to open, eBay-style auctions — managers outbid each other with their FAAB budget until the deadline (late bids extend it). Plus team-to-team trades with counter-offers and package deals.</>
+                ) : (
+                  <><strong className="text-foreground">Rolling waivers:</strong> Priority order rotates — teams who win a claim move to last place.</>
+                )}
               </div>
             </>
           )}
@@ -242,6 +263,7 @@ export default function CreateLeaguePage() {
               <ReviewRow label="Draft format" value={form.draftType} />
               <ReviewRow label="Pick time" value={`${form.draftPickTimeSeconds}s`} />
               <ReviewRow label="Roster" value={`${form.rosterConfig.GK}GK ${form.rosterConfig.DEF}DEF ${form.rosterConfig.MID}MID ${form.rosterConfig.FWD}FWD + ${form.rosterConfig.BENCH} bench`} />
+              <ReviewRow label="Formation boosts" value={form.formationBoosts ? "Enabled" : "Disabled"} />
               <ReviewRow label="Waivers" value={form.waiverType} />
               {parseInt(form.botCount) > 0 && (
                 <ReviewRow label="Bots" value={`${form.botCount} auto-pick bot${parseInt(form.botCount) > 1 ? "s" : ""} 🤖`} />
@@ -251,18 +273,18 @@ export default function CreateLeaguePage() {
 
           <div className="flex gap-3 pt-2">
             {step > 0 && (
-              <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800" onClick={() => setStep(s => s - 1)}>
+              <Button variant="outline" className="border-border text-foreground hover:bg-muted" onClick={() => setStep(s => s - 1)}>
                 Back
               </Button>
             )}
             {step < STEPS.length - 1 ? (
-              <Button className="bg-emerald-500 hover:bg-emerald-400 text-white font-semibold ml-auto"
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold ml-auto"
                 onClick={() => setStep(s => s + 1)}
                 disabled={step === 0 && (!form.name.trim() || !form.teamName.trim())}>
                 Continue →
               </Button>
             ) : (
-              <Button className="bg-emerald-500 hover:bg-emerald-400 text-white font-semibold ml-auto"
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold ml-auto"
                 onClick={submit} disabled={loading}>
                 {loading ? "Creating…" : "Create league"}
               </Button>
@@ -277,7 +299,7 @@ export default function CreateLeaguePage() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <Label className="text-slate-300 text-sm font-medium">{label}</Label>
+      <Label className="text-foreground text-sm font-medium">{label}</Label>
       {children}
     </div>
   )
@@ -290,13 +312,13 @@ function SelectField({ value, onChange, options }: {
 }) {
   return (
     <Select value={value} onValueChange={(v) => { if (v !== null) onChange(v) }}>
-      <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
+      <SelectTrigger className="bg-muted border-border text-foreground">
         <SelectValue />
       </SelectTrigger>
-      <SelectContent className="bg-slate-800 border-slate-700">
+      <SelectContent className="bg-muted border-border">
         {options.map(opt => {
           const [val, label] = Array.isArray(opt) ? opt : [opt, opt]
-          return <SelectItem key={val} value={val} className="text-slate-200 hover:bg-slate-700 focus:bg-slate-700">{label}</SelectItem>
+          return <SelectItem key={val} value={val} className="text-foreground hover:bg-muted focus:bg-muted">{label}</SelectItem>
         })}
       </SelectContent>
     </Select>
@@ -305,9 +327,9 @@ function SelectField({ value, onChange, options }: {
 
 function ReviewRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between py-2 border-b border-slate-800">
-      <span className="text-slate-400 text-sm">{label}</span>
-      <span className="text-white text-sm font-medium">{value}</span>
+    <div className="flex justify-between py-2 border-b border-border">
+      <span className="text-muted-foreground text-sm">{label}</span>
+      <span className="text-foreground text-sm font-medium">{value}</span>
     </div>
   )
 }

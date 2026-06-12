@@ -569,6 +569,23 @@ export type EnumClaimStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumClaimStatusFilter<$PrismaModel>
 }
 
+export type EnumAuctionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel> | $Enums.AuctionStatus
+}
+
+export type EnumAuctionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionStatusWithAggregatesFilter<$PrismaModel> | $Enums.AuctionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel>
+}
+
 export type EnumTradeStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.TradeStatus | Prisma.EnumTradeStatusFieldRefInput<$PrismaModel>
   in?: $Enums.TradeStatus[] | Prisma.ListEnumTradeStatusFieldRefInput<$PrismaModel>
@@ -1138,6 +1155,23 @@ export type NestedEnumClaimStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumClaimStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumClaimStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumAuctionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel> | $Enums.AuctionStatus
+}
+
+export type NestedEnumAuctionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AuctionStatus | Prisma.EnumAuctionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AuctionStatus[] | Prisma.ListEnumAuctionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAuctionStatusWithAggregatesFilter<$PrismaModel> | $Enums.AuctionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAuctionStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumTradeStatusFilter<$PrismaModel = never> = {

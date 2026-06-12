@@ -405,6 +405,8 @@ export const ModelName = {
   TeamGameweekScore: 'TeamGameweekScore',
   WaiverRun: 'WaiverRun',
   WaiverClaim: 'WaiverClaim',
+  TransferAuction: 'TransferAuction',
+  TransferBid: 'TransferBid',
   Trade: 'Trade',
   TradeParticipant: 'TradeParticipant',
   TradeAsset: 'TradeAsset',
@@ -425,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "trade" | "tradeParticipant" | "tradeAsset" | "tradeVote" | "leagueMessage"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "transferAuction" | "transferBid" | "trade" | "tradeParticipant" | "tradeAsset" | "tradeVote" | "leagueMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1983,6 +1985,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TransferAuction: {
+      payload: Prisma.$TransferAuctionPayload<ExtArgs>
+      fields: Prisma.TransferAuctionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransferAuctionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransferAuctionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>
+        }
+        findFirst: {
+          args: Prisma.TransferAuctionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransferAuctionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>
+        }
+        findMany: {
+          args: Prisma.TransferAuctionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>[]
+        }
+        create: {
+          args: Prisma.TransferAuctionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>
+        }
+        createMany: {
+          args: Prisma.TransferAuctionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransferAuctionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>[]
+        }
+        delete: {
+          args: Prisma.TransferAuctionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>
+        }
+        update: {
+          args: Prisma.TransferAuctionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransferAuctionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransferAuctionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransferAuctionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransferAuctionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferAuctionPayload>
+        }
+        aggregate: {
+          args: Prisma.TransferAuctionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransferAuction>
+        }
+        groupBy: {
+          args: Prisma.TransferAuctionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferAuctionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransferAuctionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferAuctionCountAggregateOutputType> | number
+        }
+      }
+    }
+    TransferBid: {
+      payload: Prisma.$TransferBidPayload<ExtArgs>
+      fields: Prisma.TransferBidFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransferBidFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransferBidFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>
+        }
+        findFirst: {
+          args: Prisma.TransferBidFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransferBidFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>
+        }
+        findMany: {
+          args: Prisma.TransferBidFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>[]
+        }
+        create: {
+          args: Prisma.TransferBidCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>
+        }
+        createMany: {
+          args: Prisma.TransferBidCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransferBidCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>[]
+        }
+        delete: {
+          args: Prisma.TransferBidDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>
+        }
+        update: {
+          args: Prisma.TransferBidUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransferBidDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransferBidUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransferBidUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransferBidUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransferBidPayload>
+        }
+        aggregate: {
+          args: Prisma.TransferBidAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransferBid>
+        }
+        groupBy: {
+          args: Prisma.TransferBidGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferBidGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransferBidCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransferBidCountAggregateOutputType> | number
+        }
+      }
+    }
     Trade: {
       payload: Prisma.$TradePayload<ExtArgs>
       fields: Prisma.TradeFieldRefs
@@ -2541,10 +2691,14 @@ export const LeagueScalarFieldEnum = {
   slowDraftHoursPerPick: 'slowDraftHoursPerPick',
   rosterConfig: 'rosterConfig',
   scoringConfig: 'scoringConfig',
+  formationBoostConfig: 'formationBoostConfig',
   waiverType: 'waiverType',
   faabBudget: 'faabBudget',
   waiverDay: 'waiverDay',
   waiverProcessTime: 'waiverProcessTime',
+  auctionWindowHours: 'auctionWindowHours',
+  auctionAntiSnipeMinutes: 'auctionAntiSnipeMinutes',
+  auctionMinIncrement: 'auctionMinIncrement',
   keeperSlots: 'keeperSlots',
   contractYears: 'contractYears',
   rookieDraftRounds: 'rookieDraftRounds',
@@ -2717,6 +2871,36 @@ export const WaiverClaimScalarFieldEnum = {
 export type WaiverClaimScalarFieldEnum = (typeof WaiverClaimScalarFieldEnum)[keyof typeof WaiverClaimScalarFieldEnum]
 
 
+export const TransferAuctionScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  playerId: 'playerId',
+  status: 'status',
+  startedByTeamId: 'startedByTeamId',
+  currentBid: 'currentBid',
+  currentBidTeamId: 'currentBidTeamId',
+  minIncrement: 'minIncrement',
+  endsAt: 'endsAt',
+  settledAt: 'settledAt',
+  failReason: 'failReason',
+  createdAt: 'createdAt'
+} as const
+
+export type TransferAuctionScalarFieldEnum = (typeof TransferAuctionScalarFieldEnum)[keyof typeof TransferAuctionScalarFieldEnum]
+
+
+export const TransferBidScalarFieldEnum = {
+  id: 'id',
+  auctionId: 'auctionId',
+  teamId: 'teamId',
+  amount: 'amount',
+  dropPlayerId: 'dropPlayerId',
+  createdAt: 'createdAt'
+} as const
+
+export type TransferBidScalarFieldEnum = (typeof TransferBidScalarFieldEnum)[keyof typeof TransferBidScalarFieldEnum]
+
+
 export const TradeScalarFieldEnum = {
   id: 'id',
   leagueId: 'leagueId',
@@ -2731,6 +2915,7 @@ export const TradeScalarFieldEnum = {
   expiresAt: 'expiresAt',
   processedAt: 'processedAt',
   adminOverride: 'adminOverride',
+  counterOfTradeId: 'counterOfTradeId',
   createdAt: 'createdAt'
 } as const
 
@@ -3097,6 +3282,20 @@ export type ListEnumClaimStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'AuctionStatus'
+ */
+export type EnumAuctionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AuctionStatus[]'
+ */
+export type ListEnumAuctionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuctionStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'TradeStatus'
  */
 export type EnumTradeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeStatus'>
@@ -3282,6 +3481,8 @@ export type GlobalOmitConfig = {
   teamGameweekScore?: Prisma.TeamGameweekScoreOmit
   waiverRun?: Prisma.WaiverRunOmit
   waiverClaim?: Prisma.WaiverClaimOmit
+  transferAuction?: Prisma.TransferAuctionOmit
+  transferBid?: Prisma.TransferBidOmit
   trade?: Prisma.TradeOmit
   tradeParticipant?: Prisma.TradeParticipantOmit
   tradeAsset?: Prisma.TradeAssetOmit

@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils"
 import { TradeAnalyzer } from "./TradeAnalyzer"
 
 const POS_COLORS: Record<string, string> = {
-  GK: "bg-yellow-600/20 text-yellow-400",
-  DEF: "bg-blue-600/20 text-blue-400",
-  MID: "bg-emerald-600/20 text-emerald-400",
-  FWD: "bg-red-600/20 text-red-400",
+  GK: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
+  DEF: "bg-sky-500/15 text-sky-600 dark:text-sky-300",
+  MID: "bg-violet-500/15 text-violet-600 dark:text-violet-300",
+  FWD: "bg-rose-500/15 text-rose-600 dark:text-rose-300",
 }
 
 export interface TradeParticipant {
@@ -32,6 +32,7 @@ export interface TradeView {
   notes: string | null
   isMultiTeam: boolean
   adminOverride: boolean
+  counterOfTradeId: string | null
   createdAt: string
   participants: TradeParticipant[]
   assets: TradeAssetView[]
@@ -45,21 +46,23 @@ interface TradeCardProps {
   onAccept: () => void
   onReject: () => void
   onCancel: () => void
+  onCounter: () => void
   onForce: () => void
   onCommishCancel: () => void
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  PENDING: "bg-yellow-600/20 text-yellow-400",
-  ACCEPTED: "bg-blue-600/20 text-blue-400",
-  PROCESSING: "bg-blue-600/20 text-blue-400",
-  COMPLETED: "bg-emerald-600/20 text-emerald-400",
-  REJECTED: "bg-red-600/20 text-red-400",
-  CANCELLED: "bg-slate-700 text-slate-400",
-  VETOED: "bg-red-600/20 text-red-400",
+  PENDING: "bg-warn/15 text-warn",
+  ACCEPTED: "bg-primary/15 text-primary",
+  PROCESSING: "bg-primary/15 text-primary",
+  COMPLETED: "bg-success/15 text-success",
+  REJECTED: "bg-danger/15 text-danger",
+  CANCELLED: "bg-muted text-muted-foreground",
+  COUNTERED: "bg-accent2/15 text-accent2",
+  VETOED: "bg-danger/15 text-danger",
 }
 
-export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onReject, onCancel, onForce, onCommishCancel }: TradeCardProps) {
+export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onReject, onCancel, onCounter, onForce, onCommishCancel }: TradeCardProps) {
   const teamName = (id: string) => trade.participants.find(p => p.teamId === id)?.team.name ?? "?"
   const teams = trade.participants.map(p => ({ id: p.teamId, name: p.team.name }))
 
@@ -90,15 +93,16 @@ export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onR
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+    <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       {/* Header */}
       <div className="flex items-center gap-2 flex-wrap">
-        <Badge className={cn("border-0 text-xs", STATUS_COLORS[trade.status] ?? "bg-slate-700 text-slate-400")}>
+        <Badge className={cn("border-0 text-xs", STATUS_COLORS[trade.status] ?? "bg-muted text-muted-foreground")}>
           {trade.status}
         </Badge>
-        {trade.isMultiTeam && <Badge className="bg-slate-800 text-slate-300 border-0 text-xs">{trade.participants.length}-team</Badge>}
+        {trade.isMultiTeam && <Badge className="bg-muted text-foreground border-0 text-xs">{trade.participants.length}-team</Badge>}
+        {trade.counterOfTradeId && <Badge className="bg-amber-600/20 text-amber-400 border-0 text-xs">Counter-offer</Badge>}
         {trade.adminOverride && <Badge className="bg-purple-600/20 text-purple-400 border-0 text-xs">Admin override</Badge>}
-        <span className="text-slate-500 text-xs ml-auto">
+        <span className="text-muted-foreground text-xs ml-auto">
           {isProposer ? "You proposed" : `From ${proposer ? teamName(proposer.teamId) : "?"}`}
         </span>
       </div>
@@ -106,8 +110,8 @@ export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onR
       {/* Asset flow per receiving team */}
       <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${Math.min(byReceiver.size, 3)}, minmax(0, 1fr))` }}>
         {[...byReceiver.entries()].map(([toTeamId, assets]) => (
-          <div key={toTeamId} className="rounded-lg bg-slate-800/40 border border-slate-800 p-2.5">
-            <p className={cn("text-xs font-semibold mb-1.5", toTeamId === myTeamId ? "text-emerald-400" : "text-slate-300")}>
+          <div key={toTeamId} className="rounded-lg bg-muted/40 border border-border p-2.5">
+            <p className={cn("text-xs font-semibold mb-1.5", toTeamId === myTeamId ? "text-primary" : "text-foreground")}>
               {teamName(toTeamId)} gets
             </p>
             <div className="space-y-1">
@@ -118,17 +122,17 @@ export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onR
                     {p ? (
                       <>
                         <span className={cn("text-[10px] px-1 rounded font-medium", POS_COLORS[p.position])}>{p.position}</span>
-                        <span className="text-slate-200 truncate flex-1">{p.webName}</span>
-                        <span className="text-slate-500">{p.fplTeam.shortName}</span>
-                        <span className="text-slate-400 tabular-nums">{p.totalPoints}</span>
+                        <span className="text-foreground truncate flex-1">{p.webName}</span>
+                        <span className="text-muted-foreground">{p.fplTeam.shortName}</span>
+                        <span className="text-muted-foreground tabular-nums">{p.totalPoints}</span>
                       </>
                     ) : a.draftPickSlot ? (
                       <>
                         <span className="text-[10px] px-1 rounded font-medium bg-purple-600/20 text-purple-400">PICK</span>
-                        <span className="text-slate-200 truncate flex-1">{a.draftPickSlot.season} Round {a.draftPickSlot.round}</span>
+                        <span className="text-foreground truncate flex-1">{a.draftPickSlot.season} Round {a.draftPickSlot.round}</span>
                       </>
                     ) : null}
-                    <span className="text-slate-600 text-[10px]">← {teamName(a.fromTeamId)}</span>
+                    <span className="text-muted-foreground text-[10px]">← {teamName(a.fromTeamId)}</span>
                   </div>
                 )
               })}
@@ -137,16 +141,16 @@ export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onR
         ))}
       </div>
 
-      {trade.notes && <p className="text-slate-400 text-xs italic">&ldquo;{trade.notes}&rdquo;</p>}
+      {trade.notes && <p className="text-muted-foreground text-xs italic">&ldquo;{trade.notes}&rdquo;</p>}
 
       {/* Multi-team acceptance status */}
       {(trade.isMultiTeam || trade.status === "PENDING") && (
         <div className="flex flex-wrap gap-1.5">
           {trade.participants.map(p => (
             <span key={p.teamId} className={cn("text-[10px] px-1.5 py-0.5 rounded",
-              p.status === "ACCEPTED" ? "bg-emerald-600/20 text-emerald-400" :
-              p.status === "REJECTED" ? "bg-red-600/20 text-red-400" :
-              "bg-slate-800 text-slate-500")}>
+              p.status === "ACCEPTED" ? "bg-primary/20 text-primary" :
+              p.status === "REJECTED" ? "bg-danger/20 text-danger" :
+              "bg-muted text-muted-foreground")}>
               {p.team.name} {p.status === "ACCEPTED" ? "✓" : p.status === "REJECTED" ? "✗" : "…"}
             </span>
           ))}
@@ -162,18 +166,22 @@ export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onR
           {canRespond && (
             <>
               <button onClick={onAccept} disabled={busy}
-                className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-white text-xs font-semibold transition-colors">
+                className="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground text-xs font-semibold transition-colors">
                 Accept
               </button>
               <button onClick={onReject} disabled={busy}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-red-400 text-xs font-semibold transition-colors">
+                className="px-3 py-1.5 rounded-lg bg-muted hover:bg-muted disabled:opacity-50 text-danger text-xs font-semibold transition-colors">
                 Reject
+              </button>
+              <button onClick={onCounter} disabled={busy}
+                className="px-3 py-1.5 rounded-lg bg-amber-600/20 hover:bg-amber-600/40 disabled:opacity-50 text-amber-300 text-xs font-semibold transition-colors">
+                Counter
               </button>
             </>
           )}
           {canCancel && (
             <button onClick={onCancel} disabled={busy}
-              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-300 text-xs font-semibold transition-colors">
+              className="px-3 py-1.5 rounded-lg bg-muted hover:bg-muted disabled:opacity-50 text-foreground text-xs font-semibold transition-colors">
               Cancel proposal
             </button>
           )}
@@ -184,7 +192,7 @@ export function TradeCard({ trade, myTeamId, isCommissioner, busy, onAccept, onR
                 Force ✓
               </button>
               <button onClick={onCommishCancel} disabled={busy}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-400 text-xs font-semibold transition-colors">
+                className="px-3 py-1.5 rounded-lg bg-muted hover:bg-muted disabled:opacity-50 text-muted-foreground text-xs font-semibold transition-colors">
                 Force ✗
               </button>
             </div>

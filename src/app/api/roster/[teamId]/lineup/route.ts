@@ -1,6 +1,7 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { validateLineup } from "@/lib/roster-validator"
+import { validateLineup, validateLiveSubstitution } from "@/lib/roster-validator"
+import { getLockedPlayerIds, isGameweekLive } from "@/lib/lineup-lock"
 import type { RosterConfig } from "@/types/draft"
 import { z } from "zod"
 
@@ -27,7 +28,13 @@ export async function GET(
     orderBy: { lineupPosition: "asc" },
   })
 
-  return Response.json({ slots })
+  const { gameweekId, live } = await isGameweekLive()
+  const lockedPlayerIds =
+    live && gameweekId !== null
+      ? Array.from(await getLockedPlayerIds(teamId, gameweekId))
+      : []
+
+  return Response.json({ slots, live, lockedPlayerIds })
 }
 
 export async function PATCH(
@@ -79,6 +86,17 @@ export async function PATCH(
 
   if (!validation.valid) {
     return Response.json({ error: validation.errors.join("; ") }, { status: 400 })
+  }
+
+  // Live-substitution guard: while the gameweek is in-flight, players whose club
+  // has kicked off are locked and may not change starting/bench status.
+  const { gameweekId, live } = await isGameweekLive()
+  if (live && gameweekId !== null) {
+    const lockedPlayerIds = await getLockedPlayerIds(teamId, gameweekId)
+    const liveCheck = validateLiveSubstitution(allSlots, starters, lockedPlayerIds)
+    if (!liveCheck.valid) {
+      return Response.json({ error: liveCheck.errors.join("; ") }, { status: 400 })
+    }
   }
 
   // Apply the lineup

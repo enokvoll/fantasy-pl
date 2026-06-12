@@ -14,12 +14,15 @@ export function LeagueSidebar({ league, myTeam }: LeagueSidebarProps) {
   const pathname = usePathname()
   const base = `/league/${league.id}`
 
+  const isMarketplace = league.waiverType === "MARKETPLACE"
   const links = [
     { href: base, label: "Overview", icon: "🏠" },
     { href: `${base}/draft`, label: "Draft Room", icon: "🎯" },
     { href: `${base}/roster`, label: "My Roster", icon: "👕" },
     { href: `${base}/players`, label: "Players", icon: "⚽" },
-    { href: `${base}/waivers`, label: "Waivers", icon: "🔄" },
+    isMarketplace
+      ? { href: `${base}/market`, label: "Transfer Market", icon: "🏷️" }
+      : { href: `${base}/waivers`, label: "Waivers", icon: "🔄" },
     { href: `${base}/trades`, label: "Trades", icon: "🔀" },
     { href: `${base}/matchups`, label: "Matchups", icon: "📅" },
     { href: `${base}/standings`, label: "Standings", icon: "📊" },
@@ -29,10 +32,10 @@ export function LeagueSidebar({ league, myTeam }: LeagueSidebarProps) {
   return (
     <aside className="w-52 shrink-0">
       {/* League info */}
-      <div className="mb-4 p-3 rounded-xl bg-slate-900 border border-slate-800">
-        <h2 className="font-bold text-white text-sm leading-tight truncate">{league.name}</h2>
-        {myTeam && <p className="text-emerald-400 text-xs mt-0.5 truncate">{myTeam.name}</p>}
-        <p className="text-slate-500 text-xs mt-1">{league._count.teams}/{league.maxTeams} teams</p>
+      <div className="mb-4 p-3 rounded-xl bg-card border border-border">
+        <h2 className="font-heading font-semibold text-foreground text-sm leading-tight truncate">{league.name}</h2>
+        {myTeam && <p className="text-primary text-xs mt-0.5 truncate">{myTeam.name}</p>}
+        <p className="text-muted-foreground text-xs mt-1">{league._count.teams}/{league.maxTeams} teams</p>
       </div>
 
       {/* Nav */}
@@ -44,8 +47,8 @@ export function LeagueSidebar({ league, myTeam }: LeagueSidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors",
                 active
-                  ? "bg-emerald-600/20 text-emerald-400 font-medium"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                  ? "bg-primary/12 text-primary font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}>
               <span className="text-base">{icon}</span>
               {label}
@@ -55,9 +58,9 @@ export function LeagueSidebar({ league, myTeam }: LeagueSidebarProps) {
       </nav>
 
       {/* Invite code */}
-      <div className="mt-4 p-3 rounded-xl bg-slate-900 border border-slate-800">
-        <p className="text-slate-500 text-xs mb-1">Invite code</p>
-        <p className="text-slate-300 text-xs font-mono break-all">{league.inviteCode}</p>
+      <div className="mt-4 p-3 rounded-xl bg-card border border-border">
+        <p className="text-muted-foreground text-xs mb-1">Invite code</p>
+        <p className="text-foreground text-xs font-mono break-all">{league.inviteCode}</p>
       </div>
     </aside>
   )

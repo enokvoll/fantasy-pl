@@ -1,5 +1,10 @@
 import { prisma } from "@/lib/prisma"
 import type { Position } from "@/generated/prisma/client"
+import {
+  getFormationKey,
+  resolveFormationBoost,
+  type ScoringAction,
+} from "@/lib/formation-boosts"
 
 interface ScoringRules {
   minutesPlayed1to59: number
@@ -49,18 +54,24 @@ export function calculatePlayerPoints(
     bonus: number
   },
   position: Position,
-  rules: ScoringRules = DEFAULT_SCORING
+  rules: ScoringRules = DEFAULT_SCORING,
+  /** Position-resolved formation multipliers for boostable actions. */
+  actionMultipliers?: Partial<Record<ScoringAction, number>>
 ): number {
+  // Scale a boostable action's points by its formation multiplier (default 1).
+  const m = (action: ScoringAction, value: number) =>
+    value * (actionMultipliers?.[action] ?? 1)
+
   let pts = 0
 
   if (stats.minutes >= 60) pts += rules.minutesPlayed60plus
   else if (stats.minutes > 0) pts += rules.minutesPlayed1to59
 
-  pts += stats.goalsScored * rules.goalScoredByPosition[position]
-  pts += stats.assists * rules.assist
+  pts += m("goals", stats.goalsScored * rules.goalScoredByPosition[position])
+  pts += m("assists", stats.assists * rules.assist)
 
   if (stats.cleanSheets > 0) {
-    pts += rules.cleanSheetByPosition[position]
+    pts += m("cleanSheet", rules.cleanSheetByPosition[position])
   }
 
   if ((position === "GK" || position === "DEF") && stats.goalsConceded >= 2) {
@@ -74,12 +85,17 @@ export function calculatePlayerPoints(
   pts += stats.redCards * rules.redCard
 
   if (position === "GK") {
-    pts += Math.floor(stats.saves / 3) * rules.savesEvery3
+    pts += m("saves", Math.floor(stats.saves / 3) * rules.savesEvery3)
   }
 
-  pts += stats.bonus * rules.bonus
+  pts += m("bonus", stats.bonus * rules.bonus)
 
   return pts
+}
+
+/** Round to one decimal to keep boosted (fractional) points tidy. */
+function round1(n: number): number {
+  return Math.round(n * 10) / 10
 }
 
 export async function calculateTeamScore(
@@ -113,10 +129,24 @@ export async function calculateTeamScore(
   })
   const statsMap = new Map(gwStats.map((s) => [s.playerId, s]))
 
+  // Formation boost is driven by the manager's chosen starting XI (the tactic),
+  // independent of any later auto-subs.
+  const formationKey = getFormationKey(
+    starters
+      .filter((s) => s.player)
+      .map((s) => ({ position: s.player!.position }))
+  )
+  const boost = resolveFormationBoost(formationKey, league.formationBoostConfig)
+  const actionMultipliersFor = (position: Position): Partial<Record<ScoringAction, number>> | undefined =>
+    boost?.actionMultipliers?.[position]
+  const starterMult = 1 + (boost?.starterTotalPct ?? 0)
+
   const breakdown: unknown[] = []
   let totalPoints = 0
 
   const usedBenchIds = new Set<number>()
+  // Track counted players' goals + positions for the team-bonus condition.
+  const countedScorers: { position: Position; goals: number }[] = []
 
   for (const slot of starters) {
     if (!slot.playerId || !slot.player) continue
@@ -134,18 +164,45 @@ export async function calculateTeamScore(
       )
       if (sub?.playerId && sub.player) {
         const subStats = statsMap.get(sub.playerId)!
-        const pts = calculatePlayerPoints(subStats, sub.player.position, rules)
+        const pts = round1(
+          calculatePlayerPoints(subStats, sub.player.position, rules, actionMultipliersFor(sub.player.position)) * starterMult
+        )
         usedBenchIds.add(sub.playerId)
         totalPoints += pts
+        countedScorers.push({ position: sub.player.position, goals: subStats.goalsScored })
         breakdown.push({ playerId: sub.playerId, points: pts, isStarting: false, subFor: slot.playerId })
       }
       continue
     }
 
-    const pts = calculatePlayerPoints(stats, slot.player.position, rules)
+    const pts = round1(
+      calculatePlayerPoints(stats, slot.player.position, rules, actionMultipliersFor(slot.player.position)) * starterMult
+    )
     totalPoints += pts
+    countedScorers.push({ position: slot.player.position, goals: stats.goalsScored })
     breakdown.push({ playerId: slot.playerId, points: pts, isStarting: true })
   }
+
+  // Team-level conditional bonus (e.g. +2% when 3+ attackers scored).
+  let teamBonusApplied = false
+  if (boost?.teamBonus) {
+    const { positions, threshold, pct } = boost.teamBonus
+    const qualifying = countedScorers.filter(
+      (p) => positions.includes(p.position) && p.goals >= 1
+    ).length
+    if (qualifying >= threshold) {
+      totalPoints = round1(totalPoints * (1 + pct))
+      teamBonusApplied = true
+    }
+  }
+
+  totalPoints = round1(totalPoints)
+  breakdown.push({
+    meta: true,
+    formation: formationKey,
+    boostLabel: boost?.label ?? null,
+    teamBonusApplied,
+  })
 
   await prisma.teamGameweekScore.upsert({
     where: { teamId_gameweekId: { teamId, gameweekId } },
@@ -156,4 +213,12 @@ export async function calculateTeamScore(
   })
 
   return { totalPoints, breakdown }
+}
+
+/** Shape of the meta entry appended to a TeamGameweekScore breakdown array. */
+export interface ScoreBreakdownMeta {
+  meta: true
+  formation: string
+  boostLabel: string | null
+  teamBonusApplied: boolean
 }
