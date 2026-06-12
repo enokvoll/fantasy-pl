@@ -28,16 +28,16 @@ export function TradeAnalyzer({ teams, assets, compact = false }: TradeAnalyzerP
   const topNet = net.get(top?.id ?? "") ?? 0
 
   return (
-    <div className={cn("rounded-lg bg-slate-800/50 border border-slate-700", compact ? "p-2" : "p-3")}>
-      {!compact && <p className="text-slate-400 text-xs font-medium mb-2">Trade Analyzer (by season points)</p>}
+    <div className={cn("rounded-lg bg-muted/50 border border-border", compact ? "p-2" : "p-3")}>
+      {!compact && <p className="text-muted-foreground text-xs font-medium mb-2">Trade Analyzer (by season points)</p>}
       <div className="space-y-1">
         {ranked.map(t => {
           const n = net.get(t.id) ?? 0
           return (
             <div key={t.id} className="flex items-center justify-between text-xs">
-              <span className="text-slate-300 truncate">{t.name}</span>
+              <span className="text-foreground truncate">{t.name}</span>
               <span className={cn("font-mono font-semibold tabular-nums",
-                n > 0 ? "text-emerald-400" : n < 0 ? "text-red-400" : "text-slate-500")}>
+                n > 0 ? "text-primary" : n < 0 ? "text-danger" : "text-muted-foreground")}>
                 {n > 0 ? "+" : ""}{n} pts
               </span>
             </div>
@@ -45,8 +45,8 @@ export function TradeAnalyzer({ teams, assets, compact = false }: TradeAnalyzerP
         })}
       </div>
       {topNet !== 0 && (
-        <p className="text-slate-500 text-[11px] mt-2">
-          Favours <span className="text-emerald-400 font-medium">{top.name}</span> on season points
+        <p className="text-muted-foreground text-[11px] mt-2">
+          Favours <span className="text-primary font-medium">{top.name}</span> on season points
         </p>
       )}
     </div>

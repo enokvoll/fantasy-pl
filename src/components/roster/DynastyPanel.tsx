@@ -47,25 +47,25 @@ export function DynastyPanel({ teamId, players, rosterCap, canCut }: DynastyPane
   const overCap = players.length > rosterCap
 
   return (
-    <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900 p-4">
+    <div className="mt-8 rounded-xl border border-border bg-card p-4">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-white font-bold text-sm">Dynasty roster</h2>
-        <span className={`text-xs font-medium ${overCap ? "text-red-400" : "text-slate-400"}`}>
+        <h2 className="text-foreground font-bold text-sm">Dynasty roster</h2>
+        <span className={`text-xs font-medium ${overCap ? "text-danger" : "text-muted-foreground"}`}>
           {players.length}/{rosterCap} players
         </span>
       </div>
       {canCut && overCap && (
-        <p className="text-xs text-red-400 mb-3">
+        <p className="text-xs text-danger mb-3">
           Over the roster limit — cut {players.length - rosterCap} player{players.length - rosterCap === 1 ? "" : "s"} to make room for the rookie draft.
         </p>
       )}
-      <div className="divide-y divide-slate-800">
+      <div className="divide-y divide-border">
         {players.map(p => (
           <div key={p.slotId} className="flex items-center gap-3 py-2">
-            <span className="w-9 text-xs font-mono text-slate-500">{p.position}</span>
+            <span className="w-9 text-xs font-mono text-muted-foreground">{p.position}</span>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-white truncate">{p.playerName} <span className="text-slate-500">{p.clubShort}</span></p>
-              <p className="text-xs text-slate-500">
+              <p className="text-sm text-foreground truncate">{p.playerName} <span className="text-muted-foreground">{p.clubShort}</span></p>
+              <p className="text-xs text-muted-foreground">
                 {p.yearsOwned > 0 ? `${p.yearsOwned} yr${p.yearsOwned === 1 ? "" : "s"} owned` : "New"} · {p.acquireType.toLowerCase()} · {p.totalPoints} pts
               </p>
             </div>
@@ -73,7 +73,7 @@ export function DynastyPanel({ teamId, players, rosterCap, canCut }: DynastyPane
               <button
                 onClick={() => cut(p.slotId, p.playerName)}
                 disabled={cutting !== null}
-                className="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-red-900/40 border border-slate-700 text-red-400 text-xs font-medium transition-colors disabled:opacity-50">
+                className="px-2.5 py-1 rounded-md bg-muted hover:bg-red-900/40 border border-border text-danger text-xs font-medium transition-colors disabled:opacity-50">
                 {cutting === p.slotId ? "Cutting…" : "Cut"}
               </button>
             )}

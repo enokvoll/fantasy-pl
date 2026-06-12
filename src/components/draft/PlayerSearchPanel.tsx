@@ -16,10 +16,10 @@ interface Player {
 }
 
 const POS_COLORS: Record<string, string> = {
-  GK: "bg-yellow-600/20 text-yellow-400",
-  DEF: "bg-blue-600/20 text-blue-400",
-  MID: "bg-emerald-600/20 text-emerald-400",
-  FWD: "bg-red-600/20 text-red-400",
+  GK: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
+  DEF: "bg-sky-500/15 text-sky-600 dark:text-sky-300",
+  MID: "bg-violet-500/15 text-violet-600 dark:text-violet-300",
+  FWD: "bg-rose-500/15 text-rose-600 dark:text-rose-300",
 }
 
 interface PlayerSearchPanelProps {
@@ -68,7 +68,7 @@ export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, pi
             onClick={() => setPosFilter(pos)}
             className={cn(
               "px-2 py-0.5 rounded text-xs font-medium transition-colors",
-              posFilter === pos ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700"
+              posFilter === pos ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted"
             )}>
             {pos}
           </button>
@@ -78,25 +78,25 @@ export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, pi
         value={search}
         onChange={e => setSearch(e.target.value)}
         placeholder="Search players…"
-        className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 text-xs h-8 mb-2"
+        className="bg-muted border-border text-foreground placeholder:text-muted-foreground text-xs h-8 mb-2"
       />
       <div className="overflow-y-auto flex-1 space-y-0.5 min-h-0">
         {filtered.slice(0, 60).map(player => (
           <div key={player.id}
-            className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-slate-800/60 transition-colors group">
+            className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted/60 transition-colors group">
             <span className={cn("text-[10px] px-1 rounded font-medium shrink-0", POS_COLORS[player.position] ?? "")}>
               {player.position}
             </span>
             <div className="flex-1 min-w-0">
-              <span className="text-slate-200 text-xs font-medium truncate block">{player.webName}</span>
-              <span className="text-slate-500 text-[10px]">{player.fplTeam.shortName}</span>
+              <span className="text-foreground text-xs font-medium truncate block">{player.webName}</span>
+              <span className="text-muted-foreground text-[10px]">{player.fplTeam.shortName}</span>
             </div>
-            <span className="text-slate-400 text-xs tabular-nums">{player.totalPoints}pts</span>
-            <span className="text-slate-500 text-[10px]">£{(player.nowCost / 10).toFixed(1)}m</span>
+            <span className="text-muted-foreground text-xs tabular-nums">{player.totalPoints}pts</span>
+            <span className="text-muted-foreground text-[10px]">£{(player.nowCost / 10).toFixed(1)}m</span>
             <div className="flex gap-1 shrink-0">
               <button
                 onClick={() => onAddToQueue(player.id, 999)}
-                className="opacity-0 group-hover:opacity-100 text-[10px] px-1.5 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-300 transition-all"
+                className="opacity-0 group-hover:opacity-100 text-[10px] px-1.5 py-0.5 rounded bg-muted hover:bg-muted text-foreground transition-all"
                 title="Add to queue">
                 Q+
               </button>
@@ -106,8 +106,8 @@ export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, pi
                 className={cn(
                   "text-[10px] px-2 py-0.5 rounded font-semibold transition-colors",
                   isMyTurn && picking === null
-                    ? "bg-emerald-600 hover:bg-emerald-500 text-white"
-                    : "bg-slate-800 text-slate-600 cursor-not-allowed"
+                    ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+                    : "bg-muted text-muted-foreground cursor-not-allowed"
                 )}>
                 {picking === player.id ? "…" : "Pick"}
               </button>
@@ -115,7 +115,7 @@ export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, pi
           </div>
         ))}
         {filtered.length === 0 && (
-          <p className="text-slate-500 text-xs text-center py-4">No players found</p>
+          <p className="text-muted-foreground text-xs text-center py-4">No players found</p>
         )}
       </div>
     </div>

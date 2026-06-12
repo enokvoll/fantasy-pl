@@ -46,7 +46,7 @@ export function BotControls({ leagueId, spotsLeft, botCount }: BotControlsProps)
         <button
           onClick={addBot}
           disabled={loading !== null}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-medium transition-colors disabled:opacity-50">
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted border border-border text-foreground text-xs font-medium transition-colors disabled:opacity-50">
           {loading === "add" ? "Adding…" : "🤖 Add bot"}
         </button>
       )}
@@ -54,12 +54,12 @@ export function BotControls({ leagueId, spotsLeft, botCount }: BotControlsProps)
         <button
           onClick={removeBot}
           disabled={loading !== null}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-red-400 text-xs font-medium transition-colors disabled:opacity-50">
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted hover:bg-muted border border-border text-danger text-xs font-medium transition-colors disabled:opacity-50">
           {loading === "remove" ? "Removing…" : "Remove bot"}
         </button>
       )}
       {spotsLeft > 0 && (
-        <span className="text-slate-500 text-xs">{spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} remaining</span>
+        <span className="text-muted-foreground text-xs">{spotsLeft} spot{spotsLeft !== 1 ? "s" : ""} remaining</span>
       )}
     </div>
   )

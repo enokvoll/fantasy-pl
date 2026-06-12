@@ -68,13 +68,13 @@ export function DraftRoom({
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <p className="text-5xl mb-4">🏆</p>
-        <h2 className="text-2xl font-black text-white mb-2">Draft Complete!</h2>
-        <p className="text-slate-400 mb-6">{picksCount} picks made across {teams.length} teams</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Draft Complete!</h2>
+        <p className="text-muted-foreground mb-6">{picksCount} picks made across {teams.length} teams</p>
         <div className="flex gap-3">
-          <Link href={`/league/${leagueId}/roster`} className={cn(buttonVariants(), "bg-emerald-500 hover:bg-emerald-400 text-white font-semibold")}>
+          <Link href={`/league/${leagueId}/roster`} className={cn(buttonVariants(), "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold")}>
             View my roster
           </Link>
-          <Link href={`/league/${leagueId}`} className={cn(buttonVariants({ variant: "outline" }), "border-slate-700 text-slate-300 hover:bg-slate-800")}>
+          <Link href={`/league/${leagueId}`} className={cn(buttonVariants({ variant: "outline" }), "border-border text-foreground hover:bg-muted")}>
             League overview
           </Link>
         </div>
@@ -87,8 +87,8 @@ export function DraftRoom({
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <p className="text-5xl mb-4">🎯</p>
-        <h2 className="text-2xl font-black text-white mb-2">Draft Room</h2>
-        <p className="text-slate-400 mb-2">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Draft Room</h2>
+        <p className="text-muted-foreground mb-2">
           {teams.length} team{teams.length !== 1 ? "s" : ""} registered
         </p>
         <div className="flex gap-2 justify-center mb-6 flex-wrap">
@@ -96,27 +96,27 @@ export function DraftRoom({
             <Badge key={team.id}
               className={cn(
                 "text-xs border-0",
-                team.id === myTeamId ? "bg-emerald-600/20 text-emerald-400" :
-                onlineTeamIds.includes(team.id) ? "bg-slate-700 text-slate-300" : "bg-slate-800/50 text-slate-500"
+                team.id === myTeamId ? "bg-primary/20 text-primary" :
+                onlineTeamIds.includes(team.id) ? "bg-muted text-foreground" : "bg-muted/50 text-muted-foreground"
               )}>
               {team.name}
-              {onlineTeamIds.includes(team.id) && <span className="ml-1 inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />}
+              {onlineTeamIds.includes(team.id) && <span className="ml-1 inline-block w-1.5 h-1.5 rounded-full bg-primary" />}
             </Badge>
           ))}
         </div>
-        <div className="flex items-center gap-2 mb-6 text-sm text-slate-400">
-          <span className={cn("w-2 h-2 rounded-full", isConnected ? "bg-emerald-400" : "bg-red-400")} />
+        <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
+          <span className={cn("w-2 h-2 rounded-full", isConnected ? "bg-primary" : "bg-red-400")} />
           {isConnected ? "Connected to draft room" : "Connecting…"}
         </div>
         {isCommissioner ? (
           <button
             onClick={startDraft}
             disabled={!isConnected}
-            className="px-8 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-white font-bold text-lg transition-colors">
+            className="px-8 py-3 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-primary-foreground font-bold text-lg transition-colors">
             Start Draft
           </button>
         ) : (
-          <p className="text-slate-500 text-sm">Waiting for the commissioner to start the draft…</p>
+          <p className="text-muted-foreground text-sm">Waiting for the commissioner to start the draft…</p>
         )}
       </div>
     )
@@ -129,29 +129,29 @@ export function DraftRoom({
       <div className="flex items-center gap-2 flex-wrap">
         <Badge className={cn(
           "border-0 text-xs",
-          status === "IN_PROGRESS" ? "bg-emerald-600/20 text-emerald-400" :
+          status === "IN_PROGRESS" ? "bg-primary/20 text-primary" :
           "bg-yellow-600/20 text-yellow-400"
         )}>
           {status === "IN_PROGRESS" ? "Live" : "Paused"}
         </Badge>
-        <span className="text-slate-400 text-xs">Pick {(draftState?.currentPick ?? 0) + 1}</span>
+        <span className="text-muted-foreground text-xs">Pick {(draftState?.currentPick ?? 0) + 1}</span>
         {currentTeam && (
           <span className={cn(
             "text-xs font-medium",
-            currentTeam.id === myTeamId ? "text-emerald-400" : "text-slate-300"
+            currentTeam.id === myTeamId ? "text-primary" : "text-foreground"
           )}>
             {currentTeam.id === myTeamId ? "🟢 Your pick!" : `${currentTeam.name}'s pick`}
           </span>
         )}
         <div className="flex items-center gap-1 ml-auto">
-          <span className={cn("w-2 h-2 rounded-full shrink-0", isConnected ? "bg-emerald-400" : "bg-red-400")} />
+          <span className={cn("w-2 h-2 rounded-full shrink-0", isConnected ? "bg-primary" : "bg-red-400")} />
           {isCommissioner && (
             status === "IN_PROGRESS" ? (
-              <button onClick={pauseDraft} className="text-xs px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 transition-colors">
+              <button onClick={pauseDraft} className="text-xs px-2 py-0.5 rounded bg-muted hover:bg-muted text-muted-foreground transition-colors">
                 ⏸ Pause
               </button>
             ) : (
-              <button onClick={resumeDraft} className="text-xs px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white transition-colors">
+              <button onClick={resumeDraft} className="text-xs px-2 py-0.5 rounded bg-primary hover:bg-primary/90 text-primary-foreground transition-colors">
                 ▶ Resume
               </button>
             )
@@ -162,8 +162,8 @@ export function DraftRoom({
       {/* Main 2-column layout */}
       <div className="flex gap-3 flex-1 min-h-0">
         {/* Left: board */}
-        <div className="flex-1 min-w-0 bg-slate-900 border border-slate-800 rounded-xl p-3 overflow-auto">
-          <p className="text-slate-400 text-xs font-medium mb-2">Draft Board</p>
+        <div className="flex-1 min-w-0 bg-card border border-border rounded-xl p-3 overflow-auto">
+          <p className="text-muted-foreground text-xs font-medium mb-2">Draft Board</p>
           {draftState && (
             <DraftBoard draftState={draftState} myTeamId={myTeamId} botTeamIds={botTeamIds} />
           )}
@@ -179,11 +179,11 @@ export function DraftRoom({
           />
 
           {/* Player search */}
-          <div className="flex-1 bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col min-h-0" style={{ maxHeight: "320px" }}>
-            <p className="text-slate-400 text-xs font-medium mb-2">Available Players</p>
+          <div className="flex-1 bg-card border border-border rounded-xl p-3 flex flex-col min-h-0" style={{ maxHeight: "320px" }}>
+            <p className="text-muted-foreground text-xs font-medium mb-2">Available Players</p>
             {isMyTurn && (
-              <div className="mb-2 px-2 py-1 rounded bg-emerald-600/20 border border-emerald-600/30">
-                <p className="text-emerald-400 text-xs font-medium">It&apos;s your turn to pick!</p>
+              <div className="mb-2 px-2 py-1 rounded bg-primary/20 border border-primary/40">
+                <p className="text-primary text-xs font-medium">It&apos;s your turn to pick!</p>
               </div>
             )}
             <PlayerSearchPanel
@@ -196,16 +196,16 @@ export function DraftRoom({
           </div>
 
           {/* Queue */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3">
-            <p className="text-slate-400 text-xs font-medium mb-2">
-              Auto-pick Queue <span className="text-slate-600">({queue.length})</span>
+          <div className="bg-card border border-border rounded-xl p-3">
+            <p className="text-muted-foreground text-xs font-medium mb-2">
+              Auto-pick Queue <span className="text-muted-foreground">({queue.length})</span>
             </p>
             <DraftQueue queue={queue} onRemove={removeFromQueue} onReorder={reorderQueue} />
           </div>
 
           {/* Chat */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col" style={{ maxHeight: "200px" }}>
-            <p className="text-slate-400 text-xs font-medium mb-2">Chat</p>
+          <div className="bg-card border border-border rounded-xl p-3 flex flex-col" style={{ maxHeight: "200px" }}>
+            <p className="text-muted-foreground text-xs font-medium mb-2">Chat</p>
             <DraftChat messages={chatMessages} onSend={sendChat} myTeamName={myTeamName} />
           </div>
         </div>

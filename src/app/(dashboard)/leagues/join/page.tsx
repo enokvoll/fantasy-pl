@@ -47,27 +47,27 @@ export default function JoinLeaguePage() {
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-3xl font-black text-white mb-6">Join a league</h1>
-      <Card className="bg-slate-900 border-slate-800">
+      <h1 className="text-3xl font-bold text-foreground mb-6">Join a league</h1>
+      <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="text-white">Enter invite code</CardTitle>
-          <CardDescription className="text-slate-400">
+          <CardTitle className="text-foreground">Enter invite code</CardTitle>
+          <CardDescription className="text-muted-foreground">
             Ask your league commissioner for the invite code
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label className="text-slate-300">Invite code</Label>
+              <Label className="text-foreground">Invite code</Label>
               <Input name="inviteCode" placeholder="e.g. cm4x7g8h9..." required
-                className="bg-slate-800 border-slate-700 text-white font-mono" />
+                className="bg-muted border-border text-foreground font-mono" />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Your team name</Label>
+              <Label className="text-foreground">Your team name</Label>
               <Input name="teamName" placeholder="e.g. The Special Ones" required
-                className="bg-slate-800 border-slate-700 text-white" />
+                className="bg-muted border-border text-foreground" />
             </div>
-            <Button type="submit" disabled={loading} className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-semibold">
+            <Button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
               {loading ? "Joining…" : "Join league"}
             </Button>
           </form>

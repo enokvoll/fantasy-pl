@@ -30,8 +30,8 @@ export default async function StandingsPage({ params }: { params: Promise<{ leag
     return (
       <div className="text-center py-20">
         <p className="text-4xl mb-4">📊</p>
-        <h2 className="text-xl font-bold text-white mb-2">No results yet</h2>
-        <p className="text-slate-400">Run the simulation or wait for gameweeks to complete.</p>
+        <h2 className="text-xl font-bold text-foreground mb-2">No results yet</h2>
+        <p className="text-muted-foreground">Run the simulation or wait for gameweeks to complete.</p>
       </div>
     )
   }
@@ -39,24 +39,24 @@ export default async function StandingsPage({ params }: { params: Promise<{ leag
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-black text-white">Standings</h1>
+        <h1 className="text-2xl font-bold text-foreground">Standings</h1>
         {gamesPlayed > 0 && (
-          <span className="text-slate-400 text-sm">{gamesPlayed} gameweek{gamesPlayed !== 1 ? "s" : ""} played</span>
+          <span className="text-muted-foreground text-sm">{gamesPlayed} gameweek{gamesPlayed !== 1 ? "s" : ""} played</span>
         )}
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-slate-800">
-              <th className="text-left px-4 py-3 text-slate-400 font-medium w-8">#</th>
-              <th className="text-left px-4 py-3 text-slate-400 font-medium">Team</th>
-              <th className="text-center px-3 py-3 text-slate-400 font-medium">W</th>
-              <th className="text-center px-3 py-3 text-slate-400 font-medium">L</th>
-              <th className="text-center px-3 py-3 text-slate-400 font-medium">T</th>
-              <th className="text-right px-4 py-3 text-slate-400 font-medium">PF</th>
-              <th className="text-right px-4 py-3 text-slate-400 font-medium">PA</th>
-              <th className="text-right px-4 py-3 text-slate-400 font-medium hidden md:table-cell">+/−</th>
+            <tr className="border-b border-border">
+              <th className="text-left px-4 py-3 text-muted-foreground font-medium w-8">#</th>
+              <th className="text-left px-4 py-3 text-muted-foreground font-medium">Team</th>
+              <th className="text-center px-3 py-3 text-muted-foreground font-medium">W</th>
+              <th className="text-center px-3 py-3 text-muted-foreground font-medium">L</th>
+              <th className="text-center px-3 py-3 text-muted-foreground font-medium">T</th>
+              <th className="text-right px-4 py-3 text-muted-foreground font-medium">PF</th>
+              <th className="text-right px-4 py-3 text-muted-foreground font-medium">PA</th>
+              <th className="text-right px-4 py-3 text-muted-foreground font-medium hidden md:table-cell">+/−</th>
             </tr>
           </thead>
           <tbody>
@@ -65,37 +65,37 @@ export default async function StandingsPage({ params }: { params: Promise<{ leag
               const diff = team.pointsFor - team.pointsAgainst
               return (
                 <tr key={team.id} className={cn(
-                  "border-b border-slate-800/50 last:border-0 transition-colors",
-                  isMe ? "bg-emerald-600/5" : "hover:bg-slate-800/30"
+                  "border-b border-border last:border-0 transition-colors",
+                  isMe ? "bg-primary/5" : "hover:bg-muted/30"
                 )}>
                   <td className="px-4 py-3">
                     <span className={cn(
                       "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                      i === 0 ? "bg-yellow-500/20 text-yellow-400" :
-                      i === 1 ? "bg-slate-400/20 text-slate-300" :
-                      i === 2 ? "bg-orange-600/20 text-orange-400" :
-                      "text-slate-500"
+                      i === 0 ? "bg-amber-500/20 text-amber-500" :
+                      i === 1 ? "bg-muted-foreground/20 text-foreground" :
+                      i === 2 ? "bg-orange-600/20 text-orange-500" :
+                      "text-muted-foreground"
                     )}>
                       {i + 1}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className={cn("font-medium", isMe ? "text-emerald-400" : "text-white")}>
+                      <span className={cn("font-medium", isMe ? "text-primary" : "text-foreground")}>
                         {team.isBot && <span className="mr-1 text-xs">🤖</span>}
                         {team.name}
                       </span>
-                      {isMe && <span className="text-[10px] text-emerald-400/70">you</span>}
+                      {isMe && <span className="text-[10px] text-primary/70">you</span>}
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-center text-emerald-400 font-semibold">{team.wins}</td>
-                  <td className="px-3 py-3 text-center text-red-400">{team.losses}</td>
-                  <td className="px-3 py-3 text-center text-slate-400">{team.ties}</td>
-                  <td className="px-4 py-3 text-right text-white font-mono">{team.pointsFor.toFixed(1)}</td>
-                  <td className="px-4 py-3 text-right text-slate-400 font-mono">{team.pointsAgainst.toFixed(1)}</td>
+                  <td className="px-3 py-3 text-center text-primary font-semibold">{team.wins}</td>
+                  <td className="px-3 py-3 text-center text-danger">{team.losses}</td>
+                  <td className="px-3 py-3 text-center text-muted-foreground">{team.ties}</td>
+                  <td className="px-4 py-3 text-right text-foreground font-mono">{team.pointsFor.toFixed(1)}</td>
+                  <td className="px-4 py-3 text-right text-muted-foreground font-mono">{team.pointsAgainst.toFixed(1)}</td>
                   <td className={cn(
                     "px-4 py-3 text-right font-mono hidden md:table-cell",
-                    diff > 0 ? "text-emerald-400" : diff < 0 ? "text-red-400" : "text-slate-500"
+                    diff > 0 ? "text-primary" : diff < 0 ? "text-danger" : "text-muted-foreground"
                   )}>
                     {diff > 0 ? "+" : ""}{diff.toFixed(1)}
                   </td>

@@ -9,7 +9,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <QueryProvider>
-      <div className="min-h-screen bg-slate-950 text-white">
+      <div className="min-h-screen bg-background text-foreground">
         <TopNav user={session.user} />
         <main className="max-w-7xl mx-auto px-4 py-6">
           {children}

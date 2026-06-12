@@ -35,37 +35,35 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-black text-white">
-            Fantasy<span className="text-emerald-400">PL</span>
+          <Link href="/" className="font-heading text-2xl font-bold tracking-tight text-foreground">
+            Fantasy<span className="text-primary">PL</span>
           </Link>
         </div>
-        <Card className="bg-slate-900 border-slate-800">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-white">Sign in</CardTitle>
-            <CardDescription className="text-slate-400">Enter your credentials to continue</CardDescription>
+            <CardTitle>Sign in</CardTitle>
+            <CardDescription>Enter your credentials to continue</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-300">Email</Label>
-                <Input id="email" name="email" type="email" placeholder="you@example.com" required
-                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500" />
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" placeholder="you@example.com" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-300">Password</Label>
-                <Input id="password" name="password" type="password" placeholder="••••••••" required
-                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500" />
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" name="password" type="password" placeholder="••••••••" required />
               </div>
-              <Button type="submit" disabled={loading} className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-semibold">
+              <Button type="submit" disabled={loading} className="w-full font-semibold">
                 {loading ? "Signing in…" : "Sign in"}
               </Button>
             </form>
-            <p className="text-center text-slate-400 text-sm mt-4">
+            <p className="text-center text-muted-foreground text-sm mt-4">
               No account?{" "}
-              <Link href="/register" className="text-emerald-400 hover:underline">Create one</Link>
+              <Link href="/register" className="text-primary hover:underline">Create one</Link>
             </p>
           </CardContent>
         </Card>

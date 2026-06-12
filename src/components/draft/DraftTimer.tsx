@@ -16,18 +16,18 @@ export function DraftTimer({ timeRemaining, currentTeamName, status }: DraftTime
     : `${secs}s`
 
   const color =
-    timeRemaining > 60 ? "text-white" :
+    timeRemaining > 60 ? "text-foreground" :
     timeRemaining > 30 ? "text-yellow-400" :
-    "text-red-400"
+    "text-danger"
 
   const pulse = timeRemaining <= 30 && status === "IN_PROGRESS"
 
   return (
-    <div className="flex flex-col items-center justify-center bg-slate-900 border border-slate-800 rounded-xl p-4 min-w-[110px]">
-      <div className={cn("text-4xl font-black font-mono tabular-nums leading-none", color, pulse && "animate-pulse")}>
+    <div className="flex flex-col items-center justify-center bg-card border border-border rounded-xl p-4 min-w-[110px]">
+      <div className={cn("text-4xl font-bold font-mono tabular-nums leading-none", color, pulse && "animate-pulse")}>
         {status === "IN_PROGRESS" ? display : status === "PAUSED" ? "⏸" : "--"}
       </div>
-      <div className="text-slate-400 text-xs mt-2 text-center truncate max-w-[100px]">
+      <div className="text-muted-foreground text-xs mt-2 text-center truncate max-w-[100px]">
         {status === "IN_PROGRESS" && currentTeamName ? currentTeamName : status === "PAUSED" ? "Paused" : ""}
       </div>
     </div>

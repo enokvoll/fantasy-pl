@@ -33,16 +33,16 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
     <div className="space-y-6">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-black text-white">{league.name}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{league.name}</h1>
           <div className="flex gap-2 mt-2 flex-wrap">
-            <Badge className="bg-slate-800 text-slate-300">{league.type}</Badge>
-            <Badge className="bg-slate-800 text-slate-300">{league.draftType} draft</Badge>
-            <Badge className="bg-slate-800 text-slate-300">{league.scoringType}</Badge>
-            <Badge className="bg-slate-800 text-slate-300">{league.season}</Badge>
+            <Badge className="bg-muted text-foreground">{league.type}</Badge>
+            <Badge className="bg-muted text-foreground">{league.draftType} draft</Badge>
+            <Badge className="bg-muted text-foreground">{league.scoringType}</Badge>
+            <Badge className="bg-muted text-foreground">{league.season}</Badge>
           </div>
         </div>
         {league.status === "SETUP" && (
-          <Link href={`/league/${leagueId}/draft`} className={cn(buttonVariants(), "bg-emerald-500 hover:bg-emerald-400 text-white font-semibold")}>
+          <Link href={`/league/${leagueId}/draft`} className={cn(buttonVariants(), "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold")}>
             {isCommissioner ? "Start draft" : "Draft room"}
           </Link>
         )}
@@ -52,31 +52,31 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white text-base">Teams ({league.teams.length}/{league.maxTeams})</CardTitle>
+            <CardTitle className="text-foreground text-base">Teams ({league.teams.length}/{league.maxTeams})</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {league.teams.map((team, i) => (
-              <div key={team.id} className="flex items-center gap-3 py-2 border-b border-slate-800 last:border-0">
-                <span className="text-slate-500 text-sm w-5">{i + 1}</span>
+              <div key={team.id} className="flex items-center gap-3 py-2 border-b border-border last:border-0">
+                <span className="text-muted-foreground text-sm w-5">{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm font-medium truncate">
+                  <p className="text-foreground text-sm font-medium truncate">
                     {team.isBot && <span className="mr-1">🤖</span>}
                     {team.name}
                   </p>
-                  {!team.isBot && <p className="text-slate-400 text-xs truncate">{team.user.name}</p>}
-                  {team.isBot && <p className="text-slate-500 text-xs">Auto-pick bot</p>}
+                  {!team.isBot && <p className="text-muted-foreground text-xs truncate">{team.user.name}</p>}
+                  {team.isBot && <p className="text-muted-foreground text-xs">Auto-pick bot</p>}
                 </div>
                 {team.userId === userId && (
-                  <Badge className="text-xs bg-emerald-600/20 text-emerald-400 border-0">You</Badge>
+                  <Badge className="text-xs bg-primary/20 text-primary border-0">You</Badge>
                 )}
               </div>
             ))}
 
             {/* Bot controls for commissioner */}
             {isCommissioner && league.status === "SETUP" && (
-              <div className="pt-3 border-t border-slate-800">
+              <div className="pt-3 border-t border-border">
                 {spotsLeft > 0 || botCount > 0 ? (
                   <BotControls
                     leagueId={leagueId}
@@ -85,8 +85,8 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
                   />
                 ) : null}
                 {spotsLeft > 0 && (
-                  <p className="text-slate-500 text-xs mt-2">
-                    Invite code: <span className="text-slate-300 font-mono">{league.inviteCode}</span>
+                  <p className="text-muted-foreground text-xs mt-2">
+                    Invite code: <span className="text-foreground font-mono">{league.inviteCode}</span>
                   </p>
                 )}
               </div>
@@ -94,9 +94,9 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white text-base">League settings</CardTitle>
+            <CardTitle className="text-foreground text-base">League settings</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             {[
@@ -115,8 +115,8 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
               ["Max teams", league.maxTeams.toString()],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between">
-                <span className="text-slate-400">{k}</span>
-                <span className="text-slate-200">{v}</span>
+                <span className="text-muted-foreground">{k}</span>
+                <span className="text-foreground">{v}</span>
               </div>
             ))}
           </CardContent>

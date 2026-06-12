@@ -15,7 +15,7 @@ export default async function TradesPage({ params }: { params: Promise<{ leagueI
   if (!myTeam) {
     return (
       <div className="text-center py-20">
-        <p className="text-slate-400">You don&apos;t have a team in this league.</p>
+        <p className="text-muted-foreground">You don&apos;t have a team in this league.</p>
       </div>
     )
   }

@@ -96,46 +96,46 @@ export default function SimulatePage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-black text-white">Season Simulator</h1>
-        <p className="text-slate-400 text-sm mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Season Simulator</h1>
+        <p className="text-muted-foreground text-sm mt-1">
           Replay the full 2025-26 PL season against your fantasy league to test scoring, standings, and waivers.
         </p>
       </div>
 
       {/* ── Step 1: Sync Stats ── */}
-      <Card className="bg-slate-900 border-slate-800">
+      <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center shrink-0">1</span>
-            <CardTitle className="text-white text-base">Load player stats from FPL</CardTitle>
-            {synced === totalGws && totalGws > 0 && <Badge className="bg-emerald-600/20 text-emerald-400 border-0 ml-auto">Complete</Badge>}
+            <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">1</span>
+            <CardTitle className="text-foreground text-base">Load player stats from FPL</CardTitle>
+            {synced === totalGws && totalGws > 0 && <Badge className="bg-primary/20 text-primary border-0 ml-auto">Complete</Badge>}
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-slate-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Pull real 2025-26 season stats (goals, assists, clean sheets, bonus points) for all 38 gameweeks.
-            <strong className="text-slate-300"> Run this command in your terminal:</strong>
+            <strong className="text-foreground"> Run this command in your terminal:</strong>
           </p>
-          <code className="block bg-slate-800 rounded-lg px-4 py-3 text-emerald-300 text-sm font-mono break-all">
+          <code className="block bg-muted rounded-lg px-4 py-3 text-primary text-sm font-mono break-all">
             {`curl -X POST http://localhost:3000/api/sync/all-historical -H "Authorization: Bearer ${typeof window !== "undefined" ? "<your CRON_SECRET from .env>" : "..."}" `}
           </code>
 
           {totalGws > 0 && (
             <div className="mt-3">
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-muted-foreground mb-1">
                 <span>{synced}/{totalGws} gameweeks synced</span>
                 <span>{gwSyncStatus.reduce((s, g) => s + g.statRows, 0).toLocaleString()} stat rows</span>
               </div>
-              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-emerald-500 rounded-full transition-all"
+                  className="h-full bg-primary rounded-full transition-all"
                   style={{ width: `${totalGws > 0 ? (synced / totalGws) * 100 : 0}%` }}
                 />
               </div>
               <div className="flex flex-wrap gap-1 mt-2">
                 {gwSyncStatus.map(gw => (
                   <span key={gw.gameweekId}
-                    className={`text-xs px-1.5 py-0.5 rounded font-mono ${gw.statRows > 0 ? "bg-emerald-600/20 text-emerald-400" : "bg-slate-800 text-slate-600"}`}
+                    className={`text-xs px-1.5 py-0.5 rounded font-mono ${gw.statRows > 0 ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}
                     title={`${gw.statRows} rows`}>
                     {gw.gameweekId}
                   </span>
@@ -147,28 +147,28 @@ export default function SimulatePage() {
       </Card>
 
       {/* ── Step 2: Auto-Draft ── */}
-      <Card className="bg-slate-900 border-slate-800">
+      <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center shrink-0">2</span>
-            <CardTitle className="text-white text-base">Run auto-draft</CardTitle>
-            {isDrafted && <Badge className="bg-emerald-600/20 text-emerald-400 border-0 ml-auto">Complete</Badge>}
+            <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">2</span>
+            <CardTitle className="text-foreground text-base">Run auto-draft</CardTitle>
+            {isDrafted && <Badge className="bg-primary/20 text-primary border-0 ml-auto">Complete</Badge>}
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-slate-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Automatically draft all teams using best-available-player logic (snake order). Also generates the 38-gameweek H2H schedule.
           </p>
           {simState && (
-            <div className="flex gap-4 text-sm text-slate-400">
-              <span>Teams: <span className="text-white">{simState.teamsInLeague}</span></span>
-              <span>Draft: <span className={isDrafted ? "text-emerald-400" : "text-yellow-400"}>{simState.draftStatus}</span></span>
+            <div className="flex gap-4 text-sm text-muted-foreground">
+              <span>Teams: <span className="text-foreground">{simState.teamsInLeague}</span></span>
+              <span>Draft: <span className={isDrafted ? "text-primary" : "text-yellow-400"}>{simState.draftStatus}</span></span>
             </div>
           )}
           <button
             onClick={runDraft}
             disabled={loading !== null || isDrafted}
-            className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+            className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground text-sm font-semibold transition-colors"
           >
             {loading === "draft" ? "Drafting…" : isDrafted ? "Draft completed ✓" : "Run auto-draft"}
           </button>
@@ -176,13 +176,13 @@ export default function SimulatePage() {
       </Card>
 
       {/* ── Step 3: Simulate ── */}
-      <Card className="bg-slate-900 border-slate-800">
+      <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center shrink-0">3</span>
-            <CardTitle className="text-white text-base">Simulate the season</CardTitle>
+            <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">3</span>
+            <CardTitle className="text-foreground text-base">Simulate the season</CardTitle>
             {simState && simState.completedGameweeks > 0 && (
-              <Badge className="bg-slate-700 text-slate-300 border-0 ml-auto">
+              <Badge className="bg-muted text-foreground border-0 ml-auto">
                 GW {simState.completedGameweeks}/{simState.totalFinishedGameweeks}
               </Badge>
             )}
@@ -191,13 +191,13 @@ export default function SimulatePage() {
         <CardContent className="space-y-4">
           {simState && simState.completedGameweeks > 0 && (
             <div>
-              <div className="flex justify-between text-xs text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-muted-foreground mb-1">
                 <span>{simState.completedGameweeks} gameweeks complete</span>
                 <span>{simState.totalFinishedGameweeks} total</span>
               </div>
-              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-emerald-500 rounded-full transition-all"
+                  className="h-full bg-primary rounded-full transition-all"
                   style={{ width: `${simState.totalFinishedGameweeks > 0 ? (simState.completedGameweeks / simState.totalFinishedGameweeks) * 100 : 0}%` }}
                 />
               </div>
@@ -208,14 +208,14 @@ export default function SimulatePage() {
             <button
               onClick={processNextGameweek}
               disabled={loading !== null || !canStep}
-              className="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+              className="px-4 py-2 rounded-lg bg-muted hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed text-foreground text-sm font-semibold transition-colors"
             >
               {loading?.startsWith("gw-") ? "Processing…" : `Process GW ${(simState?.completedGameweeks ?? 0) + 1} →`}
             </button>
             <button
               onClick={runFullSeason}
               disabled={loading !== null || !canRunFull}
-              className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+              className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground text-sm font-semibold transition-colors"
             >
               {loading === "full" ? "Simulating… (~30s)" : "Simulate full season ⚡"}
             </button>
@@ -223,16 +223,16 @@ export default function SimulatePage() {
 
           {/* Last GW result */}
           {lastGwResult && (
-            <div className="mt-2 p-3 rounded-lg bg-slate-800 border border-slate-700">
-              <p className="text-slate-300 text-xs font-medium mb-2">{lastGwResult.gameweekName} results</p>
+            <div className="mt-2 p-3 rounded-lg bg-muted border border-border">
+              <p className="text-foreground text-xs font-medium mb-2">{lastGwResult.gameweekName} results</p>
               <div className="space-y-1">
                 {lastGwResult.results.map((r, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs">
-                    <span className={`font-medium ${r.winner === "home" ? "text-emerald-400" : "text-slate-400"}`}>{r.homeTeamName}</span>
-                    <span className="text-white font-mono">{r.homeScore.toFixed(1)}</span>
-                    <span className="text-slate-600">vs</span>
-                    <span className="text-white font-mono">{r.awayScore.toFixed(1)}</span>
-                    <span className={`font-medium ${r.winner === "away" ? "text-emerald-400" : "text-slate-400"}`}>{r.awayTeamName ?? "BYE"}</span>
+                    <span className={`font-medium ${r.winner === "home" ? "text-primary" : "text-muted-foreground"}`}>{r.homeTeamName}</span>
+                    <span className="text-foreground font-mono">{r.homeScore.toFixed(1)}</span>
+                    <span className="text-muted-foreground">vs</span>
+                    <span className="text-foreground font-mono">{r.awayScore.toFixed(1)}</span>
+                    <span className={`font-medium ${r.winner === "away" ? "text-primary" : "text-muted-foreground"}`}>{r.awayTeamName ?? "BYE"}</span>
                   </div>
                 ))}
               </div>
@@ -243,33 +243,33 @@ export default function SimulatePage() {
 
       {/* ── Live Standings ── */}
       {simState && simState.standings.length > 0 && (
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-card border-border">
           <CardHeader className="pb-3">
-            <CardTitle className="text-white text-base">Current Standings</CardTitle>
+            <CardTitle className="text-foreground text-base">Current Standings</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-800">
-                  <th className="text-left px-4 py-2 text-slate-400 font-medium">#</th>
-                  <th className="text-left px-4 py-2 text-slate-400 font-medium">Team</th>
-                  <th className="text-center px-3 py-2 text-slate-400 font-medium">W</th>
-                  <th className="text-center px-3 py-2 text-slate-400 font-medium">L</th>
-                  <th className="text-center px-3 py-2 text-slate-400 font-medium">T</th>
-                  <th className="text-right px-4 py-2 text-slate-400 font-medium">PF</th>
-                  <th className="text-right px-4 py-2 text-slate-400 font-medium">PA</th>
+                <tr className="border-b border-border">
+                  <th className="text-left px-4 py-2 text-muted-foreground font-medium">#</th>
+                  <th className="text-left px-4 py-2 text-muted-foreground font-medium">Team</th>
+                  <th className="text-center px-3 py-2 text-muted-foreground font-medium">W</th>
+                  <th className="text-center px-3 py-2 text-muted-foreground font-medium">L</th>
+                  <th className="text-center px-3 py-2 text-muted-foreground font-medium">T</th>
+                  <th className="text-right px-4 py-2 text-muted-foreground font-medium">PF</th>
+                  <th className="text-right px-4 py-2 text-muted-foreground font-medium">PA</th>
                 </tr>
               </thead>
               <tbody>
                 {simState.standings.map((row) => (
-                  <tr key={row.teamId} className="border-b border-slate-800/50 hover:bg-slate-800/30">
-                    <td className="px-4 py-2.5 text-slate-500">{row.rank}</td>
-                    <td className="px-4 py-2.5 text-white font-medium">{row.teamName}</td>
-                    <td className="px-3 py-2.5 text-center text-emerald-400 font-semibold">{row.wins}</td>
-                    <td className="px-3 py-2.5 text-center text-red-400">{row.losses}</td>
-                    <td className="px-3 py-2.5 text-center text-slate-400">{row.ties}</td>
-                    <td className="px-4 py-2.5 text-right text-white font-mono">{row.pointsFor.toFixed(1)}</td>
-                    <td className="px-4 py-2.5 text-right text-slate-400 font-mono">{row.pointsAgainst.toFixed(1)}</td>
+                  <tr key={row.teamId} className="border-b border-border hover:bg-muted/30">
+                    <td className="px-4 py-2.5 text-muted-foreground">{row.rank}</td>
+                    <td className="px-4 py-2.5 text-foreground font-medium">{row.teamName}</td>
+                    <td className="px-3 py-2.5 text-center text-primary font-semibold">{row.wins}</td>
+                    <td className="px-3 py-2.5 text-center text-danger">{row.losses}</td>
+                    <td className="px-3 py-2.5 text-center text-muted-foreground">{row.ties}</td>
+                    <td className="px-4 py-2.5 text-right text-foreground font-mono">{row.pointsFor.toFixed(1)}</td>
+                    <td className="px-4 py-2.5 text-right text-muted-foreground font-mono">{row.pointsAgainst.toFixed(1)}</td>
                   </tr>
                 ))}
               </tbody>
