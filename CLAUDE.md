@@ -29,6 +29,32 @@ Run everything from the `fantasy-pl/` directory.
   `prisma.config.ts`). After any `schema.prisma` change you must `db:generate` (or migrate) before
   `tsc`/build will see the new types.
 
+## Local setup & environment
+
+`.env` is git-ignored and **there is no committed `.env.example`**, so a fresh clone has nothing to
+copy. Required / recognized variables (all read via `process.env.*`):
+
+- `DATABASE_URL` — Postgres (Neon) connection string. `src/lib/prisma.ts` throws without it.
+- `AUTH_SECRET` (a.k.a. `NEXTAUTH_SECRET`) — NextAuth JWT signing secret.
+- `NEXTAUTH_URL` — e.g. `http://localhost:3000` (used by `src/server/socket-server.ts`).
+- `CRON_SECRET` — Bearer token that guards the data endpoints (see below).
+- Optional: `NEXT_PUBLIC_SOCKET_URL` (draft client in `src/hooks/useDraft.ts`), `PORT` (default 3000).
+
+**Bootstrap a working instance:** `npm install` → create `.env` → `npm run db:migrate` (fresh DB; the
+shared Neon DB is already migrated) → `npm run db:seed` → `npm run dev`.
+
+**Getting data / seeing it work.** `npm run db:seed` (`prisma/seed.ts`) pulls **FPL source data only**
+— teams, players, gameweeks, fixtures, and historical per-gameweek stats — and intentionally creates
+**no demo users or leagues**. To exercise the app end-to-end: register a user in-app → create a league
+(add bots in the wizard) → open the **Simulate** page (`(dashboard)/league/[leagueId]/simulate`) to
+auto-draft and simulate gameweeks → view standings/matchups. The simulate page is the fast path to
+generate scores without live football.
+
+**Data & operational endpoints.** `src/app/api/sync/*` (`players`, `fixtures`, `scores`,
+`all-historical`) ingest FPL data and are **Bearer-guarded by `CRON_SECRET`** (as is
+`api/waivers/[leagueId]/process`); `db:seed` calls the same `fpl-sync.ts` / `sim-runner.ts` functions
+directly. `/api/simulate/*` drive `sim-runner.ts` for offline season scoring.
+
 ## Stack gotchas (these will bite)
 
 - **Prisma client is generated to `src/generated/prisma`** — import from `@/generated/prisma/client`,
@@ -97,6 +123,25 @@ uncommitted. The repo is `https://github.com/enokvoll/fantasy-pl` (note: usernam
   `Add live substitution locking to lineup editor`, not `wip` / `fixes` / `update`.
 - Never commit secrets (`.env` stays untracked). Don't commit a broken build — get lint + typecheck
   green first.
+- **Active development happens on a feature branch (currently `dynasty-and-mvp-demo`), not `main`.**
+  Run `git branch` / `git status` on return to confirm where you are before committing.
+
+## Project status
+
+Built and working: auth (credentials/JWT), league-creation wizard, snake + auto draft over Socket.io,
+roster/lineup management with **live substitutions** (kickoff locking), waivers, trades with
+**counter-offers** and package deals, **dynasty** mode (season rollover, cuts, rookie draft),
+**youth squad** (dynasty: U21 prospects, youth draft + pool signing, promote/develop/trade, +5%
+home-grown bonus), **transfer-market** FAAB auctions (`MARKETPLACE` leagues), **formation boosts** (a
+fixed set of 8 formations: 5-def → defender boost, 3-fwd → attacker boost, rest balanced), season
+simulation, standings, matchups, and league chat.
+
+- **Youth squad eligibility** uses real FPL data: `Player.birthDate`/`minutes`/`starts` are synced from
+  `bootstrap-static`. Eligible = U21 and below `PROSPECT_MAX_MINUTES` (`src/lib/prospects.ts`). The
+  development bonus lives on `RosterSlot.developmentBonus` (+`developedByTeamId` provenance) and is
+  cleared on trade.
+- **Known limitations:** rookie + youth drafts use `team.draftOrder` and do **not** consume traded
+  `DraftPickSlot` rows (same as the startup draft).
 
 ## Conventions
 
