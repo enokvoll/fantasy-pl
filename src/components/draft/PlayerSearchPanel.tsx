@@ -28,19 +28,22 @@ interface PlayerSearchPanelProps {
   onPick: (playerId: number) => void
   onAddToQueue: (playerId: number, priority: number) => void
   picksMade: number  // triggers re-fetch when a pick happens
+  /** Youth draft: restrict the pool to prospect-eligible (U21, low minutes) players. */
+  prospectOnly?: boolean
 }
 
-export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, picksMade }: PlayerSearchPanelProps) {
+export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, picksMade, prospectOnly = false }: PlayerSearchPanelProps) {
   const [search, setSearch] = useState("")
   const [posFilter, setPosFilter] = useState<string>("ALL")
   const [picking, setPicking] = useState<number | null>(null)
 
   // `picksMade` is part of the key so the list refetches whenever a pick lands.
   const { data: players = [], refetch } = useQuery({
-    queryKey: ["draft-players", leagueId, posFilter, picksMade],
+    queryKey: ["draft-players", leagueId, posFilter, picksMade, prospectOnly],
     queryFn: async (): Promise<Player[]> => {
       const posParam = posFilter !== "ALL" ? `&position=${posFilter}` : ""
-      const res = await fetch(`/api/players?leagueId=${leagueId}&available=true&limit=100${posParam}`)
+      const prospectParam = prospectOnly ? "&prospect=true" : ""
+      const res = await fetch(`/api/players?leagueId=${leagueId}&available=true&limit=100${posParam}${prospectParam}`)
       if (!res.ok) return []
       const data = await res.json()
       return data.players ?? []

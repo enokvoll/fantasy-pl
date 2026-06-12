@@ -29,6 +29,9 @@ export default function CreateLeaguePage() {
     botCount: "0",
     rookieDraftRounds: "3",
     rookieDraftOrder: "REVERSE_STANDINGS",
+    youthSquadEnabled: false,
+    youthSlots: "3",
+    youthDraftRounds: "3",
     formationBoosts: true,
     rosterConfig: { GK: 1, DEF: 4, MID: 4, FWD: 2, BENCH: 5, FLEX: 0 },
   })
@@ -49,6 +52,8 @@ export default function CreateLeaguePage() {
           draftPickTimeSeconds: parseInt(form.draftPickTimeSeconds),
           faabBudget: form.waiverType === "FAAB" || form.waiverType === "MARKETPLACE" ? parseInt(form.faabBudget) : undefined,
           rookieDraftRounds: parseInt(form.rookieDraftRounds),
+          youthSlots: parseInt(form.youthSlots),
+          youthDraftRounds: parseInt(form.youthDraftRounds),
         }),
       })
       if (!res.ok) {
@@ -179,6 +184,34 @@ export default function CreateLeaguePage() {
                   <div className="p-3 rounded-lg bg-primary/10 border border-primary/40 text-sm text-foreground">
                     <strong className="text-primary">Dynasty:</strong> Rosters carry over every season. Each new season runs only a short rookie draft of un-rostered players — worst teams pick first. Teams at their roster limit must cut a player to make room.
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setForm(f => ({ ...f, youthSquadEnabled: !f.youthSquadEnabled }))}
+                    className="w-full flex items-center justify-between gap-3 p-3 rounded-lg bg-muted/50 border border-border text-left hover:bg-muted transition-colors">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Youth squad 🌱</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Extra slots for U21 prospects. Draft them, then promote, trade, or develop — home-grown promotions keep a permanent +5% bonus.
+                      </p>
+                    </div>
+                    <span className={`shrink-0 w-11 h-6 rounded-full p-0.5 transition-colors ${form.youthSquadEnabled ? "bg-accent2" : "bg-muted-foreground/40"}`}>
+                      <span className={`block w-5 h-5 rounded-full bg-white transition-transform ${form.youthSquadEnabled ? "translate-x-5" : ""}`} />
+                    </span>
+                  </button>
+
+                  {form.youthSquadEnabled && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <Field label="Youth squad size">
+                        <SelectField value={form.youthSlots} onChange={v => set("youthSlots", v)}
+                          options={["2","3","4","5"].map(n => [n, `${n} prospects`])} />
+                      </Field>
+                      <Field label="Youth draft rounds">
+                        <SelectField value={form.youthDraftRounds} onChange={v => set("youthDraftRounds", v)}
+                          options={["1","2","3","4","5"].map(n => [n, `${n} round${n === "1" ? "" : "s"}`])} />
+                      </Field>
+                    </div>
+                  )}
                 </>
               )}
             </>
@@ -256,6 +289,7 @@ export default function CreateLeaguePage() {
                 <>
                   <ReviewRow label="Rookie draft" value={`${form.rookieDraftRounds} round${form.rookieDraftRounds === "1" ? "" : "s"}`} />
                   <ReviewRow label="Rookie order" value={form.rookieDraftOrder.replace(/_/g, " ").toLowerCase()} />
+                  <ReviewRow label="Youth squad" value={form.youthSquadEnabled ? `${form.youthSlots} prospects · ${form.youthDraftRounds}-round draft` : "Disabled"} />
                 </>
               )}
               <ReviewRow label="Scoring" value={form.scoringType} />

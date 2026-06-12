@@ -56,9 +56,9 @@ export async function processWaiverRun(
       continue
     }
 
-    // Check roster space
+    // Check roster space (youth-squad slots don't count against the senior cap)
     const rosterCount = await prisma.rosterSlot.count({
-      where: { teamId: claim.teamId, playerId: { not: null } },
+      where: { teamId: claim.teamId, playerId: { not: null }, slotType: { not: "YOUTH" } },
     })
     const rosterConfig = (league.rosterConfig as unknown as { GK: number; DEF: number; MID: number; FWD: number; BENCH: number; FLEX: number })
     const maxRoster = rosterConfig.GK + rosterConfig.DEF + rosterConfig.MID + rosterConfig.FWD + rosterConfig.BENCH + rosterConfig.FLEX

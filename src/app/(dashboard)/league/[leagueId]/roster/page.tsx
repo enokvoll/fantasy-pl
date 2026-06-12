@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 import { RosterPitch } from "@/components/roster/RosterPitch"
 import { DynastyPanel } from "@/components/roster/DynastyPanel"
+import { YouthPanel } from "@/components/roster/YouthPanel"
 import { getRosterSize } from "@/lib/dynasty-engine"
 import { getLockedPlayerIds, isGameweekLive } from "@/lib/lineup-lock"
 import { getFormationKey, resolveFormationBoost } from "@/lib/formation-boosts"
@@ -30,8 +31,9 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
   const latestGW = await prisma.gameWeek.findFirst({ where: { finished: true }, orderBy: { id: "desc" } })
   const activeGW = currentGW ?? latestGW
 
+  // Senior squad only — youth prospects are managed separately in YouthPanel.
   const slots = await prisma.rosterSlot.findMany({
-    where: { teamId: myTeam.id, playerId: { not: null } },
+    where: { teamId: myTeam.id, playerId: { not: null }, slotType: { not: "YOUTH" } },
     include: {
       player: { include: { fplTeam: { select: { shortName: true } } } },
     },
@@ -138,6 +140,10 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
               acquireType: s.acquireType,
             }))}
         />
+      )}
+
+      {league.type === "DYNASTY" && league.youthSquadEnabled && (
+        <YouthPanel teamId={myTeam.id} />
       )}
     </div>
   )

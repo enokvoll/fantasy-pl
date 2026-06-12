@@ -102,8 +102,8 @@ export async function runAutoDraft(leagueId: string): Promise<{ picks: number }>
   })
   const teamIds = teamsOrdered.map(t => t.id)
 
-  // Rookie drafts (dynasty offseason) use a configurable, possibly linear order.
-  const snake = !draft.isRookieDraft || league.rookieDraftOrder !== "REVERSE_STANDINGS"
+  // Offseason drafts (rookie/youth) use a configurable, possibly linear order.
+  const snake = !((draft.isRookieDraft || draft.isYouthDraft) && league.rookieDraftOrder === "REVERSE_STANDINGS")
 
   // Loop until all picks are made
   while (true) {

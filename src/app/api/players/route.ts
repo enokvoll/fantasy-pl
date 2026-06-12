@@ -1,10 +1,12 @@
 import { prisma } from "@/lib/prisma"
+import { isProspectEligible, PROSPECT_MAX_MINUTES } from "@/lib/prospects"
 import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const leagueId = searchParams.get("leagueId")
   const available = searchParams.get("available") === "true"
+  const prospect = searchParams.get("prospect") === "true"
   const sortBy = (searchParams.get("sortBy") ?? "totalPoints") as "totalPoints" | "form" | "nowCost"
   const search = searchParams.get("q") ?? ""
   const position = searchParams.get("position") as "GK" | "DEF" | "MID" | "FWD" | null
@@ -25,12 +27,19 @@ export async function GET(req: NextRequest) {
       ...(available && leagueId ? { id: { notIn: ownedPlayerIds } } : {}),
       ...(position ? { position } : {}),
       ...(search ? { webName: { contains: search, mode: "insensitive" } } : {}),
+      // Youth-draft pool: pre-filter to young, low-minute players (age refined below).
+      ...(prospect ? { birthDate: { not: null }, minutes: { lt: PROSPECT_MAX_MINUTES } } : {}),
     },
     include: { fplTeam: { select: { shortName: true } } },
     orderBy: sortBy === "form" ? { form: "desc" } : sortBy === "nowCost" ? { nowCost: "desc" } : { totalPoints: "desc" },
-    take: limit,
+    take: prospect ? 100 : limit,
     skip: offset,
   })
 
-  return Response.json({ players, total: players.length })
+  // Apply the precise age check for prospect requests.
+  const result = prospect
+    ? players.filter((p) => isProspectEligible({ birthDate: p.birthDate, minutes: p.minutes })).slice(0, limit)
+    : players
+
+  return Response.json({ players: result, total: result.length })
 }

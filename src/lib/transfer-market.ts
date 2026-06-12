@@ -169,7 +169,7 @@ export async function settleAuction(auctionId: string): Promise<{ awarded: boole
   const rosterConfig = auction.league.rosterConfig as unknown as RosterConfig
   const maxRoster = getRosterSize(rosterConfig)
   const rosterCount = await prisma.rosterSlot.count({
-    where: { teamId: winnerTeamId, playerId: { not: null } },
+    where: { teamId: winnerTeamId, playerId: { not: null }, slotType: { not: "YOUTH" } },
   })
   if (rosterCount >= maxRoster && !dropPlayerId) {
     await prisma.transferAuction.update({

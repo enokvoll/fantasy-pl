@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { BotControls } from "./BotControls"
 import { RolloverButton } from "./RolloverButton"
+import { YouthDraftButton } from "./YouthDraftButton"
 
 export default async function LeagueOverviewPage({ params }: { params: Promise<{ leagueId: string }> }) {
   const { leagueId } = await params
@@ -29,6 +30,14 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
   const spotsLeft = league.maxTeams - league.teams.length
   const botCount = league.teams.filter(t => t.isBot).length
 
+  // Youth squad (dynasty): the youth draft is a sequential phase after the main draft.
+  const youthEnabled = league.type === "DYNASTY" && league.youthSquadEnabled
+  const draft = youthEnabled
+    ? await prisma.draft.findFirst({ where: { leagueId }, select: { isYouthDraft: true, status: true } })
+    : null
+  const youthDraftActive = draft?.isYouthDraft && draft.status !== "COMPLETED"
+  const canStartYouthDraft = youthEnabled && isCommissioner && league.status === "IN_SEASON" && !youthDraftActive
+
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between">
@@ -49,6 +58,12 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
         {league.status === "COMPLETED" && league.type === "DYNASTY" && isCommissioner && (
           <RolloverButton leagueId={leagueId} />
         )}
+        {youthDraftActive && (
+          <Link href={`/league/${leagueId}/draft`} className={cn(buttonVariants(), "bg-accent2 hover:bg-accent2/90 text-accent2-foreground font-semibold")}>
+            Resume youth draft 🌱
+          </Link>
+        )}
+        {canStartYouthDraft && <YouthDraftButton leagueId={leagueId} />}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

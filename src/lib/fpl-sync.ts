@@ -54,6 +54,9 @@ export async function syncPlayers(): Promise<{ teams: number; players: number }>
             chancePlayingNextRound: el.chance_of_playing_next_round,
             totalPoints: el.total_points,
             form: el.form,
+            birthDate: el.birth_date ? new Date(el.birth_date) : null,
+            minutes: el.minutes ?? 0,
+            starts: el.starts ?? 0,
           },
           update: {
             webName: el.web_name,
@@ -66,6 +69,9 @@ export async function syncPlayers(): Promise<{ teams: number; players: number }>
             chancePlayingNextRound: el.chance_of_playing_next_round,
             totalPoints: el.total_points,
             form: el.form,
+            birthDate: el.birth_date ? new Date(el.birth_date) : null,
+            minutes: el.minutes ?? 0,
+            starts: el.starts ?? 0,
           },
         })
       )

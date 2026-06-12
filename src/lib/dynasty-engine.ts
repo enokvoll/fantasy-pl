@@ -2,9 +2,14 @@ import { prisma } from "@/lib/prisma"
 import { nextSeason, ensureDraftPickSlots } from "@/lib/draft-pick-slots"
 import type { RosterConfig } from "@/types/draft"
 
-/** Roster cap = total starter slots + bench. Players above this must be cut. */
+/** Senior roster cap = total starter slots + bench. Youth slots are separate. */
 export function getRosterSize(rc: RosterConfig): number {
   return rc.GK + rc.DEF + rc.MID + rc.FWD + rc.FLEX + rc.BENCH
+}
+
+/** Youth-squad cap (number of extra U21 prospect slots). */
+export function getYouthSize(youthSlots: number | null | undefined): number {
+  return youthSlots ?? 0
 }
 
 export interface RolloverResult {
@@ -116,6 +121,48 @@ export async function rolloverSeason(leagueId: string): Promise<RolloverResult> 
   await ensureDraftPickSlots(leagueId, result.rookieRounds).catch(() => {})
 
   return result.result
+}
+
+/**
+ * Reset the league's single Draft row into a youth (prospect) draft. Runs as a
+ * sequential phase after the startup/rookie draft has COMPLETED, so it respects
+ * the one-Draft-row-per-league invariant. Leaves the draft PENDING for the
+ * commissioner to start in the draft room.
+ */
+export async function startYouthDraft(leagueId: string): Promise<{ draftId: string }> {
+  return prisma.$transaction(async (tx) => {
+    const league = await tx.league.findUniqueOrThrow({ where: { id: leagueId } })
+    if (league.type !== "DYNASTY" || !league.youthSquadEnabled) {
+      throw new Error("This league does not have a youth squad")
+    }
+
+    const existing = await tx.draft.findFirst({ where: { leagueId } })
+    if (existing && existing.status !== "COMPLETED" && existing.status !== "PENDING") {
+      throw new Error("Finish the current draft before starting the youth draft")
+    }
+
+    let draft = existing
+    if (draft) {
+      await tx.draftQueue.deleteMany({ where: { draftId: draft.id } })
+      await tx.draftPick.deleteMany({ where: { draftId: draft.id } })
+      draft = await tx.draft.update({
+        where: { id: draft.id },
+        data: {
+          status: "PENDING",
+          isYouthDraft: true,
+          isRookieDraft: false,
+          currentPick: 0,
+          currentRound: 1,
+          startedAt: null,
+          completedAt: null,
+        },
+      })
+    } else {
+      draft = await tx.draft.create({ data: { leagueId, isYouthDraft: true } })
+    }
+
+    return { draftId: draft.id }
+  })
 }
 
 /** Drop a player to free agency by removing their roster slot. Owner-scoped. */

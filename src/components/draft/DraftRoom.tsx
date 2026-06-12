@@ -21,6 +21,7 @@ interface DraftRoomProps {
   isCommissioner: boolean
   teams: Array<{ id: string; name: string; draftOrder: number | null; userId: string; isBot: boolean }>
   rosterConfig: RosterConfig
+  isYouthDraft?: boolean
 }
 
 export function DraftRoom({
@@ -30,6 +31,7 @@ export function DraftRoom({
   myTeamName,
   isCommissioner,
   teams,
+  isYouthDraft = false,
 }: DraftRoomProps) {
   const botTeamIds = teams.filter(t => t.isBot).map(t => t.id)
   const {
@@ -181,6 +183,11 @@ export function DraftRoom({
           {/* Player search */}
           <div className="flex-1 bg-card border border-border rounded-xl p-3 flex flex-col min-h-0" style={{ maxHeight: "320px" }}>
             <p className="text-muted-foreground text-xs font-medium mb-2">Available Players</p>
+            {isYouthDraft && (
+              <div className="mb-2 px-2 py-1 rounded bg-accent2/15 border border-accent2/40">
+                <p className="text-accent2 text-xs font-medium">🌱 Youth draft — U21 prospects only</p>
+              </div>
+            )}
             {isMyTurn && (
               <div className="mb-2 px-2 py-1 rounded bg-primary/20 border border-primary/40">
                 <p className="text-primary text-xs font-medium">It&apos;s your turn to pick!</p>
@@ -192,6 +199,7 @@ export function DraftRoom({
               onPick={makePick}
               onAddToQueue={(playerId, priority) => addToQueue(playerId, priority)}
               picksMade={picksCount}
+              prospectOnly={isYouthDraft}
             />
           </div>
 

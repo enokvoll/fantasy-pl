@@ -235,7 +235,7 @@ function startPickTimer(
       if (!draftRecord || draftRecord.status !== "IN_PROGRESS") return
 
       const teamIds = draftRecord.league.teams.map((t) => t.id)
-      const snake = !draftRecord.isRookieDraft || draftRecord.league.rookieDraftOrder !== "REVERSE_STANDINGS"
+      const snake = !((draftRecord.isRookieDraft || draftRecord.isYouthDraft) && draftRecord.league.rookieDraftOrder === "REVERSE_STANDINGS")
       const currentTeamId = getTeamForPick(teamIds, draftRecord.currentPick, snake)
       const rosterConfig = draftRecord.league.rosterConfig as unknown as RosterConfig
 
@@ -342,7 +342,7 @@ async function buildDraftState(leagueId: string): Promise<DraftState> {
   const teams = draft.league.teams
   const teamIds = teams.map((t) => t.id)
 
-  const snake = !draft.isRookieDraft || draft.league.rookieDraftOrder !== "REVERSE_STANDINGS"
+  const snake = !((draft.isRookieDraft || draft.isYouthDraft) && draft.league.rookieDraftOrder === "REVERSE_STANDINGS")
   const currentTeamId =
     draft.status === "IN_PROGRESS"
       ? getTeamForPick(teamIds, draft.currentPick, snake)

@@ -5,6 +5,7 @@ import {
   resolveFormationBoost,
   type ScoringAction,
 } from "@/lib/formation-boosts"
+import { DEVELOPMENT_BONUS_PCT } from "@/lib/prospects"
 
 interface ScoringRules {
   minutesPlayed1to59: number
@@ -164,23 +165,25 @@ export async function calculateTeamScore(
       )
       if (sub?.playerId && sub.player) {
         const subStats = statsMap.get(sub.playerId)!
+        const devMult = sub.developmentBonus ? 1 + DEVELOPMENT_BONUS_PCT : 1
         const pts = round1(
-          calculatePlayerPoints(subStats, sub.player.position, rules, actionMultipliersFor(sub.player.position)) * starterMult
+          calculatePlayerPoints(subStats, sub.player.position, rules, actionMultipliersFor(sub.player.position)) * starterMult * devMult
         )
         usedBenchIds.add(sub.playerId)
         totalPoints += pts
         countedScorers.push({ position: sub.player.position, goals: subStats.goalsScored })
-        breakdown.push({ playerId: sub.playerId, points: pts, isStarting: false, subFor: slot.playerId })
+        breakdown.push({ playerId: sub.playerId, points: pts, isStarting: false, subFor: slot.playerId, homegrown: sub.developmentBonus })
       }
       continue
     }
 
+    const devMult = slot.developmentBonus ? 1 + DEVELOPMENT_BONUS_PCT : 1
     const pts = round1(
-      calculatePlayerPoints(stats, slot.player.position, rules, actionMultipliersFor(slot.player.position)) * starterMult
+      calculatePlayerPoints(stats, slot.player.position, rules, actionMultipliersFor(slot.player.position)) * starterMult * devMult
     )
     totalPoints += pts
     countedScorers.push({ position: slot.player.position, goals: stats.goalsScored })
-    breakdown.push({ playerId: slot.playerId, points: pts, isStarting: true })
+    breakdown.push({ playerId: slot.playerId, points: pts, isStarting: true, homegrown: slot.developmentBonus })
   }
 
   // Team-level conditional bonus (e.g. +2% when 3+ attackers scored).

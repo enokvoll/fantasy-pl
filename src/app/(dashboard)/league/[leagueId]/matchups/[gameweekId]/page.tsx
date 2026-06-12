@@ -14,7 +14,7 @@ const POS_COLORS: Record<string, string> = {
 
 async function getTeamRoster(teamId: string, gameweekId: number) {
   const slots = await prisma.rosterSlot.findMany({
-    where: { teamId, playerId: { not: null } },
+    where: { teamId, playerId: { not: null }, slotType: { not: "YOUTH" } },
     include: { player: { include: { fplTeam: { select: { shortName: true } } } } },
   })
 

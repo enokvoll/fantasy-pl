@@ -19,7 +19,7 @@ export async function GET(
   const { teamId } = await params
 
   const slots = await prisma.rosterSlot.findMany({
-    where: { teamId, playerId: { not: null } },
+    where: { teamId, playerId: { not: null }, slotType: { notIn: ["IR", "YOUTH"] } },
     include: {
       player: {
         include: { fplTeam: { select: { shortName: true } } },
@@ -63,7 +63,7 @@ export async function PATCH(
 
   // Get all slots for this team
   const allSlots = await prisma.rosterSlot.findMany({
-    where: { teamId, playerId: { not: null }, slotType: { not: "IR" } },
+    where: { teamId, playerId: { not: null }, slotType: { notIn: ["IR", "YOUTH"] } },
     include: { player: true },
   })
 

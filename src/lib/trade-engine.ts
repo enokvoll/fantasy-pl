@@ -40,6 +40,19 @@ export async function proposeTrade(
         where: { teamId: asset.fromTeamId, playerId: asset.playerId },
       })
       if (!slot) throw new Error(`A selected player is not on the offering team's roster`)
+      // A youth prospect stays a youth slot on arrival — the receiving team needs room.
+      if (slot.slotType === "YOUTH") {
+        const recvTeam = await prisma.team.findUniqueOrThrow({
+          where: { id: asset.toTeamId },
+          include: { league: true },
+        })
+        const youthCount = await prisma.rosterSlot.count({
+          where: { teamId: asset.toTeamId, slotType: "YOUTH", playerId: { not: null } },
+        })
+        if (youthCount >= recvTeam.league.youthSlots) {
+          throw new Error("The receiving team's youth squad is full")
+        }
+      }
     }
     if (asset.draftPickSlotId) {
       const pick = await prisma.draftPickSlot.findFirst({
@@ -235,9 +248,18 @@ export async function executeTrade(tradeId: string): Promise<void> {
     // Move assets
     for (const asset of trade.assets) {
       if (asset.playerId) {
+        // Moving a player resets development-bonus provenance — a homegrown
+        // bonus never transfers to the receiving team.
         await tx.rosterSlot.updateMany({
           where: { teamId: asset.fromTeamId, playerId: asset.playerId },
-          data: { teamId: asset.toTeamId, acquireType: "TRADE", isStarting: false, isOnTradeBlock: false },
+          data: {
+            teamId: asset.toTeamId,
+            acquireType: "TRADE",
+            isStarting: false,
+            isOnTradeBlock: false,
+            developmentBonus: false,
+            developedByTeamId: null,
+          },
         })
       }
       if (asset.draftPickSlotId) {

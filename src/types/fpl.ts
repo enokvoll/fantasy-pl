@@ -38,6 +38,9 @@ export interface FplElement {
   form: string
   ep_next: string | null
   points_per_game: string
+  birth_date: string | null // "YYYY-MM-DD" or null
+  minutes: number // season total
+  starts: number // season total
 }
 
 export interface FplElementType {

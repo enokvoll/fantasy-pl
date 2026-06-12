@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { isProspectEligible, PROSPECT_MAX_MINUTES } from "@/lib/prospects"
 import type { RosterConfig } from "@/types/draft"
 import type { Position } from "@/generated/prisma/client"
 
@@ -56,7 +57,9 @@ export async function makePick(
     if (draft.status !== "IN_PROGRESS") throw new Error("Draft is not in progress")
 
     const isRookie = draft.isRookieDraft
-    const snake = !isRookie || draft.league.rookieDraftOrder !== "REVERSE_STANDINGS"
+    const isYouth = draft.isYouthDraft
+    // Offseason drafts (rookie/youth) with REVERSE_STANDINGS use a linear order.
+    const snake = !((isRookie || isYouth) && draft.league.rookieDraftOrder === "REVERSE_STANDINGS")
 
     const teamIds = draft.league.teams.map((t) => t.id)
     const expectedTeamId = getTeamForPick(teamIds, draft.currentPick, snake)
@@ -78,7 +81,7 @@ export async function makePick(
       if (onRoster) throw new Error("Player is already on a roster")
 
       const rosterCount = await tx.rosterSlot.count({
-        where: { teamId, playerId: { not: null } },
+        where: { teamId, playerId: { not: null }, slotType: { not: "YOUTH" } },
       })
       if (rosterCount >= totalRounds(rosterConfig)) {
         if (!isAutoPick) {
@@ -86,11 +89,29 @@ export async function makePick(
         }
         // Auto-pick: make room by cutting the lowest-scoring rostered player.
         const lowest = await tx.rosterSlot.findFirst({
-          where: { teamId, playerId: { not: null } },
+          where: { teamId, playerId: { not: null }, slotType: { not: "YOUTH" } },
           orderBy: { player: { totalPoints: "asc" } },
         })
         if (lowest) await tx.rosterSlot.delete({ where: { id: lowest.id } })
       }
+    }
+
+    // Youth draft: picks must be prospect-eligible, unowned, and fit the youth cap.
+    if (isYouth) {
+      const onRoster = await tx.rosterSlot.findFirst({
+        where: { playerId, team: { leagueId: draft.leagueId } },
+      })
+      if (onRoster) throw new Error("Player is already on a roster")
+
+      const prospect = await tx.player.findUniqueOrThrow({ where: { id: playerId } })
+      if (!isProspectEligible({ birthDate: prospect.birthDate, minutes: prospect.minutes })) {
+        throw new Error("Player is not youth-prospect eligible")
+      }
+
+      const youthCount = await tx.rosterSlot.count({
+        where: { teamId, slotType: "YOUTH", playerId: { not: null } },
+      })
+      if (youthCount >= draft.league.youthSlots) throw new Error("Youth squad is full")
     }
 
     const n = teamIds.length
@@ -117,22 +138,27 @@ export async function makePick(
     const existingStarters = await tx.rosterSlot.count({
       where: { teamId, slotType: "STARTER", isStarting: true },
     })
-    const isStarting = !isRookie && existingStarters < totalStarterSlots(rosterConfig)
+    const isStarting = !isRookie && !isYouth && existingStarters < totalStarterSlots(rosterConfig)
 
     await tx.rosterSlot.create({
       data: {
         teamId,
         playerId,
-        slotType: isStarting ? "STARTER" : "BENCH",
+        slotType: isYouth ? "YOUTH" : isStarting ? "STARTER" : "BENCH",
         position: player.position,
         isStarting,
         acquireType: "DRAFT",
+        developedByTeamId: isYouth ? teamId : null,
       },
     })
 
     // Advance draft
     const nextPick = draft.currentPick + 1
-    const roundsThisDraft = isRookie ? draft.league.rookieDraftRounds : totalRounds(rosterConfig)
+    const roundsThisDraft = isYouth
+      ? draft.league.youthDraftRounds
+      : isRookie
+        ? draft.league.rookieDraftRounds
+        : totalRounds(rosterConfig)
     const totalPicks = n * roundsThisDraft
     const isComplete = nextPick >= totalPicks
     const nextTeamId = isComplete ? null : getTeamForPick(teamIds, nextPick, snake)
@@ -174,13 +200,29 @@ export async function getAutoPickPlayer(
     })
   ).map((p) => p.playerId as number)
 
-  // In a rookie draft, also exclude every player already on a roster in the league.
-  if (draft.isRookieDraft) {
+  // In a rookie or youth draft, also exclude every player already on a roster.
+  if (draft.isRookieDraft || draft.isYouthDraft) {
     const rostered = await prisma.rosterSlot.findMany({
       where: { playerId: { not: null }, team: { leagueId: draft.league.id } },
       select: { playerId: true },
     })
     for (const r of rostered) if (r.playerId != null) pickedPlayerIds.push(r.playerId)
+  }
+
+  // Youth draft: best available prospect-eligible player (ignores queue/needs).
+  if (draft.isYouthDraft) {
+    const candidates = await prisma.player.findMany({
+      where: {
+        id: { notIn: pickedPlayerIds.length ? pickedPlayerIds : [-1] },
+        birthDate: { not: null },
+        minutes: { lt: PROSPECT_MAX_MINUTES },
+      },
+      orderBy: { totalPoints: "desc" },
+      take: 100,
+    })
+    const pick = candidates.find((c) => isProspectEligible({ birthDate: c.birthDate, minutes: c.minutes }))
+    if (!pick) throw new Error("No eligible prospects for auto-pick")
+    return pick.id
   }
 
   // Check team's queue first

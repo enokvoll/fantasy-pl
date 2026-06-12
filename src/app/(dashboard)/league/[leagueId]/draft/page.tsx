@@ -56,6 +56,7 @@ export default async function DraftPage({
           isBot: t.isBot,
         }))}
         rosterConfig={league.rosterConfig as unknown as RosterConfig}
+        isYouthDraft={draft.isYouthDraft}
       />
     </div>
   )
