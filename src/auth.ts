@@ -34,6 +34,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  // Required for self-hosting behind a proxy (Fly.io) — NextAuth v5 otherwise
+  // rejects requests from a non-Vercel host in production.
+  trustHost: true,
   session: { strategy: "jwt" },
   callbacks: {
     jwt({ token, user }) {

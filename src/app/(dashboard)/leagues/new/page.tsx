@@ -21,7 +21,7 @@ export default function CreateLeaguePage() {
     type: "REDRAFT",
     scoringType: "H2H",
     maxTeams: "10",
-    season: "2025-26",
+    season: "2026-27",
     draftType: "SNAKE",
     draftPickTimeSeconds: "90",
     waiverType: "ROLLING",
