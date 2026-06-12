@@ -56,6 +56,8 @@ export type RosterSlotMinAggregateOutputType = {
   contractYear: number | null
   keeperRound: number | null
   dynastyYearsOwned: number | null
+  developedByTeamId: string | null
+  developmentBonus: boolean | null
 }
 
 export type RosterSlotMaxAggregateOutputType = {
@@ -72,6 +74,8 @@ export type RosterSlotMaxAggregateOutputType = {
   contractYear: number | null
   keeperRound: number | null
   dynastyYearsOwned: number | null
+  developedByTeamId: string | null
+  developmentBonus: boolean | null
 }
 
 export type RosterSlotCountAggregateOutputType = {
@@ -88,6 +92,8 @@ export type RosterSlotCountAggregateOutputType = {
   contractYear: number
   keeperRound: number
   dynastyYearsOwned: number
+  developedByTeamId: number
+  developmentBonus: number
   _all: number
 }
 
@@ -122,6 +128,8 @@ export type RosterSlotMinAggregateInputType = {
   contractYear?: true
   keeperRound?: true
   dynastyYearsOwned?: true
+  developedByTeamId?: true
+  developmentBonus?: true
 }
 
 export type RosterSlotMaxAggregateInputType = {
@@ -138,6 +146,8 @@ export type RosterSlotMaxAggregateInputType = {
   contractYear?: true
   keeperRound?: true
   dynastyYearsOwned?: true
+  developedByTeamId?: true
+  developmentBonus?: true
 }
 
 export type RosterSlotCountAggregateInputType = {
@@ -154,6 +164,8 @@ export type RosterSlotCountAggregateInputType = {
   contractYear?: true
   keeperRound?: true
   dynastyYearsOwned?: true
+  developedByTeamId?: true
+  developmentBonus?: true
   _all?: true
 }
 
@@ -257,6 +269,8 @@ export type RosterSlotGroupByOutputType = {
   contractYear: number | null
   keeperRound: number | null
   dynastyYearsOwned: number | null
+  developedByTeamId: string | null
+  developmentBonus: boolean
   _count: RosterSlotCountAggregateOutputType | null
   _avg: RosterSlotAvgAggregateOutputType | null
   _sum: RosterSlotSumAggregateOutputType | null
@@ -296,6 +310,8 @@ export type RosterSlotWhereInput = {
   contractYear?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
   keeperRound?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
   dynastyYearsOwned?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
+  developedByTeamId?: Prisma.StringNullableFilter<"RosterSlot"> | string | null
+  developmentBonus?: Prisma.BoolFilter<"RosterSlot"> | boolean
   team?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
   player?: Prisma.XOR<Prisma.PlayerNullableScalarRelationFilter, Prisma.PlayerWhereInput> | null
 }
@@ -314,6 +330,8 @@ export type RosterSlotOrderByWithRelationInput = {
   contractYear?: Prisma.SortOrderInput | Prisma.SortOrder
   keeperRound?: Prisma.SortOrderInput | Prisma.SortOrder
   dynastyYearsOwned?: Prisma.SortOrderInput | Prisma.SortOrder
+  developedByTeamId?: Prisma.SortOrderInput | Prisma.SortOrder
+  developmentBonus?: Prisma.SortOrder
   team?: Prisma.TeamOrderByWithRelationInput
   player?: Prisma.PlayerOrderByWithRelationInput
 }
@@ -335,6 +353,8 @@ export type RosterSlotWhereUniqueInput = Prisma.AtLeast<{
   contractYear?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
   keeperRound?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
   dynastyYearsOwned?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
+  developedByTeamId?: Prisma.StringNullableFilter<"RosterSlot"> | string | null
+  developmentBonus?: Prisma.BoolFilter<"RosterSlot"> | boolean
   team?: Prisma.XOR<Prisma.TeamScalarRelationFilter, Prisma.TeamWhereInput>
   player?: Prisma.XOR<Prisma.PlayerNullableScalarRelationFilter, Prisma.PlayerWhereInput> | null
 }, "id">
@@ -353,6 +373,8 @@ export type RosterSlotOrderByWithAggregationInput = {
   contractYear?: Prisma.SortOrderInput | Prisma.SortOrder
   keeperRound?: Prisma.SortOrderInput | Prisma.SortOrder
   dynastyYearsOwned?: Prisma.SortOrderInput | Prisma.SortOrder
+  developedByTeamId?: Prisma.SortOrderInput | Prisma.SortOrder
+  developmentBonus?: Prisma.SortOrder
   _count?: Prisma.RosterSlotCountOrderByAggregateInput
   _avg?: Prisma.RosterSlotAvgOrderByAggregateInput
   _max?: Prisma.RosterSlotMaxOrderByAggregateInput
@@ -377,6 +399,8 @@ export type RosterSlotScalarWhereWithAggregatesInput = {
   contractYear?: Prisma.IntNullableWithAggregatesFilter<"RosterSlot"> | number | null
   keeperRound?: Prisma.IntNullableWithAggregatesFilter<"RosterSlot"> | number | null
   dynastyYearsOwned?: Prisma.IntNullableWithAggregatesFilter<"RosterSlot"> | number | null
+  developedByTeamId?: Prisma.StringNullableWithAggregatesFilter<"RosterSlot"> | string | null
+  developmentBonus?: Prisma.BoolWithAggregatesFilter<"RosterSlot"> | boolean
 }
 
 export type RosterSlotCreateInput = {
@@ -391,6 +415,8 @@ export type RosterSlotCreateInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
   team: Prisma.TeamCreateNestedOneWithoutRosterSlotsInput
   player?: Prisma.PlayerCreateNestedOneWithoutRosterSlotsInput
 }
@@ -409,6 +435,8 @@ export type RosterSlotUncheckedCreateInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
 }
 
 export type RosterSlotUpdateInput = {
@@ -423,6 +451,8 @@ export type RosterSlotUpdateInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
   team?: Prisma.TeamUpdateOneRequiredWithoutRosterSlotsNestedInput
   player?: Prisma.PlayerUpdateOneWithoutRosterSlotsNestedInput
 }
@@ -441,6 +471,8 @@ export type RosterSlotUncheckedUpdateInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RosterSlotCreateManyInput = {
@@ -457,6 +489,8 @@ export type RosterSlotCreateManyInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
 }
 
 export type RosterSlotUpdateManyMutationInput = {
@@ -471,6 +505,8 @@ export type RosterSlotUpdateManyMutationInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RosterSlotUncheckedUpdateManyInput = {
@@ -487,6 +523,8 @@ export type RosterSlotUncheckedUpdateManyInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RosterSlotListRelationFilter = {
@@ -513,6 +551,8 @@ export type RosterSlotCountOrderByAggregateInput = {
   contractYear?: Prisma.SortOrder
   keeperRound?: Prisma.SortOrder
   dynastyYearsOwned?: Prisma.SortOrder
+  developedByTeamId?: Prisma.SortOrder
+  developmentBonus?: Prisma.SortOrder
 }
 
 export type RosterSlotAvgOrderByAggregateInput = {
@@ -537,6 +577,8 @@ export type RosterSlotMaxOrderByAggregateInput = {
   contractYear?: Prisma.SortOrder
   keeperRound?: Prisma.SortOrder
   dynastyYearsOwned?: Prisma.SortOrder
+  developedByTeamId?: Prisma.SortOrder
+  developmentBonus?: Prisma.SortOrder
 }
 
 export type RosterSlotMinOrderByAggregateInput = {
@@ -553,6 +595,8 @@ export type RosterSlotMinOrderByAggregateInput = {
   contractYear?: Prisma.SortOrder
   keeperRound?: Prisma.SortOrder
   dynastyYearsOwned?: Prisma.SortOrder
+  developedByTeamId?: Prisma.SortOrder
+  developmentBonus?: Prisma.SortOrder
 }
 
 export type RosterSlotSumOrderByAggregateInput = {
@@ -671,6 +715,8 @@ export type RosterSlotCreateWithoutPlayerInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
   team: Prisma.TeamCreateNestedOneWithoutRosterSlotsInput
 }
 
@@ -687,6 +733,8 @@ export type RosterSlotUncheckedCreateWithoutPlayerInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
 }
 
 export type RosterSlotCreateOrConnectWithoutPlayerInput = {
@@ -732,6 +780,8 @@ export type RosterSlotScalarWhereInput = {
   contractYear?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
   keeperRound?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
   dynastyYearsOwned?: Prisma.IntNullableFilter<"RosterSlot"> | number | null
+  developedByTeamId?: Prisma.StringNullableFilter<"RosterSlot"> | string | null
+  developmentBonus?: Prisma.BoolFilter<"RosterSlot"> | boolean
 }
 
 export type RosterSlotCreateWithoutTeamInput = {
@@ -746,6 +796,8 @@ export type RosterSlotCreateWithoutTeamInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
   player?: Prisma.PlayerCreateNestedOneWithoutRosterSlotsInput
 }
 
@@ -762,6 +814,8 @@ export type RosterSlotUncheckedCreateWithoutTeamInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
 }
 
 export type RosterSlotCreateOrConnectWithoutTeamInput = {
@@ -803,6 +857,8 @@ export type RosterSlotCreateManyPlayerInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
 }
 
 export type RosterSlotUpdateWithoutPlayerInput = {
@@ -817,6 +873,8 @@ export type RosterSlotUpdateWithoutPlayerInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
   team?: Prisma.TeamUpdateOneRequiredWithoutRosterSlotsNestedInput
 }
 
@@ -833,6 +891,8 @@ export type RosterSlotUncheckedUpdateWithoutPlayerInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RosterSlotUncheckedUpdateManyWithoutPlayerInput = {
@@ -848,6 +908,8 @@ export type RosterSlotUncheckedUpdateManyWithoutPlayerInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RosterSlotCreateManyTeamInput = {
@@ -863,6 +925,8 @@ export type RosterSlotCreateManyTeamInput = {
   contractYear?: number | null
   keeperRound?: number | null
   dynastyYearsOwned?: number | null
+  developedByTeamId?: string | null
+  developmentBonus?: boolean
 }
 
 export type RosterSlotUpdateWithoutTeamInput = {
@@ -877,6 +941,8 @@ export type RosterSlotUpdateWithoutTeamInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
   player?: Prisma.PlayerUpdateOneWithoutRosterSlotsNestedInput
 }
 
@@ -893,6 +959,8 @@ export type RosterSlotUncheckedUpdateWithoutTeamInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type RosterSlotUncheckedUpdateManyWithoutTeamInput = {
@@ -908,6 +976,8 @@ export type RosterSlotUncheckedUpdateManyWithoutTeamInput = {
   contractYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   keeperRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dynastyYearsOwned?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  developedByTeamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  developmentBonus?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -926,6 +996,8 @@ export type RosterSlotSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   contractYear?: boolean
   keeperRound?: boolean
   dynastyYearsOwned?: boolean
+  developedByTeamId?: boolean
+  developmentBonus?: boolean
   team?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   player?: boolean | Prisma.RosterSlot$playerArgs<ExtArgs>
 }, ExtArgs["result"]["rosterSlot"]>
@@ -944,6 +1016,8 @@ export type RosterSlotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   contractYear?: boolean
   keeperRound?: boolean
   dynastyYearsOwned?: boolean
+  developedByTeamId?: boolean
+  developmentBonus?: boolean
   team?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   player?: boolean | Prisma.RosterSlot$playerArgs<ExtArgs>
 }, ExtArgs["result"]["rosterSlot"]>
@@ -962,6 +1036,8 @@ export type RosterSlotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   contractYear?: boolean
   keeperRound?: boolean
   dynastyYearsOwned?: boolean
+  developedByTeamId?: boolean
+  developmentBonus?: boolean
   team?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   player?: boolean | Prisma.RosterSlot$playerArgs<ExtArgs>
 }, ExtArgs["result"]["rosterSlot"]>
@@ -980,9 +1056,11 @@ export type RosterSlotSelectScalar = {
   contractYear?: boolean
   keeperRound?: boolean
   dynastyYearsOwned?: boolean
+  developedByTeamId?: boolean
+  developmentBonus?: boolean
 }
 
-export type RosterSlotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "teamId" | "playerId" | "slotType" | "position" | "lineupPosition" | "isStarting" | "isOnTradeBlock" | "acquiredAt" | "acquireType" | "contractYear" | "keeperRound" | "dynastyYearsOwned", ExtArgs["result"]["rosterSlot"]>
+export type RosterSlotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "teamId" | "playerId" | "slotType" | "position" | "lineupPosition" | "isStarting" | "isOnTradeBlock" | "acquiredAt" | "acquireType" | "contractYear" | "keeperRound" | "dynastyYearsOwned" | "developedByTeamId" | "developmentBonus", ExtArgs["result"]["rosterSlot"]>
 export type RosterSlotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   team?: boolean | Prisma.TeamDefaultArgs<ExtArgs>
   player?: boolean | Prisma.RosterSlot$playerArgs<ExtArgs>
@@ -1016,6 +1094,8 @@ export type $RosterSlotPayload<ExtArgs extends runtime.Types.Extensions.Internal
     contractYear: number | null
     keeperRound: number | null
     dynastyYearsOwned: number | null
+    developedByTeamId: string | null
+    developmentBonus: boolean
   }, ExtArgs["result"]["rosterSlot"]>
   composites: {}
 }
@@ -1454,6 +1534,8 @@ export interface RosterSlotFieldRefs {
   readonly contractYear: Prisma.FieldRef<"RosterSlot", 'Int'>
   readonly keeperRound: Prisma.FieldRef<"RosterSlot", 'Int'>
   readonly dynastyYearsOwned: Prisma.FieldRef<"RosterSlot", 'Int'>
+  readonly developedByTeamId: Prisma.FieldRef<"RosterSlot", 'String'>
+  readonly developmentBonus: Prisma.FieldRef<"RosterSlot", 'Boolean'>
 }
     
 

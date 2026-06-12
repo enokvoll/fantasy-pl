@@ -39,45 +39,28 @@ export interface FormationBoost {
 export type FormationBoostTable = Record<string, FormationBoost>
 
 /**
- * Default boost table keyed by "DEF-MID-FWD". Seeded with the user's three
- * examples plus sensible defaults for the other standard 11-a-side formations.
- *
- * NOTE: the 4-5-1 "key passes worth +0.5 points" rule cannot be implemented yet
- * — `PlayerGameweekStat` has no key-passes stat (FPL live data doesn't expose
- * it). Only the assist multiplier is applied; revisit if a stat source is added.
+ * Default boost table keyed by "DEF-MID-FWD" for the eight supported formations.
+ * Classification rule:
+ *  - 3 forwards  → attacker boost (FWD goals + a team bonus when 3+ attackers score)
+ *  - 5 defenders → defender boost (DEF clean-sheet multiplier)
+ *  - 5 def AND 3 fwd (5-2-3) → both
+ *  - everything else → balanced (+% to every starter)
  */
 export const DEFAULT_FORMATION_BOOSTS: FormationBoostTable = {
+  // ── Attacker boost (3 forwards) ──
   "3-4-3": {
     label: "Attacking",
     description: "Forwards earn +10% on goals; +2% team bonus when 3+ attackers score.",
     actionMultipliers: { FWD: { goals: 1.1 } },
     teamBonus: { positions: ["MID", "FWD"], metric: "scored", threshold: 3, pct: 0.02, label: "3+ attackers scored" },
   },
-  "4-4-2": {
-    label: "Balanced",
-    description: "All starters earn +3% on their total.",
-    starterTotalPct: 0.03,
-  },
-  "4-5-1": {
-    label: "Midfield control",
-    description: "Midfielders earn +10% on assists.",
-    actionMultipliers: { MID: { assists: 1.1 } },
-  },
-  "3-5-2": {
-    label: "Wing-backs",
-    description: "Midfielders +5% on assists, forwards +5% on goals.",
-    actionMultipliers: { MID: { assists: 1.05 }, FWD: { goals: 1.05 } },
-  },
   "4-3-3": {
     label: "Front three",
-    description: "Forwards earn +7% on goals.",
-    actionMultipliers: { FWD: { goals: 1.07 } },
+    description: "Forwards earn +10% on goals; +2% team bonus when 3+ attackers score.",
+    actionMultipliers: { FWD: { goals: 1.1 } },
+    teamBonus: { positions: ["MID", "FWD"], metric: "scored", threshold: 3, pct: 0.02, label: "3+ attackers scored" },
   },
-  "5-2-3": {
-    label: "Counter-attack",
-    description: "Forwards +8% on goals.",
-    actionMultipliers: { FWD: { goals: 1.08 } },
-  },
+  // ── Defender boost (5 defenders) ──
   "5-3-2": {
     label: "Low block",
     description: "Defenders earn +15% on clean sheets.",
@@ -87,6 +70,28 @@ export const DEFAULT_FORMATION_BOOSTS: FormationBoostTable = {
     label: "Park the bus",
     description: "Defenders earn +20% on clean sheets.",
     actionMultipliers: { DEF: { cleanSheet: 1.2 } },
+  },
+  // ── Both (5 defenders AND 3 forwards) ──
+  "5-2-3": {
+    label: "All-out",
+    description: "Defenders +12% on clean sheets and forwards +8% on goals.",
+    actionMultipliers: { DEF: { cleanSheet: 1.12 }, FWD: { goals: 1.08 } },
+  },
+  // ── Balanced (everything else) ──
+  "3-5-2": {
+    label: "Balanced",
+    description: "All starters earn +3% on their total.",
+    starterTotalPct: 0.03,
+  },
+  "4-4-2": {
+    label: "Balanced",
+    description: "All starters earn +3% on their total.",
+    starterTotalPct: 0.03,
+  },
+  "4-5-1": {
+    label: "Balanced",
+    description: "All starters earn +3% on their total.",
+    starterTotalPct: 0.03,
   },
 }
 

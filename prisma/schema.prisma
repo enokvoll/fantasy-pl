@@ -89,6 +89,10 @@ model Player {
   chancePlayingNextRound Int?
   totalPoints Int          @default(0)
   form        String?      @default("0.0")
+  // Source fields used for youth-prospect eligibility (synced from FPL bootstrap).
+  birthDate   DateTime?
+  minutes     Int          @default(0)
+  starts      Int          @default(0)
   updatedAt   DateTime     @updatedAt
 
   fplTeam       FplTeam              @relation(fields: [fplTeamId], references: [id])
@@ -216,6 +220,11 @@ model League {
   rookieDraftRounds Int              @default(3)
   rookieDraftOrder  RookieDraftOrder @default(REVERSE_STANDINGS)
 
+  // Dynasty youth squad: extra slots for U21 prospects, with their own draft.
+  youthSquadEnabled Boolean @default(false)
+  youthSlots        Int     @default(3)
+  youthDraftRounds  Int     @default(3)
+
   tradeDeadlineGameweek Int?
   playoffStartGameweek  Int?
 
@@ -324,6 +333,11 @@ model RosterSlot {
   contractYear   Int?
   keeperRound    Int?
   dynastyYearsOwned Int?
+  // Youth-prospect provenance: the team that drafted/signed this player into its
+  // youth squad. Cleared on trade so a development bonus never transfers.
+  developedByTeamId String?
+  // Permanent +5% bonus granted when a home-grown prospect is promoted. Cleared on trade.
+  developmentBonus  Boolean  @default(false)
 
   team   Team    @relation(fields: [teamId], references: [id])
   player Player? @relation(fields: [playerId], references: [id])
@@ -333,6 +347,7 @@ enum SlotType {
   STARTER
   BENCH
   IR
+  YOUTH
 }
 
 enum AcquireType {
@@ -349,6 +364,7 @@ model Draft {
   leagueId     String      @unique
   status        DraftStatus @default(PENDING)
   isRookieDraft Boolean     @default(false)
+  isYouthDraft  Boolean     @default(false)
   currentPick   Int         @default(0)
   currentRound  Int         @default(1)
   startedAt    DateTime?

@@ -2617,6 +2617,9 @@ export const PlayerScalarFieldEnum = {
   chancePlayingNextRound: 'chancePlayingNextRound',
   totalPoints: 'totalPoints',
   form: 'form',
+  birthDate: 'birthDate',
+  minutes: 'minutes',
+  starts: 'starts',
   updatedAt: 'updatedAt'
 } as const
 
@@ -2703,6 +2706,9 @@ export const LeagueScalarFieldEnum = {
   contractYears: 'contractYears',
   rookieDraftRounds: 'rookieDraftRounds',
   rookieDraftOrder: 'rookieDraftOrder',
+  youthSquadEnabled: 'youthSquadEnabled',
+  youthSlots: 'youthSlots',
+  youthDraftRounds: 'youthDraftRounds',
   tradeDeadlineGameweek: 'tradeDeadlineGameweek',
   playoffStartGameweek: 'playoffStartGameweek',
   createdAt: 'createdAt',
@@ -2746,7 +2752,9 @@ export const RosterSlotScalarFieldEnum = {
   acquireType: 'acquireType',
   contractYear: 'contractYear',
   keeperRound: 'keeperRound',
-  dynastyYearsOwned: 'dynastyYearsOwned'
+  dynastyYearsOwned: 'dynastyYearsOwned',
+  developedByTeamId: 'developedByTeamId',
+  developmentBonus: 'developmentBonus'
 } as const
 
 export type RosterSlotScalarFieldEnum = (typeof RosterSlotScalarFieldEnum)[keyof typeof RosterSlotScalarFieldEnum]
@@ -2757,6 +2765,7 @@ export const DraftScalarFieldEnum = {
   leagueId: 'leagueId',
   status: 'status',
   isRookieDraft: 'isRookieDraft',
+  isYouthDraft: 'isYouthDraft',
   currentPick: 'currentPick',
   currentRound: 'currentRound',
   startedAt: 'startedAt',

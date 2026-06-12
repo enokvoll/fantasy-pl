@@ -91,7 +91,8 @@ export type RookieDraftOrder = (typeof RookieDraftOrder)[keyof typeof RookieDraf
 export const SlotType = {
   STARTER: 'STARTER',
   BENCH: 'BENCH',
-  IR: 'IR'
+  IR: 'IR',
+  YOUTH: 'YOUTH'
 } as const
 
 export type SlotType = (typeof SlotType)[keyof typeof SlotType]

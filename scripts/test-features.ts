@@ -101,6 +101,52 @@ async function main() {
     assert.equal(res.valid, false)
   })
 
+  console.log("formation set (8 formations)")
+  test("the table has exactly the 8 supported formations", () => {
+    assert.deepEqual(
+      Object.keys(DEFAULT_FORMATION_BOOSTS).sort(),
+      ["3-4-3", "3-5-2", "4-3-3", "4-4-2", "4-5-1", "5-2-3", "5-3-2", "5-4-1"].sort()
+    )
+  })
+  test("5-defender formations boost defender clean sheets", () => {
+    assert.equal(resolveFormationBoost("5-3-2", DEFAULT_FORMATION_BOOSTS)!.actionMultipliers?.DEF?.cleanSheet, 1.15)
+    assert.equal(resolveFormationBoost("5-4-1", DEFAULT_FORMATION_BOOSTS)!.actionMultipliers?.DEF?.cleanSheet, 1.2)
+  })
+  test("5-2-3 boosts both defenders and forwards", () => {
+    const b = resolveFormationBoost("5-2-3", DEFAULT_FORMATION_BOOSTS)!
+    assert.equal(b.actionMultipliers?.DEF?.cleanSheet, 1.12)
+    assert.equal(b.actionMultipliers?.FWD?.goals, 1.08)
+  })
+  test("4-3-3 is an attacker boost like 3-4-3", () => {
+    const b = resolveFormationBoost("4-3-3", DEFAULT_FORMATION_BOOSTS)!
+    assert.equal(b.actionMultipliers?.FWD?.goals, 1.1)
+    assert.equal(b.teamBonus?.threshold, 3)
+  })
+  test("3-5-2 / 4-5-1 are balanced (+3% all starters)", () => {
+    assert.equal(resolveFormationBoost("3-5-2", DEFAULT_FORMATION_BOOSTS)!.starterTotalPct, 0.03)
+    assert.equal(resolveFormationBoost("4-5-1", DEFAULT_FORMATION_BOOSTS)!.starterTotalPct, 0.03)
+  })
+
+  console.log("prospect eligibility")
+  const { ageAt, isProspectEligible, PROSPECT_MAX_MINUTES } = await import("../src/lib/prospects")
+  const ref = new Date("2026-06-12")
+  test("ageAt computes whole years", () => {
+    assert.equal(ageAt(new Date("2006-06-13"), ref), 19) // birthday not yet reached
+    assert.equal(ageAt(new Date("2006-06-12"), ref), 20) // birthday today
+  })
+  test("U21 + low minutes is eligible", () => {
+    assert.equal(isProspectEligible({ birthDate: new Date("2007-01-01"), minutes: 200 }, ref), true)
+  })
+  test("21+ is not eligible regardless of minutes", () => {
+    assert.equal(isProspectEligible({ birthDate: new Date("2004-01-01"), minutes: 0 }, ref), false)
+  })
+  test("U21 but high minutes (broken through) is not eligible", () => {
+    assert.equal(isProspectEligible({ birthDate: new Date("2007-01-01"), minutes: PROSPECT_MAX_MINUTES + 1 }, ref), false)
+  })
+  test("null birthDate is not eligible", () => {
+    assert.equal(isProspectEligible({ birthDate: null, minutes: 0 }, ref), false)
+  })
+
   console.log("")
   if (failures > 0) {
     console.error(`${failures} test(s) failed`)

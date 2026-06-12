@@ -37,6 +37,8 @@ export type LeagueAvgAggregateOutputType = {
   auctionMinIncrement: number | null
   keeperSlots: number | null
   rookieDraftRounds: number | null
+  youthSlots: number | null
+  youthDraftRounds: number | null
   tradeDeadlineGameweek: number | null
   playoffStartGameweek: number | null
 }
@@ -52,6 +54,8 @@ export type LeagueSumAggregateOutputType = {
   auctionMinIncrement: number | null
   keeperSlots: number | null
   rookieDraftRounds: number | null
+  youthSlots: number | null
+  youthDraftRounds: number | null
   tradeDeadlineGameweek: number | null
   playoffStartGameweek: number | null
 }
@@ -80,6 +84,9 @@ export type LeagueMinAggregateOutputType = {
   contractYears: boolean | null
   rookieDraftRounds: number | null
   rookieDraftOrder: $Enums.RookieDraftOrder | null
+  youthSquadEnabled: boolean | null
+  youthSlots: number | null
+  youthDraftRounds: number | null
   tradeDeadlineGameweek: number | null
   playoffStartGameweek: number | null
   createdAt: Date | null
@@ -110,6 +117,9 @@ export type LeagueMaxAggregateOutputType = {
   contractYears: boolean | null
   rookieDraftRounds: number | null
   rookieDraftOrder: $Enums.RookieDraftOrder | null
+  youthSquadEnabled: boolean | null
+  youthSlots: number | null
+  youthDraftRounds: number | null
   tradeDeadlineGameweek: number | null
   playoffStartGameweek: number | null
   createdAt: Date | null
@@ -143,6 +153,9 @@ export type LeagueCountAggregateOutputType = {
   contractYears: number
   rookieDraftRounds: number
   rookieDraftOrder: number
+  youthSquadEnabled: number
+  youthSlots: number
+  youthDraftRounds: number
   tradeDeadlineGameweek: number
   playoffStartGameweek: number
   createdAt: number
@@ -162,6 +175,8 @@ export type LeagueAvgAggregateInputType = {
   auctionMinIncrement?: true
   keeperSlots?: true
   rookieDraftRounds?: true
+  youthSlots?: true
+  youthDraftRounds?: true
   tradeDeadlineGameweek?: true
   playoffStartGameweek?: true
 }
@@ -177,6 +192,8 @@ export type LeagueSumAggregateInputType = {
   auctionMinIncrement?: true
   keeperSlots?: true
   rookieDraftRounds?: true
+  youthSlots?: true
+  youthDraftRounds?: true
   tradeDeadlineGameweek?: true
   playoffStartGameweek?: true
 }
@@ -205,6 +222,9 @@ export type LeagueMinAggregateInputType = {
   contractYears?: true
   rookieDraftRounds?: true
   rookieDraftOrder?: true
+  youthSquadEnabled?: true
+  youthSlots?: true
+  youthDraftRounds?: true
   tradeDeadlineGameweek?: true
   playoffStartGameweek?: true
   createdAt?: true
@@ -235,6 +255,9 @@ export type LeagueMaxAggregateInputType = {
   contractYears?: true
   rookieDraftRounds?: true
   rookieDraftOrder?: true
+  youthSquadEnabled?: true
+  youthSlots?: true
+  youthDraftRounds?: true
   tradeDeadlineGameweek?: true
   playoffStartGameweek?: true
   createdAt?: true
@@ -268,6 +291,9 @@ export type LeagueCountAggregateInputType = {
   contractYears?: true
   rookieDraftRounds?: true
   rookieDraftOrder?: true
+  youthSquadEnabled?: true
+  youthSlots?: true
+  youthDraftRounds?: true
   tradeDeadlineGameweek?: true
   playoffStartGameweek?: true
   createdAt?: true
@@ -388,6 +414,9 @@ export type LeagueGroupByOutputType = {
   contractYears: boolean
   rookieDraftRounds: number
   rookieDraftOrder: $Enums.RookieDraftOrder
+  youthSquadEnabled: boolean
+  youthSlots: number
+  youthDraftRounds: number
   tradeDeadlineGameweek: number | null
   playoffStartGameweek: number | null
   createdAt: Date
@@ -444,6 +473,9 @@ export type LeagueWhereInput = {
   contractYears?: Prisma.BoolFilter<"League"> | boolean
   rookieDraftRounds?: Prisma.IntFilter<"League"> | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFilter<"League"> | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFilter<"League"> | boolean
+  youthSlots?: Prisma.IntFilter<"League"> | number
+  youthDraftRounds?: Prisma.IntFilter<"League"> | number
   tradeDeadlineGameweek?: Prisma.IntNullableFilter<"League"> | number | null
   playoffStartGameweek?: Prisma.IntNullableFilter<"League"> | number | null
   createdAt?: Prisma.DateTimeFilter<"League"> | Date | string
@@ -485,6 +517,9 @@ export type LeagueOrderByWithRelationInput = {
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
   rookieDraftOrder?: Prisma.SortOrder
+  youthSquadEnabled?: Prisma.SortOrder
+  youthSlots?: Prisma.SortOrder
+  youthDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrderInput | Prisma.SortOrder
   playoffStartGameweek?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -529,6 +564,9 @@ export type LeagueWhereUniqueInput = Prisma.AtLeast<{
   contractYears?: Prisma.BoolFilter<"League"> | boolean
   rookieDraftRounds?: Prisma.IntFilter<"League"> | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFilter<"League"> | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFilter<"League"> | boolean
+  youthSlots?: Prisma.IntFilter<"League"> | number
+  youthDraftRounds?: Prisma.IntFilter<"League"> | number
   tradeDeadlineGameweek?: Prisma.IntNullableFilter<"League"> | number | null
   playoffStartGameweek?: Prisma.IntNullableFilter<"League"> | number | null
   createdAt?: Prisma.DateTimeFilter<"League"> | Date | string
@@ -570,6 +608,9 @@ export type LeagueOrderByWithAggregationInput = {
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
   rookieDraftOrder?: Prisma.SortOrder
+  youthSquadEnabled?: Prisma.SortOrder
+  youthSlots?: Prisma.SortOrder
+  youthDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrderInput | Prisma.SortOrder
   playoffStartGameweek?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -611,6 +652,9 @@ export type LeagueScalarWhereWithAggregatesInput = {
   contractYears?: Prisma.BoolWithAggregatesFilter<"League"> | boolean
   rookieDraftRounds?: Prisma.IntWithAggregatesFilter<"League"> | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderWithAggregatesFilter<"League"> | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolWithAggregatesFilter<"League"> | boolean
+  youthSlots?: Prisma.IntWithAggregatesFilter<"League"> | number
+  youthDraftRounds?: Prisma.IntWithAggregatesFilter<"League"> | number
   tradeDeadlineGameweek?: Prisma.IntNullableWithAggregatesFilter<"League"> | number | null
   playoffStartGameweek?: Prisma.IntNullableWithAggregatesFilter<"League"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"League"> | Date | string
@@ -644,6 +688,9 @@ export type LeagueCreateInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -685,6 +732,9 @@ export type LeagueUncheckedCreateInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -726,6 +776,9 @@ export type LeagueUpdateInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -767,6 +820,9 @@ export type LeagueUncheckedUpdateInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -808,6 +864,9 @@ export type LeagueCreateManyInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -841,6 +900,9 @@ export type LeagueUpdateManyMutationInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -874,6 +936,9 @@ export type LeagueUncheckedUpdateManyInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -907,6 +972,9 @@ export type LeagueCountOrderByAggregateInput = {
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
   rookieDraftOrder?: Prisma.SortOrder
+  youthSquadEnabled?: Prisma.SortOrder
+  youthSlots?: Prisma.SortOrder
+  youthDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrder
   playoffStartGameweek?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -924,6 +992,8 @@ export type LeagueAvgOrderByAggregateInput = {
   auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
+  youthSlots?: Prisma.SortOrder
+  youthDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrder
   playoffStartGameweek?: Prisma.SortOrder
 }
@@ -952,6 +1022,9 @@ export type LeagueMaxOrderByAggregateInput = {
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
   rookieDraftOrder?: Prisma.SortOrder
+  youthSquadEnabled?: Prisma.SortOrder
+  youthSlots?: Prisma.SortOrder
+  youthDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrder
   playoffStartGameweek?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -982,6 +1055,9 @@ export type LeagueMinOrderByAggregateInput = {
   contractYears?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
   rookieDraftOrder?: Prisma.SortOrder
+  youthSquadEnabled?: Prisma.SortOrder
+  youthSlots?: Prisma.SortOrder
+  youthDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrder
   playoffStartGameweek?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -999,6 +1075,8 @@ export type LeagueSumOrderByAggregateInput = {
   auctionMinIncrement?: Prisma.SortOrder
   keeperSlots?: Prisma.SortOrder
   rookieDraftRounds?: Prisma.SortOrder
+  youthSlots?: Prisma.SortOrder
+  youthDraftRounds?: Prisma.SortOrder
   tradeDeadlineGameweek?: Prisma.SortOrder
   playoffStartGameweek?: Prisma.SortOrder
 }
@@ -1171,6 +1249,9 @@ export type LeagueCreateWithoutTeamsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1211,6 +1292,9 @@ export type LeagueUncheckedCreateWithoutTeamsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1267,6 +1351,9 @@ export type LeagueUpdateWithoutTeamsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1307,6 +1394,9 @@ export type LeagueUncheckedUpdateWithoutTeamsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1347,6 +1437,9 @@ export type LeagueCreateWithoutDraftInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1387,6 +1480,9 @@ export type LeagueUncheckedCreateWithoutDraftInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1443,6 +1539,9 @@ export type LeagueUpdateWithoutDraftInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1483,6 +1582,9 @@ export type LeagueUncheckedUpdateWithoutDraftInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1523,6 +1625,9 @@ export type LeagueCreateWithoutDraftPickSlotsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1563,6 +1668,9 @@ export type LeagueUncheckedCreateWithoutDraftPickSlotsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1619,6 +1727,9 @@ export type LeagueUpdateWithoutDraftPickSlotsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1659,6 +1770,9 @@ export type LeagueUncheckedUpdateWithoutDraftPickSlotsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1699,6 +1813,9 @@ export type LeagueCreateWithoutMatchupsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1739,6 +1856,9 @@ export type LeagueUncheckedCreateWithoutMatchupsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1795,6 +1915,9 @@ export type LeagueUpdateWithoutMatchupsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1835,6 +1958,9 @@ export type LeagueUncheckedUpdateWithoutMatchupsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1875,6 +2001,9 @@ export type LeagueCreateWithoutWaiverRunsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1915,6 +2044,9 @@ export type LeagueUncheckedCreateWithoutWaiverRunsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -1971,6 +2103,9 @@ export type LeagueUpdateWithoutWaiverRunsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2011,6 +2146,9 @@ export type LeagueUncheckedUpdateWithoutWaiverRunsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2051,6 +2189,9 @@ export type LeagueCreateWithoutTransferAuctionsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -2091,6 +2232,9 @@ export type LeagueUncheckedCreateWithoutTransferAuctionsInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -2147,6 +2291,9 @@ export type LeagueUpdateWithoutTransferAuctionsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2187,6 +2334,9 @@ export type LeagueUncheckedUpdateWithoutTransferAuctionsInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2227,6 +2377,9 @@ export type LeagueCreateWithoutTradesInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -2267,6 +2420,9 @@ export type LeagueUncheckedCreateWithoutTradesInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -2323,6 +2479,9 @@ export type LeagueUpdateWithoutTradesInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2363,6 +2522,9 @@ export type LeagueUncheckedUpdateWithoutTradesInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2403,6 +2565,9 @@ export type LeagueCreateWithoutMessagesInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -2443,6 +2608,9 @@ export type LeagueUncheckedCreateWithoutMessagesInput = {
   contractYears?: boolean
   rookieDraftRounds?: number
   rookieDraftOrder?: $Enums.RookieDraftOrder
+  youthSquadEnabled?: boolean
+  youthSlots?: number
+  youthDraftRounds?: number
   tradeDeadlineGameweek?: number | null
   playoffStartGameweek?: number | null
   createdAt?: Date | string
@@ -2499,6 +2667,9 @@ export type LeagueUpdateWithoutMessagesInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2539,6 +2710,9 @@ export type LeagueUncheckedUpdateWithoutMessagesInput = {
   contractYears?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rookieDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   rookieDraftOrder?: Prisma.EnumRookieDraftOrderFieldUpdateOperationsInput | $Enums.RookieDraftOrder
+  youthSquadEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  youthSlots?: Prisma.IntFieldUpdateOperationsInput | number
+  youthDraftRounds?: Prisma.IntFieldUpdateOperationsInput | number
   tradeDeadlineGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   playoffStartGameweek?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2664,6 +2838,9 @@ export type LeagueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   contractYears?: boolean
   rookieDraftRounds?: boolean
   rookieDraftOrder?: boolean
+  youthSquadEnabled?: boolean
+  youthSlots?: boolean
+  youthDraftRounds?: boolean
   tradeDeadlineGameweek?: boolean
   playoffStartGameweek?: boolean
   createdAt?: boolean
@@ -2706,6 +2883,9 @@ export type LeagueSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   contractYears?: boolean
   rookieDraftRounds?: boolean
   rookieDraftOrder?: boolean
+  youthSquadEnabled?: boolean
+  youthSlots?: boolean
+  youthDraftRounds?: boolean
   tradeDeadlineGameweek?: boolean
   playoffStartGameweek?: boolean
   createdAt?: boolean
@@ -2739,6 +2919,9 @@ export type LeagueSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   contractYears?: boolean
   rookieDraftRounds?: boolean
   rookieDraftOrder?: boolean
+  youthSquadEnabled?: boolean
+  youthSlots?: boolean
+  youthDraftRounds?: boolean
   tradeDeadlineGameweek?: boolean
   playoffStartGameweek?: boolean
   createdAt?: boolean
@@ -2772,13 +2955,16 @@ export type LeagueSelectScalar = {
   contractYears?: boolean
   rookieDraftRounds?: boolean
   rookieDraftOrder?: boolean
+  youthSquadEnabled?: boolean
+  youthSlots?: boolean
+  youthDraftRounds?: boolean
   tradeDeadlineGameweek?: boolean
   playoffStartGameweek?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LeagueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "type" | "scoringType" | "status" | "maxTeams" | "season" | "draftType" | "draftDate" | "draftPickTimeSeconds" | "slowDraftHoursPerPick" | "rosterConfig" | "scoringConfig" | "formationBoostConfig" | "waiverType" | "faabBudget" | "waiverDay" | "waiverProcessTime" | "auctionWindowHours" | "auctionAntiSnipeMinutes" | "auctionMinIncrement" | "keeperSlots" | "contractYears" | "rookieDraftRounds" | "rookieDraftOrder" | "tradeDeadlineGameweek" | "playoffStartGameweek" | "createdAt" | "updatedAt", ExtArgs["result"]["league"]>
+export type LeagueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "inviteCode" | "type" | "scoringType" | "status" | "maxTeams" | "season" | "draftType" | "draftDate" | "draftPickTimeSeconds" | "slowDraftHoursPerPick" | "rosterConfig" | "scoringConfig" | "formationBoostConfig" | "waiverType" | "faabBudget" | "waiverDay" | "waiverProcessTime" | "auctionWindowHours" | "auctionAntiSnipeMinutes" | "auctionMinIncrement" | "keeperSlots" | "contractYears" | "rookieDraftRounds" | "rookieDraftOrder" | "youthSquadEnabled" | "youthSlots" | "youthDraftRounds" | "tradeDeadlineGameweek" | "playoffStartGameweek" | "createdAt" | "updatedAt", ExtArgs["result"]["league"]>
 export type LeagueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   teams?: boolean | Prisma.League$teamsArgs<ExtArgs>
   draft?: boolean | Prisma.League$draftArgs<ExtArgs>
@@ -2832,6 +3018,9 @@ export type $LeaguePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     contractYears: boolean
     rookieDraftRounds: number
     rookieDraftOrder: $Enums.RookieDraftOrder
+    youthSquadEnabled: boolean
+    youthSlots: number
+    youthDraftRounds: number
     tradeDeadlineGameweek: number | null
     playoffStartGameweek: number | null
     createdAt: Date
@@ -3293,6 +3482,9 @@ export interface LeagueFieldRefs {
   readonly contractYears: Prisma.FieldRef<"League", 'Boolean'>
   readonly rookieDraftRounds: Prisma.FieldRef<"League", 'Int'>
   readonly rookieDraftOrder: Prisma.FieldRef<"League", 'RookieDraftOrder'>
+  readonly youthSquadEnabled: Prisma.FieldRef<"League", 'Boolean'>
+  readonly youthSlots: Prisma.FieldRef<"League", 'Int'>
+  readonly youthDraftRounds: Prisma.FieldRef<"League", 'Int'>
   readonly tradeDeadlineGameweek: Prisma.FieldRef<"League", 'Int'>
   readonly playoffStartGameweek: Prisma.FieldRef<"League", 'Int'>
   readonly createdAt: Prisma.FieldRef<"League", 'DateTime'>

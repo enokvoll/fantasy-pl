@@ -41,6 +41,7 @@ export type DraftMinAggregateOutputType = {
   leagueId: string | null
   status: $Enums.DraftStatus | null
   isRookieDraft: boolean | null
+  isYouthDraft: boolean | null
   currentPick: number | null
   currentRound: number | null
   startedAt: Date | null
@@ -52,6 +53,7 @@ export type DraftMaxAggregateOutputType = {
   leagueId: string | null
   status: $Enums.DraftStatus | null
   isRookieDraft: boolean | null
+  isYouthDraft: boolean | null
   currentPick: number | null
   currentRound: number | null
   startedAt: Date | null
@@ -63,6 +65,7 @@ export type DraftCountAggregateOutputType = {
   leagueId: number
   status: number
   isRookieDraft: number
+  isYouthDraft: number
   currentPick: number
   currentRound: number
   startedAt: number
@@ -86,6 +89,7 @@ export type DraftMinAggregateInputType = {
   leagueId?: true
   status?: true
   isRookieDraft?: true
+  isYouthDraft?: true
   currentPick?: true
   currentRound?: true
   startedAt?: true
@@ -97,6 +101,7 @@ export type DraftMaxAggregateInputType = {
   leagueId?: true
   status?: true
   isRookieDraft?: true
+  isYouthDraft?: true
   currentPick?: true
   currentRound?: true
   startedAt?: true
@@ -108,6 +113,7 @@ export type DraftCountAggregateInputType = {
   leagueId?: true
   status?: true
   isRookieDraft?: true
+  isYouthDraft?: true
   currentPick?: true
   currentRound?: true
   startedAt?: true
@@ -206,6 +212,7 @@ export type DraftGroupByOutputType = {
   leagueId: string
   status: $Enums.DraftStatus
   isRookieDraft: boolean
+  isYouthDraft: boolean
   currentPick: number
   currentRound: number
   startedAt: Date | null
@@ -240,6 +247,7 @@ export type DraftWhereInput = {
   leagueId?: Prisma.StringFilter<"Draft"> | string
   status?: Prisma.EnumDraftStatusFilter<"Draft"> | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFilter<"Draft"> | boolean
+  isYouthDraft?: Prisma.BoolFilter<"Draft"> | boolean
   currentPick?: Prisma.IntFilter<"Draft"> | number
   currentRound?: Prisma.IntFilter<"Draft"> | number
   startedAt?: Prisma.DateTimeNullableFilter<"Draft"> | Date | string | null
@@ -254,6 +262,7 @@ export type DraftOrderByWithRelationInput = {
   leagueId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isRookieDraft?: Prisma.SortOrder
+  isYouthDraft?: Prisma.SortOrder
   currentPick?: Prisma.SortOrder
   currentRound?: Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -271,6 +280,7 @@ export type DraftWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DraftWhereInput | Prisma.DraftWhereInput[]
   status?: Prisma.EnumDraftStatusFilter<"Draft"> | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFilter<"Draft"> | boolean
+  isYouthDraft?: Prisma.BoolFilter<"Draft"> | boolean
   currentPick?: Prisma.IntFilter<"Draft"> | number
   currentRound?: Prisma.IntFilter<"Draft"> | number
   startedAt?: Prisma.DateTimeNullableFilter<"Draft"> | Date | string | null
@@ -285,6 +295,7 @@ export type DraftOrderByWithAggregationInput = {
   leagueId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isRookieDraft?: Prisma.SortOrder
+  isYouthDraft?: Prisma.SortOrder
   currentPick?: Prisma.SortOrder
   currentRound?: Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -304,6 +315,7 @@ export type DraftScalarWhereWithAggregatesInput = {
   leagueId?: Prisma.StringWithAggregatesFilter<"Draft"> | string
   status?: Prisma.EnumDraftStatusWithAggregatesFilter<"Draft"> | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolWithAggregatesFilter<"Draft"> | boolean
+  isYouthDraft?: Prisma.BoolWithAggregatesFilter<"Draft"> | boolean
   currentPick?: Prisma.IntWithAggregatesFilter<"Draft"> | number
   currentRound?: Prisma.IntWithAggregatesFilter<"Draft"> | number
   startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Draft"> | Date | string | null
@@ -314,6 +326,7 @@ export type DraftCreateInput = {
   id?: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -328,6 +341,7 @@ export type DraftUncheckedCreateInput = {
   leagueId: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -340,6 +354,7 @@ export type DraftUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -354,6 +369,7 @@ export type DraftUncheckedUpdateInput = {
   leagueId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -367,6 +383,7 @@ export type DraftCreateManyInput = {
   leagueId: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -377,6 +394,7 @@ export type DraftUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -388,6 +406,7 @@ export type DraftUncheckedUpdateManyInput = {
   leagueId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -404,6 +423,7 @@ export type DraftCountOrderByAggregateInput = {
   leagueId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isRookieDraft?: Prisma.SortOrder
+  isYouthDraft?: Prisma.SortOrder
   currentPick?: Prisma.SortOrder
   currentRound?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -420,6 +440,7 @@ export type DraftMaxOrderByAggregateInput = {
   leagueId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isRookieDraft?: Prisma.SortOrder
+  isYouthDraft?: Prisma.SortOrder
   currentPick?: Prisma.SortOrder
   currentRound?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -431,6 +452,7 @@ export type DraftMinOrderByAggregateInput = {
   leagueId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   isRookieDraft?: Prisma.SortOrder
+  isYouthDraft?: Prisma.SortOrder
   currentPick?: Prisma.SortOrder
   currentRound?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
@@ -515,6 +537,7 @@ export type DraftCreateWithoutLeagueInput = {
   id?: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -527,6 +550,7 @@ export type DraftUncheckedCreateWithoutLeagueInput = {
   id?: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -555,6 +579,7 @@ export type DraftUpdateWithoutLeagueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -567,6 +592,7 @@ export type DraftUncheckedUpdateWithoutLeagueInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -579,6 +605,7 @@ export type DraftCreateWithoutPicksInput = {
   id?: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -592,6 +619,7 @@ export type DraftUncheckedCreateWithoutPicksInput = {
   leagueId: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -619,6 +647,7 @@ export type DraftUpdateWithoutPicksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -632,6 +661,7 @@ export type DraftUncheckedUpdateWithoutPicksInput = {
   leagueId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -643,6 +673,7 @@ export type DraftCreateWithoutQueuesInput = {
   id?: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -656,6 +687,7 @@ export type DraftUncheckedCreateWithoutQueuesInput = {
   leagueId: string
   status?: $Enums.DraftStatus
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: number
   currentRound?: number
   startedAt?: Date | string | null
@@ -683,6 +715,7 @@ export type DraftUpdateWithoutQueuesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -696,6 +729,7 @@ export type DraftUncheckedUpdateWithoutQueuesInput = {
   leagueId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
   isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
   currentPick?: Prisma.IntFieldUpdateOperationsInput | number
   currentRound?: Prisma.IntFieldUpdateOperationsInput | number
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -748,6 +782,7 @@ export type DraftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   leagueId?: boolean
   status?: boolean
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: boolean
   currentRound?: boolean
   startedAt?: boolean
@@ -763,6 +798,7 @@ export type DraftSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   leagueId?: boolean
   status?: boolean
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: boolean
   currentRound?: boolean
   startedAt?: boolean
@@ -775,6 +811,7 @@ export type DraftSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   leagueId?: boolean
   status?: boolean
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: boolean
   currentRound?: boolean
   startedAt?: boolean
@@ -787,13 +824,14 @@ export type DraftSelectScalar = {
   leagueId?: boolean
   status?: boolean
   isRookieDraft?: boolean
+  isYouthDraft?: boolean
   currentPick?: boolean
   currentRound?: boolean
   startedAt?: boolean
   completedAt?: boolean
 }
 
-export type DraftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "leagueId" | "status" | "isRookieDraft" | "currentPick" | "currentRound" | "startedAt" | "completedAt", ExtArgs["result"]["draft"]>
+export type DraftOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "leagueId" | "status" | "isRookieDraft" | "isYouthDraft" | "currentPick" | "currentRound" | "startedAt" | "completedAt", ExtArgs["result"]["draft"]>
 export type DraftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   league?: boolean | Prisma.LeagueDefaultArgs<ExtArgs>
   picks?: boolean | Prisma.Draft$picksArgs<ExtArgs>
@@ -819,6 +857,7 @@ export type $DraftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     leagueId: string
     status: $Enums.DraftStatus
     isRookieDraft: boolean
+    isYouthDraft: boolean
     currentPick: number
     currentRound: number
     startedAt: Date | null
@@ -1253,6 +1292,7 @@ export interface DraftFieldRefs {
   readonly leagueId: Prisma.FieldRef<"Draft", 'String'>
   readonly status: Prisma.FieldRef<"Draft", 'DraftStatus'>
   readonly isRookieDraft: Prisma.FieldRef<"Draft", 'Boolean'>
+  readonly isYouthDraft: Prisma.FieldRef<"Draft", 'Boolean'>
   readonly currentPick: Prisma.FieldRef<"Draft", 'Int'>
   readonly currentRound: Prisma.FieldRef<"Draft", 'Int'>
   readonly startedAt: Prisma.FieldRef<"Draft", 'DateTime'>

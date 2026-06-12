@@ -32,6 +32,8 @@ export type PlayerAvgAggregateOutputType = {
   nowCost: number | null
   chancePlayingNextRound: number | null
   totalPoints: number | null
+  minutes: number | null
+  starts: number | null
 }
 
 export type PlayerSumAggregateOutputType = {
@@ -40,6 +42,8 @@ export type PlayerSumAggregateOutputType = {
   nowCost: number | null
   chancePlayingNextRound: number | null
   totalPoints: number | null
+  minutes: number | null
+  starts: number | null
 }
 
 export type PlayerMinAggregateOutputType = {
@@ -56,6 +60,9 @@ export type PlayerMinAggregateOutputType = {
   chancePlayingNextRound: number | null
   totalPoints: number | null
   form: string | null
+  birthDate: Date | null
+  minutes: number | null
+  starts: number | null
   updatedAt: Date | null
 }
 
@@ -73,6 +80,9 @@ export type PlayerMaxAggregateOutputType = {
   chancePlayingNextRound: number | null
   totalPoints: number | null
   form: string | null
+  birthDate: Date | null
+  minutes: number | null
+  starts: number | null
   updatedAt: Date | null
 }
 
@@ -90,6 +100,9 @@ export type PlayerCountAggregateOutputType = {
   chancePlayingNextRound: number
   totalPoints: number
   form: number
+  birthDate: number
+  minutes: number
+  starts: number
   updatedAt: number
   _all: number
 }
@@ -101,6 +114,8 @@ export type PlayerAvgAggregateInputType = {
   nowCost?: true
   chancePlayingNextRound?: true
   totalPoints?: true
+  minutes?: true
+  starts?: true
 }
 
 export type PlayerSumAggregateInputType = {
@@ -109,6 +124,8 @@ export type PlayerSumAggregateInputType = {
   nowCost?: true
   chancePlayingNextRound?: true
   totalPoints?: true
+  minutes?: true
+  starts?: true
 }
 
 export type PlayerMinAggregateInputType = {
@@ -125,6 +142,9 @@ export type PlayerMinAggregateInputType = {
   chancePlayingNextRound?: true
   totalPoints?: true
   form?: true
+  birthDate?: true
+  minutes?: true
+  starts?: true
   updatedAt?: true
 }
 
@@ -142,6 +162,9 @@ export type PlayerMaxAggregateInputType = {
   chancePlayingNextRound?: true
   totalPoints?: true
   form?: true
+  birthDate?: true
+  minutes?: true
+  starts?: true
   updatedAt?: true
 }
 
@@ -159,6 +182,9 @@ export type PlayerCountAggregateInputType = {
   chancePlayingNextRound?: true
   totalPoints?: true
   form?: true
+  birthDate?: true
+  minutes?: true
+  starts?: true
   updatedAt?: true
   _all?: true
 }
@@ -263,6 +289,9 @@ export type PlayerGroupByOutputType = {
   chancePlayingNextRound: number | null
   totalPoints: number
   form: string | null
+  birthDate: Date | null
+  minutes: number
+  starts: number
   updatedAt: Date
   _count: PlayerCountAggregateOutputType | null
   _avg: PlayerAvgAggregateOutputType | null
@@ -303,6 +332,9 @@ export type PlayerWhereInput = {
   chancePlayingNextRound?: Prisma.IntNullableFilter<"Player"> | number | null
   totalPoints?: Prisma.IntFilter<"Player"> | number
   form?: Prisma.StringNullableFilter<"Player"> | string | null
+  birthDate?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
+  minutes?: Prisma.IntFilter<"Player"> | number
+  starts?: Prisma.IntFilter<"Player"> | number
   updatedAt?: Prisma.DateTimeFilter<"Player"> | Date | string
   fplTeam?: Prisma.XOR<Prisma.FplTeamScalarRelationFilter, Prisma.FplTeamWhereInput>
   gameweekStats?: Prisma.PlayerGameweekStatListRelationFilter
@@ -328,6 +360,9 @@ export type PlayerOrderByWithRelationInput = {
   chancePlayingNextRound?: Prisma.SortOrderInput | Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   form?: Prisma.SortOrderInput | Prisma.SortOrder
+  birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  minutes?: Prisma.SortOrder
+  starts?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   fplTeam?: Prisma.FplTeamOrderByWithRelationInput
   gameweekStats?: Prisma.PlayerGameweekStatOrderByRelationAggregateInput
@@ -356,6 +391,9 @@ export type PlayerWhereUniqueInput = Prisma.AtLeast<{
   chancePlayingNextRound?: Prisma.IntNullableFilter<"Player"> | number | null
   totalPoints?: Prisma.IntFilter<"Player"> | number
   form?: Prisma.StringNullableFilter<"Player"> | string | null
+  birthDate?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
+  minutes?: Prisma.IntFilter<"Player"> | number
+  starts?: Prisma.IntFilter<"Player"> | number
   updatedAt?: Prisma.DateTimeFilter<"Player"> | Date | string
   fplTeam?: Prisma.XOR<Prisma.FplTeamScalarRelationFilter, Prisma.FplTeamWhereInput>
   gameweekStats?: Prisma.PlayerGameweekStatListRelationFilter
@@ -381,6 +419,9 @@ export type PlayerOrderByWithAggregationInput = {
   chancePlayingNextRound?: Prisma.SortOrderInput | Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   form?: Prisma.SortOrderInput | Prisma.SortOrder
+  birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  minutes?: Prisma.SortOrder
+  starts?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PlayerCountOrderByAggregateInput
   _avg?: Prisma.PlayerAvgOrderByAggregateInput
@@ -406,6 +447,9 @@ export type PlayerScalarWhereWithAggregatesInput = {
   chancePlayingNextRound?: Prisma.IntNullableWithAggregatesFilter<"Player"> | number | null
   totalPoints?: Prisma.IntWithAggregatesFilter<"Player"> | number
   form?: Prisma.StringNullableWithAggregatesFilter<"Player"> | string | null
+  birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Player"> | Date | string | null
+  minutes?: Prisma.IntWithAggregatesFilter<"Player"> | number
+  starts?: Prisma.IntWithAggregatesFilter<"Player"> | number
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Player"> | Date | string
 }
 
@@ -422,6 +466,9 @@ export type PlayerCreateInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -447,6 +494,9 @@ export type PlayerUncheckedCreateInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -470,6 +520,9 @@ export type PlayerUpdateInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -495,6 +548,9 @@ export type PlayerUncheckedUpdateInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -519,6 +575,9 @@ export type PlayerCreateManyInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
 }
 
@@ -535,6 +594,9 @@ export type PlayerUpdateManyMutationInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -552,6 +614,9 @@ export type PlayerUncheckedUpdateManyInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -579,6 +644,9 @@ export type PlayerCountOrderByAggregateInput = {
   chancePlayingNextRound?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   form?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
+  minutes?: Prisma.SortOrder
+  starts?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -588,6 +656,8 @@ export type PlayerAvgOrderByAggregateInput = {
   nowCost?: Prisma.SortOrder
   chancePlayingNextRound?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
+  minutes?: Prisma.SortOrder
+  starts?: Prisma.SortOrder
 }
 
 export type PlayerMaxOrderByAggregateInput = {
@@ -604,6 +674,9 @@ export type PlayerMaxOrderByAggregateInput = {
   chancePlayingNextRound?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   form?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
+  minutes?: Prisma.SortOrder
+  starts?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -621,6 +694,9 @@ export type PlayerMinOrderByAggregateInput = {
   chancePlayingNextRound?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
   form?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
+  minutes?: Prisma.SortOrder
+  starts?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -630,6 +706,8 @@ export type PlayerSumOrderByAggregateInput = {
   nowCost?: Prisma.SortOrder
   chancePlayingNextRound?: Prisma.SortOrder
   totalPoints?: Prisma.SortOrder
+  minutes?: Prisma.SortOrder
+  starts?: Prisma.SortOrder
 }
 
 export type PlayerScalarRelationFilter = {
@@ -811,6 +889,9 @@ export type PlayerCreateWithoutFplTeamInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutPlayerInput
@@ -834,6 +915,9 @@ export type PlayerUncheckedCreateWithoutFplTeamInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -887,6 +971,9 @@ export type PlayerScalarWhereInput = {
   chancePlayingNextRound?: Prisma.IntNullableFilter<"Player"> | number | null
   totalPoints?: Prisma.IntFilter<"Player"> | number
   form?: Prisma.StringNullableFilter<"Player"> | string | null
+  birthDate?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
+  minutes?: Prisma.IntFilter<"Player"> | number
+  starts?: Prisma.IntFilter<"Player"> | number
   updatedAt?: Prisma.DateTimeFilter<"Player"> | Date | string
 }
 
@@ -903,6 +990,9 @@ export type PlayerCreateWithoutGameweekStatsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutPlayerInput
@@ -927,6 +1017,9 @@ export type PlayerUncheckedCreateWithoutGameweekStatsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
   draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
@@ -965,6 +1058,9 @@ export type PlayerUpdateWithoutGameweekStatsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   rosterSlots?: Prisma.RosterSlotUpdateManyWithoutPlayerNestedInput
@@ -989,6 +1085,9 @@ export type PlayerUncheckedUpdateWithoutGameweekStatsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
   draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1011,6 +1110,9 @@ export type PlayerCreateWithoutRosterSlotsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1035,6 +1137,9 @@ export type PlayerUncheckedCreateWithoutRosterSlotsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
@@ -1073,6 +1178,9 @@ export type PlayerUpdateWithoutRosterSlotsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1097,6 +1205,9 @@ export type PlayerUncheckedUpdateWithoutRosterSlotsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1119,6 +1230,9 @@ export type PlayerCreateWithoutDraftPicksInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1143,6 +1257,9 @@ export type PlayerUncheckedCreateWithoutDraftPicksInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1181,6 +1298,9 @@ export type PlayerUpdateWithoutDraftPicksInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1205,6 +1325,9 @@ export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1227,6 +1350,9 @@ export type PlayerCreateWithoutWaiverTargetsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1251,6 +1377,9 @@ export type PlayerUncheckedCreateWithoutWaiverTargetsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1278,6 +1407,9 @@ export type PlayerCreateWithoutWaiverDropsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1302,6 +1434,9 @@ export type PlayerUncheckedCreateWithoutWaiverDropsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1340,6 +1475,9 @@ export type PlayerUpdateWithoutWaiverTargetsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1364,6 +1502,9 @@ export type PlayerUncheckedUpdateWithoutWaiverTargetsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1397,6 +1538,9 @@ export type PlayerUpdateWithoutWaiverDropsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1421,6 +1565,9 @@ export type PlayerUncheckedUpdateWithoutWaiverDropsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1443,6 +1590,9 @@ export type PlayerCreateWithoutTransferAuctionsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1467,6 +1617,9 @@ export type PlayerUncheckedCreateWithoutTransferAuctionsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1505,6 +1658,9 @@ export type PlayerUpdateWithoutTransferAuctionsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1529,6 +1685,9 @@ export type PlayerUncheckedUpdateWithoutTransferAuctionsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1551,6 +1710,9 @@ export type PlayerCreateWithoutTradeAssetsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1575,6 +1737,9 @@ export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1613,6 +1778,9 @@ export type PlayerUpdateWithoutTradeAssetsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1637,6 +1805,9 @@ export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1659,6 +1830,9 @@ export type PlayerCreateManyFplTeamInput = {
   chancePlayingNextRound?: number | null
   totalPoints?: number
   form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
   updatedAt?: Date | string
 }
 
@@ -1675,6 +1849,9 @@ export type PlayerUpdateWithoutFplTeamInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUpdateManyWithoutPlayerNestedInput
@@ -1698,6 +1875,9 @@ export type PlayerUncheckedUpdateWithoutFplTeamInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1721,6 +1901,9 @@ export type PlayerUncheckedUpdateManyWithoutFplTeamInput = {
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
   form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1823,6 +2006,9 @@ export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   chancePlayingNextRound?: boolean
   totalPoints?: boolean
   form?: boolean
+  birthDate?: boolean
+  minutes?: boolean
+  starts?: boolean
   updatedAt?: boolean
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
   gameweekStats?: boolean | Prisma.Player$gameweekStatsArgs<ExtArgs>
@@ -1849,6 +2035,9 @@ export type PlayerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   chancePlayingNextRound?: boolean
   totalPoints?: boolean
   form?: boolean
+  birthDate?: boolean
+  minutes?: boolean
+  starts?: boolean
   updatedAt?: boolean
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["player"]>
@@ -1867,6 +2056,9 @@ export type PlayerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   chancePlayingNextRound?: boolean
   totalPoints?: boolean
   form?: boolean
+  birthDate?: boolean
+  minutes?: boolean
+  starts?: boolean
   updatedAt?: boolean
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["player"]>
@@ -1885,10 +2077,13 @@ export type PlayerSelectScalar = {
   chancePlayingNextRound?: boolean
   totalPoints?: boolean
   form?: boolean
+  birthDate?: boolean
+  minutes?: boolean
+  starts?: boolean
   updatedAt?: boolean
 }
 
-export type PlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "webName" | "firstName" | "lastName" | "position" | "fplTeamId" | "nowCost" | "status" | "photo" | "news" | "chancePlayingNextRound" | "totalPoints" | "form" | "updatedAt", ExtArgs["result"]["player"]>
+export type PlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "webName" | "firstName" | "lastName" | "position" | "fplTeamId" | "nowCost" | "status" | "photo" | "news" | "chancePlayingNextRound" | "totalPoints" | "form" | "birthDate" | "minutes" | "starts" | "updatedAt", ExtArgs["result"]["player"]>
 export type PlayerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
   gameweekStats?: boolean | Prisma.Player$gameweekStatsArgs<ExtArgs>
@@ -1933,6 +2128,9 @@ export type $PlayerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     chancePlayingNextRound: number | null
     totalPoints: number
     form: string | null
+    birthDate: Date | null
+    minutes: number
+    starts: number
     updatedAt: Date
   }, ExtArgs["result"]["player"]>
   composites: {}
@@ -2378,6 +2576,9 @@ export interface PlayerFieldRefs {
   readonly chancePlayingNextRound: Prisma.FieldRef<"Player", 'Int'>
   readonly totalPoints: Prisma.FieldRef<"Player", 'Int'>
   readonly form: Prisma.FieldRef<"Player", 'String'>
+  readonly birthDate: Prisma.FieldRef<"Player", 'DateTime'>
+  readonly minutes: Prisma.FieldRef<"Player", 'Int'>
+  readonly starts: Prisma.FieldRef<"Player", 'Int'>
   readonly updatedAt: Prisma.FieldRef<"Player", 'DateTime'>
 }
     
