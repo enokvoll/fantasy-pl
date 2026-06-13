@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { isProspectEligible, PROSPECT_MAX_MINUTES } from "@/lib/prospects"
+import { getSeasonPlayerPoints, getLeaguePlayedGameweekIds } from "@/lib/season-points"
 import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -41,5 +42,17 @@ export async function GET(req: NextRequest) {
     ? players.filter((p) => isProspectEligible({ birthDate: p.birthDate, minutes: p.minutes })).slice(0, limit)
     : players
 
-  return Response.json({ players: result, total: result.length })
+  // Season-to-date points (league-scoped). Preseason → `points: null`, so the UI
+  // shows "—" instead of last season's bootstrap total.
+  const seasonStarted = leagueId ? (await getLeaguePlayedGameweekIds(leagueId)).length > 0 : false
+  const seasonPoints = seasonStarted
+    ? await getSeasonPlayerPoints(leagueId!, result.map((p) => p.id))
+    : new Map<number, number>()
+
+  const withPoints = result.map((p) => ({
+    ...p,
+    points: seasonStarted ? (seasonPoints.get(p.id) ?? 0) : null,
+  }))
+
+  return Response.json({ players: withPoints, total: withPoints.length, seasonStarted })
 }

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { getSeasonPlayerPoints } from "@/lib/season-points"
 
 const POS_COLORS: Record<string, string> = {
   GK: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
@@ -44,6 +45,10 @@ export default async function PlayersPage({
   })
 
   const totalPlayers = await prisma.player.count()
+
+  // Season-to-date points (league-scoped). Empty map ⇒ preseason ⇒ render "—".
+  const seasonPoints = await getSeasonPlayerPoints(leagueId, players.map(p => p.id))
+  const seasonStarted = seasonPoints.size > 0
 
   if (players.length === 0 && totalPlayers === 0) {
     return (
@@ -111,7 +116,7 @@ export default async function PlayersPage({
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right text-foreground">£{(player.nowCost / 10).toFixed(1)}m</td>
-                      <td className="px-4 py-3 text-right text-foreground font-semibold">{player.totalPoints}</td>
+                      <td className="px-4 py-3 text-right text-foreground font-semibold">{seasonStarted ? (seasonPoints.get(player.id) ?? 0) : "—"}</td>
                       <td className="px-4 py-3 text-right text-foreground">{player.form}</td>
                       <td className="px-4 py-3 text-center">
                         {ownerTeamId ? (

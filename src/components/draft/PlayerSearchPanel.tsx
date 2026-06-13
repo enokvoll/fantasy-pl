@@ -11,6 +11,8 @@ interface Player {
   position: string
   nowCost: number
   totalPoints: number
+  /** Season-to-date points; null in preseason (before any gameweek is played). */
+  points: number | null
   form: string | null
   fplTeam: { shortName: string }
 }
@@ -94,7 +96,7 @@ export function PlayerSearchPanel({ leagueId, isMyTurn, onPick, onAddToQueue, pi
               <span className="text-foreground text-xs font-medium truncate block">{player.webName}</span>
               <span className="text-muted-foreground text-[10px]">{player.fplTeam.shortName}</span>
             </div>
-            <span className="text-muted-foreground text-xs tabular-nums">{player.totalPoints}pts</span>
+            <span className="text-muted-foreground text-xs tabular-nums">{player.points ?? "—"}pts</span>
             <span className="text-muted-foreground text-[10px]">£{(player.nowCost / 10).toFixed(1)}m</span>
             <div className="flex gap-1 shrink-0">
               <button

@@ -9,7 +9,8 @@ export interface DynastyPlayer {
   playerName: string
   position: string
   clubShort: string
-  totalPoints: number
+  /** Season-to-date points; null in preseason (before any gameweek is played). */
+  totalPoints: number | null
   yearsOwned: number
   acquireType: string
 }
@@ -66,7 +67,7 @@ export function DynastyPanel({ teamId, players, rosterCap, canCut }: DynastyPane
             <div className="flex-1 min-w-0">
               <p className="text-sm text-foreground truncate">{p.playerName} <span className="text-muted-foreground">{p.clubShort}</span></p>
               <p className="text-xs text-muted-foreground">
-                {p.yearsOwned > 0 ? `${p.yearsOwned} yr${p.yearsOwned === 1 ? "" : "s"} owned` : "New"} · {p.acquireType.toLowerCase()} · {p.totalPoints} pts
+                {p.yearsOwned > 0 ? `${p.yearsOwned} yr${p.yearsOwned === 1 ? "" : "s"} owned` : "New"} · {p.acquireType.toLowerCase()} · {p.totalPoints ?? "—"} pts
               </p>
             </div>
             {canCut && (

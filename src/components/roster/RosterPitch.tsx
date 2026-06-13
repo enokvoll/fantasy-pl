@@ -17,7 +17,8 @@ interface PlayerSlot {
   playerName: string
   position: string
   clubShort: string
-  totalPoints: number
+  /** Season-to-date points; null in preseason (before any gameweek is played). */
+  totalPoints: number | null
   gwPoints: number | null
   isStarting: boolean
   locked?: boolean
@@ -72,7 +73,7 @@ function PlayerCard({
       {slot.gwPoints !== null ? (
         <span className="text-xs font-bold text-foreground">{slot.gwPoints}pts</span>
       ) : (
-        <span className="text-[10px] opacity-50">{slot.totalPoints}tot</span>
+        <span className="text-[10px] opacity-50">{slot.totalPoints ?? "—"}tot</span>
       )}
     </div>
   )

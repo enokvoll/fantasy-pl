@@ -8,9 +8,16 @@ interface UseDraftOptions {
   leagueId: string
   myTeamId: string | null
   draftId: string | null
+  /** Fired when the draft finishes and the post-draft phase is known. */
+  onFinalized?: (nextPhase: "YOUTH_DRAFT_PENDING" | "SEASON") => void
 }
 
-export function useDraft({ leagueId, myTeamId, draftId }: UseDraftOptions) {
+export function useDraft({ leagueId, myTeamId, draftId, onFinalized }: UseDraftOptions) {
+  // Keep the latest callback in a ref so the socket effect needn't re-subscribe.
+  const onFinalizedRef = useRef(onFinalized)
+  useEffect(() => {
+    onFinalizedRef.current = onFinalized
+  }, [onFinalized])
   const socketRef = useRef<Socket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [draftState, setDraftState] = useState<DraftState | null>(null)
@@ -102,6 +109,10 @@ export function useDraft({ leagueId, myTeamId, draftId }: UseDraftOptions) {
       setDraftState(prev => prev ? { ...prev, status: "COMPLETED" } : prev)
     })
 
+    socket.on("draft:finalized", ({ nextPhase }) => {
+      onFinalizedRef.current?.(nextPhase)
+    })
+
     socket.on("user:online", ({ teamId }: { teamId: string }) => {
       setOnlineTeamIds(prev => prev.includes(teamId) ? prev : [...prev, teamId])
     })
@@ -155,6 +166,11 @@ export function useDraft({ leagueId, myTeamId, draftId }: UseDraftOptions) {
     socketRef.current?.emit("draft:resume", { draftId })
   }, [draftId])
 
+  const autoFinishDraft = useCallback(() => {
+    if (!draftId) return
+    socketRef.current?.emit("draft:auto-finish", { draftId })
+  }, [draftId])
+
   const isMyTurn = myTeamId !== null && draftState?.currentTeamId === myTeamId && draftState?.status === "IN_PROGRESS"
 
   return {
@@ -173,5 +189,6 @@ export function useDraft({ leagueId, myTeamId, draftId }: UseDraftOptions) {
     startDraft,
     pauseDraft,
     resumeDraft,
+    autoFinishDraft,
   }
 }

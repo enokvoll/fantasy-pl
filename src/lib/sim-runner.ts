@@ -1,8 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { syncLiveScores } from "@/lib/fpl-sync"
-import { makePick, getAutoPickPlayer, getTeamForPick } from "@/lib/draft-engine"
 import { calculateTeamScore } from "@/lib/scoring"
-import { generateMatchupSchedule } from "@/lib/matchup-generator"
+import { finishDraftPicks, finalizeDraftCompletion } from "@/lib/draft-flow"
 import type { RosterConfig } from "@/types/draft"
 import type { Position } from "@/generated/prisma/client"
 
@@ -62,14 +61,12 @@ export async function syncAllHistoricalGameweeks(): Promise<{ synced: number[]; 
   return { synced, skipped }
 }
 
-/** Run a complete auto-draft for a league (all picks via BPA). */
+/** Run a complete auto-draft for a league (all picks via BPA), then open the season. */
 export async function runAutoDraft(leagueId: string): Promise<{ picks: number }> {
   const league = await prisma.league.findUniqueOrThrow({
     where: { id: leagueId },
     include: { teams: { orderBy: { draftOrder: "asc" } } },
   })
-
-  const rosterConfig = league.rosterConfig as unknown as RosterConfig
 
   // Create a Draft row if one doesn't exist yet
   let draft = await prisma.draft.findFirst({ where: { leagueId } })
@@ -84,51 +81,14 @@ export async function runAutoDraft(leagueId: string): Promise<{ picks: number }>
     draft = await prisma.draft.create({
       data: { leagueId, status: "IN_PROGRESS", startedAt: new Date() },
     })
-  } else if (draft.status === "PENDING") {
-    await prisma.draft.update({
-      where: { id: draft.id },
-      data: { status: "IN_PROGRESS", startedAt: new Date() },
-    })
   }
 
-  const totalRounds = totalRoundsFromConfig(rosterConfig)
-  const totalPicks = league.teams.length * totalRounds
-  let picksMade = 0
+  const { picks } = await finishDraftPicks(draft.id)
 
-  // Re-fetch draft + teams in order
-  const teamsOrdered = await prisma.team.findMany({
-    where: { leagueId },
-    orderBy: { draftOrder: "asc" },
-  })
-  const teamIds = teamsOrdered.map(t => t.id)
+  // Simulation always proceeds straight to the season (no youth-draft pause).
+  await finalizeDraftCompletion(leagueId, { pauseForYouth: false })
 
-  // Offseason drafts (rookie/youth) use a configurable, possibly linear order.
-  const snake = !((draft.isRookieDraft || draft.isYouthDraft) && league.rookieDraftOrder === "REVERSE_STANDINGS")
-
-  // Loop until all picks are made
-  while (true) {
-    const currentDraft = await prisma.draft.findUniqueOrThrow({ where: { id: draft.id } })
-    if (currentDraft.status === "COMPLETED" || currentDraft.currentPick >= totalPicks) break
-
-    const currentTeamId = getTeamForPick(teamIds, currentDraft.currentPick, snake)
-
-    try {
-      const playerId = await getAutoPickPlayer(currentTeamId, draft.id, rosterConfig)
-      await makePick(draft.id, currentTeamId, playerId, true)
-      picksMade++
-    } catch {
-      break
-    }
-  }
-
-  // Generate matchup schedule and mark league as IN_SEASON
-  await generateMatchupSchedule(leagueId)
-  await prisma.league.update({
-    where: { id: leagueId },
-    data: { status: "IN_SEASON" },
-  })
-
-  return { picks: picksMade }
+  return { picks }
 }
 
 /** Auto-set the best possible starting lineup for a team in a given gameweek. */
@@ -354,10 +314,4 @@ export async function runFullSimulation(leagueId: string): Promise<SimulationSum
     topTeamName: top?.teamName ?? "",
     topTeamPoints: top?.pointsFor ?? 0,
   }
-}
-
-// --- Helpers ---
-
-function totalRoundsFromConfig(rc: RosterConfig): number {
-  return rc.GK + rc.DEF + rc.MID + rc.FWD + rc.FLEX + rc.BENCH
 }

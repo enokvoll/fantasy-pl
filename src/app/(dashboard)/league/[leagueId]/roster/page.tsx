@@ -7,6 +7,7 @@ import { YouthPanel } from "@/components/roster/YouthPanel"
 import { getRosterSize } from "@/lib/dynasty-engine"
 import { getLockedPlayerIds, isGameweekLive } from "@/lib/lineup-lock"
 import { getFormationKey, resolveFormationBoost } from "@/lib/formation-boosts"
+import { getSeasonPlayerPoints } from "@/lib/season-points"
 import type { Position } from "@/generated/prisma/client"
 import type { RosterConfig } from "@/types/draft"
 
@@ -27,9 +28,19 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
     )
   }
 
+  // Prefer the league's first unplayed matchup gameweek (the one you're setting your
+  // lineup for) — falling back to the live/most-recent FPL gameweek.
+  const firstUpcoming = await prisma.matchup.findFirst({
+    where: { leagueId, isCompleted: false },
+    orderBy: { gameweekId: "asc" },
+    select: { gameweekId: true },
+  })
+  const upcomingGW = firstUpcoming
+    ? await prisma.gameWeek.findUnique({ where: { id: firstUpcoming.gameweekId } })
+    : null
   const currentGW = await prisma.gameWeek.findFirst({ where: { isCurrent: true } })
   const latestGW = await prisma.gameWeek.findFirst({ where: { finished: true }, orderBy: { id: "desc" } })
-  const activeGW = currentGW ?? latestGW
+  const activeGW = upcomingGW ?? currentGW ?? latestGW
 
   // Senior squad only — youth prospects are managed separately in YouthPanel.
   const slots = await prisma.rosterSlot.findMany({
@@ -78,6 +89,10 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
   const formationKey = getFormationKey(startingPositions)
   const formationBoost = resolveFormationBoost(formationKey, league.formationBoostConfig)
 
+  // Season-to-date points (league-scoped). Preseason ⇒ empty map ⇒ render "—".
+  const seasonPoints = await getSeasonPlayerPoints(leagueId, slots.map(s => s.playerId!))
+  const seasonStarted = seasonPoints.size > 0
+
   const pitchSlots = slots
     .filter(s => s.player)
     .map(s => ({
@@ -86,7 +101,7 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
       playerName: s.player!.webName,
       position: s.player!.position,
       clubShort: s.player!.fplTeam.shortName,
-      totalPoints: s.player!.totalPoints,
+      totalPoints: seasonStarted ? (seasonPoints.get(s.playerId!) ?? 0) : null,
       gwPoints: statsMap.get(s.playerId!) ?? null,
       isStarting: s.isStarting,
     }))
@@ -135,7 +150,7 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
               playerName: s.player!.webName,
               position: s.player!.position,
               clubShort: s.player!.fplTeam.shortName,
-              totalPoints: s.player!.totalPoints,
+              totalPoints: seasonStarted ? (seasonPoints.get(s.playerId!) ?? 0) : null,
               yearsOwned: s.dynastyYearsOwned ?? 0,
               acquireType: s.acquireType,
             }))}

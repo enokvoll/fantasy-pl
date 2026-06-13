@@ -52,6 +52,7 @@ export interface ServerToClientEvents {
   "draft:paused": () => void
   "draft:resumed": () => void
   "draft:completed": (data: { completedAt: Date }) => void
+  "draft:finalized": (data: { nextPhase: "YOUTH_DRAFT_PENDING" | "SEASON" }) => void
   "draft:error": (data: { code: string; message: string }) => void
   "user:online": (data: { teamId: string }) => void
   "user:offline": (data: { teamId: string }) => void
@@ -67,6 +68,7 @@ export interface ClientToServerEvents {
   "draft:start": (data: { draftId: string }) => void
   "draft:pause": (data: { draftId: string }) => void
   "draft:resume": (data: { draftId: string }) => void
+  "draft:auto-finish": (data: { draftId: string }) => void
 }
 
 export interface QueueItem {

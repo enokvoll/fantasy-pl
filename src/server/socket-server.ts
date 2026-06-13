@@ -2,9 +2,14 @@ import { Server } from "socket.io"
 import type { Server as HttpServer } from "http"
 import { prisma } from "@/lib/prisma"
 import { makePick, getAutoPickPlayer, getTeamForPick } from "@/lib/draft-engine"
+import { finishDraftPicks, finalizeDraftCompletion } from "@/lib/draft-flow"
 import type { DraftState, RosterConfig } from "@/types/draft"
 
 const draftTimers = new Map<string, ReturnType<typeof setTimeout>>()
+
+// Bots pick almost immediately — just enough of a beat for the board to animate
+// between picks (they no longer ride the full human pick timer).
+const BOT_PICK_DELAY_MS = 300
 
 export function initSocketServer(httpServer: HttpServer): Server {
   const io = new Server(httpServer, {
@@ -48,14 +53,14 @@ export function initSocketServer(httpServer: HttpServer): Server {
         draft.to(`draft:${draftRecord.leagueId}`).emit("draft:state", state)
         draft.to(`draft:${draftRecord.leagueId}`).emit("draft:started", { startedAt: new Date() })
 
-        // If first pick is a bot, auto-pick immediately; otherwise start timer
-        await scheduleIfBot(io, draftId, draftRecord.leagueId, state.currentTeamId)
-        if (state.currentTeamId) {
-          const firstTeam = await prisma.team.findUnique({ where: { id: state.currentTeamId } })
-          if (!firstTeam?.isBot) {
-            startPickTimer(io, draftId, draftRecord.leagueId, draftRecord.league.draftPickTimeSeconds)
-          }
-        }
+        // Bot on the clock → pick immediately; human → start the pick timer.
+        await advanceToNextPicker(
+          io,
+          draftId,
+          draftRecord.leagueId,
+          state.currentTeamId,
+          draftRecord.league.draftPickTimeSeconds
+        )
       } catch (e) {
         socket.emit("draft:error", { code: "START_ERROR", message: String(e) })
       }
@@ -79,16 +84,7 @@ export function initSocketServer(httpServer: HttpServer): Server {
         })
         draft.to(`draft:${leagueId}`).emit("draft:state", state)
 
-        if (result.nextTeamId) {
-          // Check if next team is a bot — if so, schedule bot pick instead of human timer
-          await scheduleIfBot(io, draftId, leagueId, result.nextTeamId)
-          const nextTeam = await prisma.team.findUnique({ where: { id: result.nextTeamId } })
-          if (!nextTeam?.isBot) {
-            startPickTimer(io, draftId, leagueId, result.pickTimeSeconds)
-          }
-        } else {
-          draft.to(`draft:${leagueId}`).emit("draft:completed", { completedAt: new Date() })
-        }
+        await advanceToNextPicker(io, draftId, leagueId, result.nextTeamId, result.pickTimeSeconds)
       } catch (e) {
         socket.emit("draft:error", { code: "PICK_ERROR", message: String(e) })
       }
@@ -191,6 +187,41 @@ export function initSocketServer(httpServer: HttpServer): Server {
       }
     })
 
+    // Commissioner-only: auto-pick every remaining pick of the *current* draft.
+    socket.on("draft:auto-finish", async ({ draftId }) => {
+      const leagueId = socket.data.leagueId as string
+      const teamId = socket.data.teamId as string
+      try {
+        const draftRecord = await prisma.draft.findUniqueOrThrow({
+          where: { id: draftId },
+          include: { league: { include: { teams: { orderBy: { createdAt: "asc" } } } } },
+        })
+        const commissioner = draftRecord.league.teams[0]
+        if (!commissioner || commissioner.id !== teamId) {
+          socket.emit("draft:error", {
+            code: "FORBIDDEN",
+            message: "Only the commissioner can auto-finish the draft",
+          })
+          return
+        }
+
+        clearPickTimer(draftId)
+        await finishDraftPicks(draftId)
+
+        const state = await buildDraftState(leagueId)
+        draft.to(`draft:${leagueId}`).emit("draft:state", state)
+
+        // Only run the post-draft transition if the draft actually completed
+        // (e.g. it won't if the pool ran dry mid-way).
+        const after = await prisma.draft.findUnique({ where: { id: draftId } })
+        if (after?.status === "COMPLETED") {
+          await finalizeAndBroadcast(io, leagueId)
+        }
+      } catch (e) {
+        socket.emit("draft:error", { code: "AUTO_FINISH_ERROR", message: String(e) })
+      }
+    })
+
     socket.on("disconnect", () => {
       const leagueId = socket.data.leagueId as string | undefined
       const teamId = socket.data.teamId as string | undefined
@@ -248,11 +279,7 @@ function startPickTimer(
       draftNs.to(`draft:${leagueId}`).emit("draft:pick:auto", { pick: latestPick })
       draftNs.to(`draft:${leagueId}`).emit("draft:state", state)
 
-      if (result.nextTeamId) {
-        startPickTimer(io, draftId, leagueId, result.pickTimeSeconds)
-      } else {
-        draftNs.to(`draft:${leagueId}`).emit("draft:completed", { completedAt: new Date() })
-      }
+      await advanceToNextPicker(io, draftId, leagueId, result.nextTeamId, result.pickTimeSeconds)
     } catch (e) {
       console.error("Auto-pick error:", e)
     }
@@ -281,9 +308,6 @@ async function scheduleIfBot(
   const team = await prisma.team.findUnique({ where: { id: nextTeamId } })
   if (!team?.isBot) return
 
-  // Small delay so it feels like the bot is "thinking"
-  const delay = 1200 + Math.random() * 1000  // 1.2–2.2s
-
   setTimeout(async () => {
     const draftRecord = await prisma.draft.findUnique({
       where: { id: draftId },
@@ -310,21 +334,55 @@ async function scheduleIfBot(
       })
       draftNs.to(`draft:${leagueId}`).emit("draft:state", state)
 
-      if (result.nextTeamId) {
-        // Check if the next-next team is also a bot (chain of bots)
-        await scheduleIfBot(io, draftId, leagueId, result.nextTeamId)
-        // Also start the human timer in case there are humans after
-        const nextNextTeam = await prisma.team.findUnique({ where: { id: result.nextTeamId } })
-        if (!nextNextTeam?.isBot) {
-          startPickTimer(io, draftId, leagueId, result.pickTimeSeconds)
-        }
-      } else {
-        draftNs.to(`draft:${leagueId}`).emit("draft:completed", { completedAt: new Date() })
-      }
+      await advanceToNextPicker(io, draftId, leagueId, result.nextTeamId, result.pickTimeSeconds)
     } catch (e) {
       console.error("Bot auto-pick error:", e)
     }
-  }, delay)
+  }, BOT_PICK_DELAY_MS)
+}
+
+/**
+ * Single decision point for "who picks next": finish the draft when there is no
+ * next team, fast-path bots (short delay), or arm the human pick timer. Every
+ * pick path (manual, bot, timer-expiry) funnels through here so bots can never
+ * end up sitting on the full human timer.
+ */
+async function advanceToNextPicker(
+  io: Server,
+  draftId: string,
+  leagueId: string,
+  nextTeamId: string | null,
+  pickTimeSeconds: number
+): Promise<void> {
+  if (!nextTeamId) {
+    await finalizeAndBroadcast(io, leagueId)
+    return
+  }
+
+  const nextTeam = await prisma.team.findUnique({ where: { id: nextTeamId } })
+  if (nextTeam?.isBot) {
+    await scheduleIfBot(io, draftId, leagueId, nextTeamId)
+  } else {
+    startPickTimer(io, draftId, leagueId, pickTimeSeconds)
+  }
+}
+
+/**
+ * Draft just completed: announce it, run the post-draft transition (generate the
+ * H2H schedule + open the season, or pause for the dynasty youth draft), then
+ * broadcast the final state and the resulting phase so clients can route.
+ */
+async function finalizeAndBroadcast(io: Server, leagueId: string): Promise<void> {
+  const draftNs = io.of("/draft")
+  draftNs.to(`draft:${leagueId}`).emit("draft:completed", { completedAt: new Date() })
+  try {
+    const { nextPhase } = await finalizeDraftCompletion(leagueId, { pauseForYouth: true })
+    const state = await buildDraftState(leagueId)
+    draftNs.to(`draft:${leagueId}`).emit("draft:state", state)
+    draftNs.to(`draft:${leagueId}`).emit("draft:finalized", { nextPhase })
+  } catch (e) {
+    console.error("Finalize draft error:", e)
+  }
 }
 
 async function buildDraftState(leagueId: string): Promise<DraftState> {

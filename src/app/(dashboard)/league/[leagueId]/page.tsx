@@ -36,7 +36,13 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
     ? await prisma.draft.findFirst({ where: { leagueId }, select: { isYouthDraft: true, status: true } })
     : null
   const youthDraftActive = draft?.isYouthDraft && draft.status !== "COMPLETED"
-  const canStartYouthDraft = youthEnabled && isCommissioner && league.status === "IN_SEASON" && !youthDraftActive
+  // The main (startup) draft has finished — youth draft can begin even though the
+  // league is still SETUP (it opens the season only once the youth draft is done).
+  const mainDraftDone = draft?.status === "COMPLETED" && !draft.isYouthDraft
+  const canStartYouthDraft =
+    youthEnabled && isCommissioner && !youthDraftActive && (mainDraftDone || league.status === "IN_SEASON")
+  // Hide the "Start draft" entry point once the main draft is done or a youth draft is running.
+  const showStartDraft = league.status === "SETUP" && !mainDraftDone && !youthDraftActive
 
   return (
     <div className="space-y-6">
@@ -50,7 +56,7 @@ export default async function LeagueOverviewPage({ params }: { params: Promise<{
             <Badge className="bg-muted text-foreground">{league.season}</Badge>
           </div>
         </div>
-        {league.status === "SETUP" && (
+        {showStartDraft && (
           <Link href={`/league/${leagueId}/draft`} className={cn(buttonVariants(), "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold")}>
             {isCommissioner ? "Start draft" : "Draft room"}
           </Link>

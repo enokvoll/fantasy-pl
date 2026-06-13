@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useDraft } from "@/hooks/useDraft"
 import { DraftBoard } from "./DraftBoard"
 import { DraftTimer } from "./DraftTimer"
@@ -33,6 +34,7 @@ export function DraftRoom({
   teams,
   isYouthDraft = false,
 }: DraftRoomProps) {
+  const router = useRouter()
   const botTeamIds = teams.filter(t => t.isBot).map(t => t.id)
   const {
     isConnected,
@@ -50,7 +52,22 @@ export function DraftRoom({
     startDraft,
     pauseDraft,
     resumeDraft,
-  } = useDraft({ leagueId, myTeamId, draftId: initialDraftId })
+    autoFinishDraft,
+  } = useDraft({
+    leagueId,
+    myTeamId,
+    draftId: initialDraftId,
+    onFinalized: (nextPhase) => {
+      // Season open → go set the first lineup. Youth draft still to come →
+      // back to the overview where the commissioner starts it.
+      if (nextPhase === "SEASON") {
+        router.push(`/league/${leagueId}/roster`)
+      } else {
+        router.push(`/league/${leagueId}`)
+        router.refresh()
+      }
+    },
+  })
 
   // Load chat history on mount
   useEffect(() => {
@@ -157,6 +174,14 @@ export function DraftRoom({
                 ▶ Resume
               </button>
             )
+          )}
+          {isCommissioner && (
+            <button
+              onClick={autoFinishDraft}
+              title="Auto-pick all remaining picks of this draft"
+              className="text-xs px-2 py-0.5 rounded bg-accent2/20 hover:bg-accent2/30 text-accent2 transition-colors">
+              ⏭ Auto-finish
+            </button>
           )}
         </div>
       </div>
