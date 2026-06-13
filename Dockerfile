@@ -3,16 +3,24 @@
 # TS source (the custom server runs through tsx) alongside the compiled .next.
 
 # ── deps ────────────────────────────────────────────────────────────────────
-FROM node:20-slim AS deps
+FROM node:24-slim AS deps
 WORKDIR /app
 # OpenSSL is handy for Prisma/pg TLS; libc is fine on slim otherwise.
 RUN apt-get update -y && apt-get install -y --no-install-recommends openssl ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json* ./
-RUN npm ci
+# Playwright (a devDependency) auto-downloads browser binaries in its postinstall;
+# the server image never runs browser tests, so skip that download.
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+# Use `npm install`, not `npm ci`: the lock is generated on Windows and omits the
+# linux-only WASM-fallback subtree (@emnapi/core, @emnapi/runtime — transitive deps
+# of @img/sharp-wasm32 and @unrs/resolver-binding-wasm32-wasi). `npm ci` treats that
+# as "out of sync" and fails on linux; `npm install` reconciles it while still
+# honoring the locked versions of everything present.
+RUN npm install --no-audit --no-fund
 
 # ── build ───────────────────────────────────────────────────────────────────
-FROM node:20-slim AS build
+FROM node:24-slim AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -25,7 +33,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npx prisma generate && npm run build
 
 # ── runtime ─────────────────────────────────────────────────────────────────
-FROM node:20-slim AS runner
+FROM node:24-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
