@@ -67,6 +67,7 @@ export const ModelName = {
   DraftPick: 'DraftPick',
   DraftPickSlot: 'DraftPickSlot',
   DraftQueue: 'DraftQueue',
+  DraftShortlist: 'DraftShortlist',
   DraftMessage: 'DraftMessage',
   Matchup: 'Matchup',
   TeamGameweekScore: 'TeamGameweekScore',
@@ -288,6 +289,7 @@ export const TeamScalarFieldEnum = {
   pointsFor: 'pointsFor',
   pointsAgainst: 'pointsAgainst',
   isBot: 'isBot',
+  autoPickEnabled: 'autoPickEnabled',
   createdAt: 'createdAt'
 } as const
 
@@ -368,6 +370,16 @@ export const DraftQueueScalarFieldEnum = {
 } as const
 
 export type DraftQueueScalarFieldEnum = (typeof DraftQueueScalarFieldEnum)[keyof typeof DraftQueueScalarFieldEnum]
+
+
+export const DraftShortlistScalarFieldEnum = {
+  id: 'id',
+  draftId: 'draftId',
+  teamId: 'teamId',
+  playerId: 'playerId'
+} as const
+
+export type DraftShortlistScalarFieldEnum = (typeof DraftShortlistScalarFieldEnum)[keyof typeof DraftShortlistScalarFieldEnum]
 
 
 export const DraftMessageScalarFieldEnum = {

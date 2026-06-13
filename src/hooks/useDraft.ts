@@ -22,6 +22,7 @@ export function useDraft({ leagueId, myTeamId, draftId, onFinalized }: UseDraftO
   const [isConnected, setIsConnected] = useState(false)
   const [draftState, setDraftState] = useState<DraftState | null>(null)
   const [queue, setQueue] = useState<QueueItem[]>([])
+  const [shortlist, setShortlist] = useState<number[]>([])
   const [chatMessages, setChatMessages] = useState<DraftChatMessage[]>([])
   const [onlineTeamIds, setOnlineTeamIds] = useState<string[]>([])
 
@@ -87,6 +88,10 @@ export function useDraft({ leagueId, myTeamId, draftId, onFinalized }: UseDraftO
 
     socket.on("draft:queue:updated", ({ queue: newQueue }: { teamId: string; queue: QueueItem[] }) => {
       setQueue(newQueue)
+    })
+
+    socket.on("draft:shortlist:updated", ({ playerIds }: { teamId: string; playerIds: number[] }) => {
+      setShortlist(playerIds)
     })
 
     socket.on("draft:chat:message", (msg: DraftChatMessage) => {
@@ -171,20 +176,41 @@ export function useDraft({ leagueId, myTeamId, draftId, onFinalized }: UseDraftO
     socketRef.current?.emit("draft:auto-finish", { draftId })
   }, [draftId])
 
+  const addToShortlist = useCallback((playerId: number) => {
+    if (!draftId) return
+    socketRef.current?.emit("draft:shortlist:add", { draftId, playerId })
+  }, [draftId])
+
+  const removeFromShortlist = useCallback((playerId: number) => {
+    if (!draftId) return
+    socketRef.current?.emit("draft:shortlist:remove", { draftId, playerId })
+  }, [draftId])
+
+  const toggleAutoPick = useCallback((enabled: boolean) => {
+    if (!draftId) return
+    socketRef.current?.emit("draft:auto-pick:toggle", { draftId, enabled })
+  }, [draftId])
+
   const isMyTurn = myTeamId !== null && draftState?.currentTeamId === myTeamId && draftState?.status === "IN_PROGRESS"
+  const myAutoPickEnabled = myTeamId !== null && (draftState?.teams.find(t => t.id === myTeamId)?.autoPickEnabled ?? false)
 
   return {
     isConnected,
     draftState,
     queue,
+    shortlist,
     chatMessages,
     setChatMessages,
     onlineTeamIds,
     isMyTurn,
+    myAutoPickEnabled,
     makePick,
     addToQueue,
     removeFromQueue,
     reorderQueue,
+    addToShortlist,
+    removeFromShortlist,
+    toggleAutoPick,
     sendChat,
     startDraft,
     pauseDraft,

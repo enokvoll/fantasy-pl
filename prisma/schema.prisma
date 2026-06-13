@@ -298,6 +298,9 @@ model Team {
   pointsFor    Float   @default(0)
   pointsAgainst Float  @default(0)
   isBot        Boolean @default(false)
+  // When enabled, the server auto-picks for this (human) manager on their turn,
+  // just like a bot — drawing from their queue, then best-available.
+  autoPickEnabled Boolean @default(false)
   createdAt    DateTime @default(now())
 
   user               User           @relation(fields: [userId], references: [id])
@@ -370,9 +373,10 @@ model Draft {
   startedAt    DateTime?
   completedAt  DateTime?
 
-  league League      @relation(fields: [leagueId], references: [id])
-  picks  DraftPick[]
-  queues DraftQueue[]
+  league     League          @relation(fields: [leagueId], references: [id])
+  picks      DraftPick[]
+  queues     DraftQueue[]
+  shortlists DraftShortlist[]
 }
 
 model DraftPick {
@@ -413,6 +417,20 @@ model DraftQueue {
   teamId   String
   playerId Int
   priority Int
+
+  draft Draft @relation(fields: [draftId], references: [id])
+
+  @@unique([draftId, teamId, playerId])
+}
+
+// A loose "star" set of players a manager is interested in — distinct from the
+// ordered DraftQueue that drives auto-pick. Unordered; used by the table's
+// "shortlisted" filter.
+model DraftShortlist {
+  id       String @id @default(cuid())
+  draftId  String
+  teamId   String
+  playerId Int
 
   draft Draft @relation(fields: [draftId], references: [id])
 

@@ -102,3 +102,22 @@ export interface FplExplainStat {
   points: number
   value: number
 }
+
+// element-summary/{id}/ — a single player's history. `history_past` holds one
+// row per prior Premier League season; we only read the fields we display.
+export interface FplElementSummary {
+  history_past: FplPastSeason[]
+}
+
+export interface FplPastSeason {
+  season_name: string
+  total_points: number
+  minutes: number
+  goals_scored: number
+  assists: number
+  clean_sheets: number
+  goals_conceded: number
+  bonus: number
+  start_cost: number
+  end_cost: number
+}

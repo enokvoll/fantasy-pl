@@ -32,6 +32,13 @@ export function initSocketServer(httpServer: HttpServer): Server {
         const state = await buildDraftState(leagueId)
         socket.emit("draft:state", state)
         draft.to(`draft:${leagueId}`).emit("user:online", { teamId })
+
+        // Load this team's saved queue + shortlist so they show on entry.
+        const draftRow = await prisma.draft.findFirst({ where: { leagueId }, select: { id: true } })
+        if (draftRow && teamId) {
+          socket.emit("draft:queue:updated", { teamId, queue: await getQueueItems(draftRow.id, teamId) })
+          socket.emit("draft:shortlist:updated", { teamId, playerIds: await getShortlist(draftRow.id, teamId) })
+        }
       } catch (e) {
         socket.emit("draft:error", { code: "STATE_ERROR", message: String(e) })
       }
@@ -131,6 +138,51 @@ export function initSocketServer(httpServer: HttpServer): Server {
         socket.emit("draft:queue:updated", { teamId, queue })
       } catch (e) {
         socket.emit("draft:error", { code: "QUEUE_ERROR", message: String(e) })
+      }
+    })
+
+    // ── Shortlist (loose "star" set, separate from the ordered queue) ──────────
+    socket.on("draft:shortlist:add", async ({ draftId, playerId }) => {
+      const teamId = socket.data.teamId as string
+      try {
+        await prisma.draftShortlist.upsert({
+          where: { draftId_teamId_playerId: { draftId, teamId, playerId } },
+          create: { draftId, teamId, playerId },
+          update: {},
+        })
+        socket.emit("draft:shortlist:updated", { teamId, playerIds: await getShortlist(draftId, teamId) })
+      } catch (e) {
+        socket.emit("draft:error", { code: "SHORTLIST_ERROR", message: String(e) })
+      }
+    })
+
+    socket.on("draft:shortlist:remove", async ({ draftId, playerId }) => {
+      const teamId = socket.data.teamId as string
+      try {
+        await prisma.draftShortlist.deleteMany({ where: { draftId, teamId, playerId } })
+        socket.emit("draft:shortlist:updated", { teamId, playerIds: await getShortlist(draftId, teamId) })
+      } catch (e) {
+        socket.emit("draft:error", { code: "SHORTLIST_ERROR", message: String(e) })
+      }
+    })
+
+    // ── Auto-pick toggle: a human manager picks like a bot on their turn ───────
+    socket.on("draft:auto-pick:toggle", async ({ draftId, enabled }) => {
+      const teamId = socket.data.teamId as string
+      const leagueId = socket.data.leagueId as string
+      try {
+        await prisma.team.update({ where: { id: teamId }, data: { autoPickEnabled: enabled } })
+
+        const state = await buildDraftState(leagueId)
+        draft.to(`draft:${leagueId}`).emit("draft:state", state)
+
+        // If enabling while it's already this team's turn, pick right away.
+        if (enabled && state.status === "IN_PROGRESS" && state.currentTeamId === teamId) {
+          clearPickTimer(draftId)
+          await scheduleIfBot(io, draftId, leagueId, teamId)
+        }
+      } catch (e) {
+        socket.emit("draft:error", { code: "AUTO_PICK_ERROR", message: String(e) })
       }
     })
 
@@ -296,7 +348,10 @@ function clearPickTimer(draftId: string): void {
   }
 }
 
-/** If the current-turn team is a bot, schedule an auto-pick after a short realistic delay. */
+/**
+ * If the current-turn team is an auto-picker — a bot, or a human who toggled
+ * auto-pick — schedule its pick after a short delay.
+ */
 async function scheduleIfBot(
   io: Server,
   draftId: string,
@@ -306,7 +361,7 @@ async function scheduleIfBot(
   if (!nextTeamId) return
 
   const team = await prisma.team.findUnique({ where: { id: nextTeamId } })
-  if (!team?.isBot) return
+  if (!team?.isBot && !team?.autoPickEnabled) return
 
   setTimeout(async () => {
     const draftRecord = await prisma.draft.findUnique({
@@ -360,7 +415,7 @@ async function advanceToNextPicker(
   }
 
   const nextTeam = await prisma.team.findUnique({ where: { id: nextTeamId } })
-  if (nextTeam?.isBot) {
+  if (nextTeam?.isBot || nextTeam?.autoPickEnabled) {
     await scheduleIfBot(io, draftId, leagueId, nextTeamId)
   } else {
     startPickTimer(io, draftId, leagueId, pickTimeSeconds)
@@ -435,6 +490,7 @@ async function buildDraftState(leagueId: string): Promise<DraftState> {
       draftOrder: t.draftOrder ?? 0,
       userId: t.userId,
       rosterCount: t.rosterSlots.filter((s) => s.playerId !== null).length,
+      autoPickEnabled: t.autoPickEnabled,
     })),
     onlineTeamIds: [],
   }
@@ -458,4 +514,12 @@ async function getQueueItems(draftId: string, teamId: string) {
     position: playerMap.get(item.playerId)?.position ?? "GK",
     priority: item.priority,
   }))
+}
+
+async function getShortlist(draftId: string, teamId: string): Promise<number[]> {
+  const items = await prisma.draftShortlist.findMany({
+    where: { draftId, teamId },
+    select: { playerId: true },
+  })
+  return items.map((i) => i.playerId)
 }

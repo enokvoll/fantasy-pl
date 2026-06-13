@@ -255,6 +255,7 @@ export type DraftWhereInput = {
   league?: Prisma.XOR<Prisma.LeagueScalarRelationFilter, Prisma.LeagueWhereInput>
   picks?: Prisma.DraftPickListRelationFilter
   queues?: Prisma.DraftQueueListRelationFilter
+  shortlists?: Prisma.DraftShortlistListRelationFilter
 }
 
 export type DraftOrderByWithRelationInput = {
@@ -270,6 +271,7 @@ export type DraftOrderByWithRelationInput = {
   league?: Prisma.LeagueOrderByWithRelationInput
   picks?: Prisma.DraftPickOrderByRelationAggregateInput
   queues?: Prisma.DraftQueueOrderByRelationAggregateInput
+  shortlists?: Prisma.DraftShortlistOrderByRelationAggregateInput
 }
 
 export type DraftWhereUniqueInput = Prisma.AtLeast<{
@@ -288,6 +290,7 @@ export type DraftWhereUniqueInput = Prisma.AtLeast<{
   league?: Prisma.XOR<Prisma.LeagueScalarRelationFilter, Prisma.LeagueWhereInput>
   picks?: Prisma.DraftPickListRelationFilter
   queues?: Prisma.DraftQueueListRelationFilter
+  shortlists?: Prisma.DraftShortlistListRelationFilter
 }, "id" | "leagueId">
 
 export type DraftOrderByWithAggregationInput = {
@@ -334,6 +337,7 @@ export type DraftCreateInput = {
   league: Prisma.LeagueCreateNestedOneWithoutDraftInput
   picks?: Prisma.DraftPickCreateNestedManyWithoutDraftInput
   queues?: Prisma.DraftQueueCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistCreateNestedManyWithoutDraftInput
 }
 
 export type DraftUncheckedCreateInput = {
@@ -348,6 +352,7 @@ export type DraftUncheckedCreateInput = {
   completedAt?: Date | string | null
   picks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutDraftInput
   queues?: Prisma.DraftQueueUncheckedCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistUncheckedCreateNestedManyWithoutDraftInput
 }
 
 export type DraftUpdateInput = {
@@ -362,6 +367,7 @@ export type DraftUpdateInput = {
   league?: Prisma.LeagueUpdateOneRequiredWithoutDraftNestedInput
   picks?: Prisma.DraftPickUpdateManyWithoutDraftNestedInput
   queues?: Prisma.DraftQueueUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateInput = {
@@ -376,6 +382,7 @@ export type DraftUncheckedUpdateInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   picks?: Prisma.DraftPickUncheckedUpdateManyWithoutDraftNestedInput
   queues?: Prisma.DraftQueueUncheckedUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUncheckedUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftCreateManyInput = {
@@ -533,6 +540,20 @@ export type DraftUpdateOneRequiredWithoutQueuesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutQueuesInput, Prisma.DraftUpdateWithoutQueuesInput>, Prisma.DraftUncheckedUpdateWithoutQueuesInput>
 }
 
+export type DraftCreateNestedOneWithoutShortlistsInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutShortlistsInput, Prisma.DraftUncheckedCreateWithoutShortlistsInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutShortlistsInput
+  connect?: Prisma.DraftWhereUniqueInput
+}
+
+export type DraftUpdateOneRequiredWithoutShortlistsNestedInput = {
+  create?: Prisma.XOR<Prisma.DraftCreateWithoutShortlistsInput, Prisma.DraftUncheckedCreateWithoutShortlistsInput>
+  connectOrCreate?: Prisma.DraftCreateOrConnectWithoutShortlistsInput
+  upsert?: Prisma.DraftUpsertWithoutShortlistsInput
+  connect?: Prisma.DraftWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DraftUpdateToOneWithWhereWithoutShortlistsInput, Prisma.DraftUpdateWithoutShortlistsInput>, Prisma.DraftUncheckedUpdateWithoutShortlistsInput>
+}
+
 export type DraftCreateWithoutLeagueInput = {
   id?: string
   status?: $Enums.DraftStatus
@@ -544,6 +565,7 @@ export type DraftCreateWithoutLeagueInput = {
   completedAt?: Date | string | null
   picks?: Prisma.DraftPickCreateNestedManyWithoutDraftInput
   queues?: Prisma.DraftQueueCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistCreateNestedManyWithoutDraftInput
 }
 
 export type DraftUncheckedCreateWithoutLeagueInput = {
@@ -557,6 +579,7 @@ export type DraftUncheckedCreateWithoutLeagueInput = {
   completedAt?: Date | string | null
   picks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutDraftInput
   queues?: Prisma.DraftQueueUncheckedCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistUncheckedCreateNestedManyWithoutDraftInput
 }
 
 export type DraftCreateOrConnectWithoutLeagueInput = {
@@ -586,6 +609,7 @@ export type DraftUpdateWithoutLeagueInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   picks?: Prisma.DraftPickUpdateManyWithoutDraftNestedInput
   queues?: Prisma.DraftQueueUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateWithoutLeagueInput = {
@@ -599,6 +623,7 @@ export type DraftUncheckedUpdateWithoutLeagueInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   picks?: Prisma.DraftPickUncheckedUpdateManyWithoutDraftNestedInput
   queues?: Prisma.DraftQueueUncheckedUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUncheckedUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftCreateWithoutPicksInput = {
@@ -612,6 +637,7 @@ export type DraftCreateWithoutPicksInput = {
   completedAt?: Date | string | null
   league: Prisma.LeagueCreateNestedOneWithoutDraftInput
   queues?: Prisma.DraftQueueCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistCreateNestedManyWithoutDraftInput
 }
 
 export type DraftUncheckedCreateWithoutPicksInput = {
@@ -625,6 +651,7 @@ export type DraftUncheckedCreateWithoutPicksInput = {
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   queues?: Prisma.DraftQueueUncheckedCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistUncheckedCreateNestedManyWithoutDraftInput
 }
 
 export type DraftCreateOrConnectWithoutPicksInput = {
@@ -654,6 +681,7 @@ export type DraftUpdateWithoutPicksInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   league?: Prisma.LeagueUpdateOneRequiredWithoutDraftNestedInput
   queues?: Prisma.DraftQueueUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateWithoutPicksInput = {
@@ -667,6 +695,7 @@ export type DraftUncheckedUpdateWithoutPicksInput = {
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   queues?: Prisma.DraftQueueUncheckedUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUncheckedUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftCreateWithoutQueuesInput = {
@@ -680,6 +709,7 @@ export type DraftCreateWithoutQueuesInput = {
   completedAt?: Date | string | null
   league: Prisma.LeagueCreateNestedOneWithoutDraftInput
   picks?: Prisma.DraftPickCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistCreateNestedManyWithoutDraftInput
 }
 
 export type DraftUncheckedCreateWithoutQueuesInput = {
@@ -693,6 +723,7 @@ export type DraftUncheckedCreateWithoutQueuesInput = {
   startedAt?: Date | string | null
   completedAt?: Date | string | null
   picks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutDraftInput
+  shortlists?: Prisma.DraftShortlistUncheckedCreateNestedManyWithoutDraftInput
 }
 
 export type DraftCreateOrConnectWithoutQueuesInput = {
@@ -722,6 +753,7 @@ export type DraftUpdateWithoutQueuesInput = {
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   league?: Prisma.LeagueUpdateOneRequiredWithoutDraftNestedInput
   picks?: Prisma.DraftPickUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUpdateManyWithoutDraftNestedInput
 }
 
 export type DraftUncheckedUpdateWithoutQueuesInput = {
@@ -735,6 +767,79 @@ export type DraftUncheckedUpdateWithoutQueuesInput = {
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   picks?: Prisma.DraftPickUncheckedUpdateManyWithoutDraftNestedInput
+  shortlists?: Prisma.DraftShortlistUncheckedUpdateManyWithoutDraftNestedInput
+}
+
+export type DraftCreateWithoutShortlistsInput = {
+  id?: string
+  status?: $Enums.DraftStatus
+  isRookieDraft?: boolean
+  isYouthDraft?: boolean
+  currentPick?: number
+  currentRound?: number
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  league: Prisma.LeagueCreateNestedOneWithoutDraftInput
+  picks?: Prisma.DraftPickCreateNestedManyWithoutDraftInput
+  queues?: Prisma.DraftQueueCreateNestedManyWithoutDraftInput
+}
+
+export type DraftUncheckedCreateWithoutShortlistsInput = {
+  id?: string
+  leagueId: string
+  status?: $Enums.DraftStatus
+  isRookieDraft?: boolean
+  isYouthDraft?: boolean
+  currentPick?: number
+  currentRound?: number
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  picks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutDraftInput
+  queues?: Prisma.DraftQueueUncheckedCreateNestedManyWithoutDraftInput
+}
+
+export type DraftCreateOrConnectWithoutShortlistsInput = {
+  where: Prisma.DraftWhereUniqueInput
+  create: Prisma.XOR<Prisma.DraftCreateWithoutShortlistsInput, Prisma.DraftUncheckedCreateWithoutShortlistsInput>
+}
+
+export type DraftUpsertWithoutShortlistsInput = {
+  update: Prisma.XOR<Prisma.DraftUpdateWithoutShortlistsInput, Prisma.DraftUncheckedUpdateWithoutShortlistsInput>
+  create: Prisma.XOR<Prisma.DraftCreateWithoutShortlistsInput, Prisma.DraftUncheckedCreateWithoutShortlistsInput>
+  where?: Prisma.DraftWhereInput
+}
+
+export type DraftUpdateToOneWithWhereWithoutShortlistsInput = {
+  where?: Prisma.DraftWhereInput
+  data: Prisma.XOR<Prisma.DraftUpdateWithoutShortlistsInput, Prisma.DraftUncheckedUpdateWithoutShortlistsInput>
+}
+
+export type DraftUpdateWithoutShortlistsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
+  isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentPick?: Prisma.IntFieldUpdateOperationsInput | number
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  league?: Prisma.LeagueUpdateOneRequiredWithoutDraftNestedInput
+  picks?: Prisma.DraftPickUpdateManyWithoutDraftNestedInput
+  queues?: Prisma.DraftQueueUpdateManyWithoutDraftNestedInput
+}
+
+export type DraftUncheckedUpdateWithoutShortlistsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leagueId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDraftStatusFieldUpdateOperationsInput | $Enums.DraftStatus
+  isRookieDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isYouthDraft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentPick?: Prisma.IntFieldUpdateOperationsInput | number
+  currentRound?: Prisma.IntFieldUpdateOperationsInput | number
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  picks?: Prisma.DraftPickUncheckedUpdateManyWithoutDraftNestedInput
+  queues?: Prisma.DraftQueueUncheckedUpdateManyWithoutDraftNestedInput
 }
 
 
@@ -745,11 +850,13 @@ export type DraftUncheckedUpdateWithoutQueuesInput = {
 export type DraftCountOutputType = {
   picks: number
   queues: number
+  shortlists: number
 }
 
 export type DraftCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   picks?: boolean | DraftCountOutputTypeCountPicksArgs
   queues?: boolean | DraftCountOutputTypeCountQueuesArgs
+  shortlists?: boolean | DraftCountOutputTypeCountShortlistsArgs
 }
 
 /**
@@ -776,6 +883,13 @@ export type DraftCountOutputTypeCountQueuesArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.DraftQueueWhereInput
 }
 
+/**
+ * DraftCountOutputType without action
+ */
+export type DraftCountOutputTypeCountShortlistsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DraftShortlistWhereInput
+}
+
 
 export type DraftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -790,6 +904,7 @@ export type DraftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   league?: boolean | Prisma.LeagueDefaultArgs<ExtArgs>
   picks?: boolean | Prisma.Draft$picksArgs<ExtArgs>
   queues?: boolean | Prisma.Draft$queuesArgs<ExtArgs>
+  shortlists?: boolean | Prisma.Draft$shortlistsArgs<ExtArgs>
   _count?: boolean | Prisma.DraftCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["draft"]>
 
@@ -836,6 +951,7 @@ export type DraftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   league?: boolean | Prisma.LeagueDefaultArgs<ExtArgs>
   picks?: boolean | Prisma.Draft$picksArgs<ExtArgs>
   queues?: boolean | Prisma.Draft$queuesArgs<ExtArgs>
+  shortlists?: boolean | Prisma.Draft$shortlistsArgs<ExtArgs>
   _count?: boolean | Prisma.DraftCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DraftIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -851,6 +967,7 @@ export type $DraftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     league: Prisma.$LeaguePayload<ExtArgs>
     picks: Prisma.$DraftPickPayload<ExtArgs>[]
     queues: Prisma.$DraftQueuePayload<ExtArgs>[]
+    shortlists: Prisma.$DraftShortlistPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1259,6 +1376,7 @@ export interface Prisma__DraftClient<T, Null = never, ExtArgs extends runtime.Ty
   league<T extends Prisma.LeagueDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LeagueDefaultArgs<ExtArgs>>): Prisma.Prisma__LeagueClient<runtime.Types.Result.GetResult<Prisma.$LeaguePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   picks<T extends Prisma.Draft$picksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$picksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DraftPickPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   queues<T extends Prisma.Draft$queuesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$queuesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DraftQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  shortlists<T extends Prisma.Draft$shortlistsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Draft$shortlistsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DraftShortlistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1743,6 +1861,30 @@ export type Draft$queuesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.DraftQueueScalarFieldEnum | Prisma.DraftQueueScalarFieldEnum[]
+}
+
+/**
+ * Draft.shortlists
+ */
+export type Draft$shortlistsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DraftShortlist
+   */
+  select?: Prisma.DraftShortlistSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DraftShortlist
+   */
+  omit?: Prisma.DraftShortlistOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DraftShortlistInclude<ExtArgs> | null
+  where?: Prisma.DraftShortlistWhereInput
+  orderBy?: Prisma.DraftShortlistOrderByWithRelationInput | Prisma.DraftShortlistOrderByWithRelationInput[]
+  cursor?: Prisma.DraftShortlistWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DraftShortlistScalarFieldEnum | Prisma.DraftShortlistScalarFieldEnum[]
 }
 
 /**

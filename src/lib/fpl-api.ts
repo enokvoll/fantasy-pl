@@ -1,4 +1,4 @@
-import type { FplBootstrapResponse, FplFixture, FplLiveResponse } from "@/types/fpl"
+import type { FplBootstrapResponse, FplFixture, FplLiveResponse, FplElementSummary } from "@/types/fpl"
 
 const FPL_BASE = "https://fantasy.premierleague.com/api"
 
@@ -27,4 +27,9 @@ export async function getFixtures(eventId?: number): Promise<FplFixture[]> {
 
 export async function getLiveGameweek(eventId: number): Promise<FplLiveResponse> {
   return fplFetch<FplLiveResponse>(`/event/${eventId}/live/`)
+}
+
+/** A single player's detail, including `history_past` (per prior-season totals). */
+export async function getElementSummary(playerId: number): Promise<FplElementSummary> {
+  return fplFetch<FplElementSummary>(`/element-summary/${playerId}/`)
 }

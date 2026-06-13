@@ -400,6 +400,7 @@ export const ModelName = {
   DraftPick: 'DraftPick',
   DraftPickSlot: 'DraftPickSlot',
   DraftQueue: 'DraftQueue',
+  DraftShortlist: 'DraftShortlist',
   DraftMessage: 'DraftMessage',
   Matchup: 'Matchup',
   TeamGameweekScore: 'TeamGameweekScore',
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "transferAuction" | "transferBid" | "trade" | "tradeParticipant" | "tradeAsset" | "tradeVote" | "leagueMessage"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftShortlist" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "transferAuction" | "transferBid" | "trade" | "tradeParticipant" | "tradeAsset" | "tradeVote" | "leagueMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1615,6 +1616,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DraftShortlist: {
+      payload: Prisma.$DraftShortlistPayload<ExtArgs>
+      fields: Prisma.DraftShortlistFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DraftShortlistFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DraftShortlistFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>
+        }
+        findFirst: {
+          args: Prisma.DraftShortlistFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DraftShortlistFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>
+        }
+        findMany: {
+          args: Prisma.DraftShortlistFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>[]
+        }
+        create: {
+          args: Prisma.DraftShortlistCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>
+        }
+        createMany: {
+          args: Prisma.DraftShortlistCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DraftShortlistCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>[]
+        }
+        delete: {
+          args: Prisma.DraftShortlistDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>
+        }
+        update: {
+          args: Prisma.DraftShortlistUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>
+        }
+        deleteMany: {
+          args: Prisma.DraftShortlistDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DraftShortlistUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DraftShortlistUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>[]
+        }
+        upsert: {
+          args: Prisma.DraftShortlistUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DraftShortlistPayload>
+        }
+        aggregate: {
+          args: Prisma.DraftShortlistAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDraftShortlist>
+        }
+        groupBy: {
+          args: Prisma.DraftShortlistGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DraftShortlistGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DraftShortlistCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DraftShortlistCountAggregateOutputType> | number
+        }
+      }
+    }
     DraftMessage: {
       payload: Prisma.$DraftMessagePayload<ExtArgs>
       fields: Prisma.DraftMessageFieldRefs
@@ -2733,6 +2808,7 @@ export const TeamScalarFieldEnum = {
   pointsFor: 'pointsFor',
   pointsAgainst: 'pointsAgainst',
   isBot: 'isBot',
+  autoPickEnabled: 'autoPickEnabled',
   createdAt: 'createdAt'
 } as const
 
@@ -2813,6 +2889,16 @@ export const DraftQueueScalarFieldEnum = {
 } as const
 
 export type DraftQueueScalarFieldEnum = (typeof DraftQueueScalarFieldEnum)[keyof typeof DraftQueueScalarFieldEnum]
+
+
+export const DraftShortlistScalarFieldEnum = {
+  id: 'id',
+  draftId: 'draftId',
+  teamId: 'teamId',
+  playerId: 'playerId'
+} as const
+
+export type DraftShortlistScalarFieldEnum = (typeof DraftShortlistScalarFieldEnum)[keyof typeof DraftShortlistScalarFieldEnum]
 
 
 export const DraftMessageScalarFieldEnum = {
@@ -3485,6 +3571,7 @@ export type GlobalOmitConfig = {
   draftPick?: Prisma.DraftPickOmit
   draftPickSlot?: Prisma.DraftPickSlotOmit
   draftQueue?: Prisma.DraftQueueOmit
+  draftShortlist?: Prisma.DraftShortlistOmit
   draftMessage?: Prisma.DraftMessageOmit
   matchup?: Prisma.MatchupOmit
   teamGameweekScore?: Prisma.TeamGameweekScoreOmit

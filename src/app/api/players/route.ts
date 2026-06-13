@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { isProspectEligible, PROSPECT_MAX_MINUTES } from "@/lib/prospects"
-import { getSeasonPlayerPoints, getLeaguePlayedGameweekIds } from "@/lib/season-points"
+import { getSeasonPlayerStatlines, getLeaguePlayedGameweekIds } from "@/lib/season-points"
 import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -11,7 +11,8 @@ export async function GET(req: NextRequest) {
   const sortBy = (searchParams.get("sortBy") ?? "totalPoints") as "totalPoints" | "form" | "nowCost"
   const search = searchParams.get("q") ?? ""
   const position = searchParams.get("position") as "GK" | "DEF" | "MID" | "FWD" | null
-  const limit = Math.min(parseInt(searchParams.get("limit") ?? "50"), 100)
+  const fplTeamId = searchParams.get("fplTeamId")
+  const limit = Math.min(parseInt(searchParams.get("limit") ?? "50"), 300)
   const offset = parseInt(searchParams.get("offset") ?? "0")
 
   let ownedPlayerIds: number[] = []
@@ -27,6 +28,7 @@ export async function GET(req: NextRequest) {
     where: {
       ...(available && leagueId ? { id: { notIn: ownedPlayerIds } } : {}),
       ...(position ? { position } : {}),
+      ...(fplTeamId ? { fplTeamId: Number(fplTeamId) } : {}),
       ...(search ? { webName: { contains: search, mode: "insensitive" } } : {}),
       // Youth-draft pool: pre-filter to young, low-minute players (age refined below).
       ...(prospect ? { birthDate: { not: null }, minutes: { lt: PROSPECT_MAX_MINUTES } } : {}),
@@ -42,17 +44,23 @@ export async function GET(req: NextRequest) {
     ? players.filter((p) => isProspectEligible({ birthDate: p.birthDate, minutes: p.minutes })).slice(0, limit)
     : players
 
-  // Season-to-date points (league-scoped). Preseason → `points: null`, so the UI
-  // shows "—" instead of last season's bootstrap total.
+  // Season-to-date statlines (league-scoped). Preseason → `seasonStats: null` and
+  // `points: null`, so the UI shows "—" instead of last season's bootstrap totals.
   const seasonStarted = leagueId ? (await getLeaguePlayedGameweekIds(leagueId)).length > 0 : false
-  const seasonPoints = seasonStarted
-    ? await getSeasonPlayerPoints(leagueId!, result.map((p) => p.id))
-    : new Map<number, number>()
+  const statlines = seasonStarted
+    ? await getSeasonPlayerStatlines(leagueId!, result.map((p) => p.id))
+    : new Map()
 
-  const withPoints = result.map((p) => ({
-    ...p,
-    points: seasonStarted ? (seasonPoints.get(p.id) ?? 0) : null,
-  }))
+  const withStats = result.map((p) => {
+    const s = statlines.get(p.id) ?? null
+    return {
+      ...p,
+      points: seasonStarted ? (s?.points ?? 0) : null,
+      seasonStats: seasonStarted
+        ? (s ?? { points: 0, minutes: 0, goals: 0, assists: 0, cleanSheets: 0 })
+        : null,
+    }
+  })
 
-  return Response.json({ players: withPoints, total: withPoints.length, seasonStarted })
+  return Response.json({ players: withStats, total: withStats.length, seasonStarted })
 }

@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation"
 import { useDraft } from "@/hooks/useDraft"
 import { DraftBoard } from "./DraftBoard"
 import { DraftTimer } from "./DraftTimer"
-import { PlayerSearchPanel } from "./PlayerSearchPanel"
+import { PlayerTable, type FplTeamOption } from "./PlayerTable"
 import { DraftQueue } from "./DraftQueue"
+import { DraftRosterTab } from "./DraftRosterTab"
 import { DraftChat } from "./DraftChat"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -23,6 +25,7 @@ interface DraftRoomProps {
   teams: Array<{ id: string; name: string; draftOrder: number | null; userId: string; isBot: boolean }>
   rosterConfig: RosterConfig
   isYouthDraft?: boolean
+  fplTeams: FplTeamOption[]
 }
 
 export function DraftRoom({
@@ -32,7 +35,9 @@ export function DraftRoom({
   myTeamName,
   isCommissioner,
   teams,
+  rosterConfig,
   isYouthDraft = false,
+  fplTeams,
 }: DraftRoomProps) {
   const router = useRouter()
   const botTeamIds = teams.filter(t => t.isBot).map(t => t.id)
@@ -40,14 +45,19 @@ export function DraftRoom({
     isConnected,
     draftState,
     queue,
+    shortlist,
     chatMessages,
     setChatMessages,
     onlineTeamIds,
     isMyTurn,
+    myAutoPickEnabled,
     makePick,
     addToQueue,
     removeFromQueue,
     reorderQueue,
+    addToShortlist,
+    removeFromShortlist,
+    toggleAutoPick,
     sendChat,
     startDraft,
     pauseDraft,
@@ -144,7 +154,7 @@ export function DraftRoom({
   // ── Active draft ─────────────────────────────────────────────
   return (
     <div className="flex flex-col gap-3 h-full">
-      {/* Top bar: status + pick order + commissioner controls */}
+      {/* Top bar: status + whose turn + timer + commissioner controls */}
       <div className="flex items-center gap-2 flex-wrap">
         <Badge className={cn(
           "border-0 text-xs",
@@ -162,7 +172,16 @@ export function DraftRoom({
             {currentTeam.id === myTeamId ? "🟢 Your pick!" : `${currentTeam.name}'s pick`}
           </span>
         )}
-        <div className="flex items-center gap-1 ml-auto">
+        {isYouthDraft && (
+          <Badge className="border-0 text-xs bg-accent2/15 text-accent2">🌱 Youth draft</Badge>
+        )}
+        <div className="flex items-center gap-2 ml-auto">
+          <DraftTimer
+            timeRemaining={draftState?.timeRemaining ?? 0}
+            currentTeamName={currentTeam?.name ?? null}
+            status={status}
+            compact
+          />
           <span className={cn("w-2 h-2 rounded-full shrink-0", isConnected ? "bg-primary" : "bg-red-400")} />
           {isCommissioner && (
             status === "IN_PROGRESS" ? (
@@ -186,61 +205,75 @@ export function DraftRoom({
         </div>
       </div>
 
-      {/* Main 2-column layout */}
-      <div className="flex gap-3 flex-1 min-h-0">
-        {/* Left: board */}
-        <div className="flex-1 min-w-0 bg-card border border-border rounded-xl p-3 overflow-auto">
-          <p className="text-muted-foreground text-xs font-medium mb-2">Draft Board</p>
+      {/* Top half: draft board (teams as columns) */}
+      <div className="flex-[5] min-h-0 bg-card border border-border rounded-xl p-3 flex flex-col">
+        <p className="text-muted-foreground text-xs font-medium mb-2">Draft Board</p>
+        <div className="flex-1 min-h-0">
           {draftState && (
             <DraftBoard draftState={draftState} myTeamId={myTeamId} botTeamIds={botTeamIds} />
           )}
         </div>
+      </div>
 
-        {/* Right: timer + search + queue + chat */}
-        <div className="w-72 shrink-0 flex flex-col gap-2 min-h-0">
-          {/* Timer */}
-          <DraftTimer
-            timeRemaining={draftState?.timeRemaining ?? 0}
-            currentTeamName={currentTeam?.name ?? null}
-            status={status}
+      {/* Bottom half: tabs (left) + player table (right) */}
+      <div className="flex gap-3 flex-[4] min-h-0">
+        {/* Bottom-left: Roster / Queue / Chat */}
+        <div className="w-[36%] min-w-0 bg-card border border-border rounded-xl p-3 flex flex-col min-h-0">
+          <Tabs defaultValue="roster" className="flex flex-col h-full min-h-0 gap-2">
+            <TabsList className="w-full">
+              <TabsTrigger value="roster">Roster</TabsTrigger>
+              <TabsTrigger value="queue">Queue {queue.length > 0 && `(${queue.length})`}</TabsTrigger>
+              <TabsTrigger value="chat">Chat</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="roster" className="min-h-0">
+              <DraftRosterTab draftState={draftState} myTeamId={myTeamId} rosterConfig={rosterConfig} />
+            </TabsContent>
+
+            <TabsContent value="queue" className="min-h-0 flex flex-col">
+              {myTeamId && (
+                <div className="flex items-center justify-between mb-2 px-1">
+                  <span className="text-xs text-muted-foreground">Auto-pick when it&apos;s your turn</span>
+                  <button
+                    onClick={() => toggleAutoPick(!myAutoPickEnabled)}
+                    className={cn(
+                      "text-xs px-2 py-0.5 rounded font-semibold transition-colors",
+                      myAutoPickEnabled ? "bg-success/20 text-success" : "bg-muted text-muted-foreground hover:bg-muted/70"
+                    )}>
+                    Auto-pick {myAutoPickEnabled ? "ON" : "OFF"}
+                  </button>
+                </div>
+              )}
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                <DraftQueue queue={queue} onRemove={removeFromQueue} onReorder={reorderQueue} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="chat" className="min-h-0">
+              <DraftChat messages={chatMessages} onSend={sendChat} myTeamName={myTeamName} />
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* Bottom-right: player table */}
+        <div className="flex-1 min-w-0 bg-card border border-border rounded-xl p-3 flex flex-col min-h-0">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-muted-foreground text-xs font-medium">Players</p>
+            {isMyTurn && <span className="text-primary text-xs font-medium">It&apos;s your pick!</span>}
+          </div>
+          <PlayerTable
+            leagueId={leagueId}
+            isMyTurn={isMyTurn}
+            onPick={makePick}
+            picksMade={picksCount}
+            draftState={draftState}
+            shortlist={shortlist}
+            onShortlistAdd={addToShortlist}
+            onShortlistRemove={removeFromShortlist}
+            onAddToQueue={addToQueue}
+            fplTeams={fplTeams}
+            prospectOnly={isYouthDraft}
           />
-
-          {/* Player search */}
-          <div className="flex-1 bg-card border border-border rounded-xl p-3 flex flex-col min-h-0" style={{ maxHeight: "320px" }}>
-            <p className="text-muted-foreground text-xs font-medium mb-2">Available Players</p>
-            {isYouthDraft && (
-              <div className="mb-2 px-2 py-1 rounded bg-accent2/15 border border-accent2/40">
-                <p className="text-accent2 text-xs font-medium">🌱 Youth draft — U21 prospects only</p>
-              </div>
-            )}
-            {isMyTurn && (
-              <div className="mb-2 px-2 py-1 rounded bg-primary/20 border border-primary/40">
-                <p className="text-primary text-xs font-medium">It&apos;s your turn to pick!</p>
-              </div>
-            )}
-            <PlayerSearchPanel
-              leagueId={leagueId}
-              isMyTurn={isMyTurn}
-              onPick={makePick}
-              onAddToQueue={(playerId, priority) => addToQueue(playerId, priority)}
-              picksMade={picksCount}
-              prospectOnly={isYouthDraft}
-            />
-          </div>
-
-          {/* Queue */}
-          <div className="bg-card border border-border rounded-xl p-3">
-            <p className="text-muted-foreground text-xs font-medium mb-2">
-              Auto-pick Queue <span className="text-muted-foreground">({queue.length})</span>
-            </p>
-            <DraftQueue queue={queue} onRemove={removeFromQueue} onReorder={reorderQueue} />
-          </div>
-
-          {/* Chat */}
-          <div className="bg-card border border-border rounded-xl p-3 flex flex-col" style={{ maxHeight: "200px" }}>
-            <p className="text-muted-foreground text-xs font-medium mb-2">Chat</p>
-            <DraftChat messages={chatMessages} onSend={sendChat} myTeamName={myTeamName} />
-          </div>
         </div>
       </div>
     </div>

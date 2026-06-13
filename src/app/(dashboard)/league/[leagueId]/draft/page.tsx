@@ -40,6 +40,12 @@ export default async function DraftPage({
   const myTeam = league.teams.find(t => t.userId === userId)
   const isCommissioner = league.teams[0]?.userId === userId
 
+  // FPL clubs for the player-table team filter (no separate endpoint needed).
+  const fplTeams = await prisma.fplTeam.findMany({
+    orderBy: { shortName: "asc" },
+    select: { id: true, name: true, shortName: true },
+  })
+
   return (
     <div className="flex flex-col h-full" style={{ minHeight: "calc(100vh - 120px)" }}>
       <DraftRoom
@@ -57,6 +63,7 @@ export default async function DraftPage({
         }))}
         rosterConfig={league.rosterConfig as unknown as RosterConfig}
         isYouthDraft={draft.isYouthDraft}
+        fplTeams={fplTeams}
       />
     </div>
   )

@@ -98,6 +98,11 @@ export type DraftPickSlot = Prisma.DraftPickSlotModel
  */
 export type DraftQueue = Prisma.DraftQueueModel
 /**
+ * Model DraftShortlist
+ * 
+ */
+export type DraftShortlist = Prisma.DraftShortlistModel
+/**
  * Model DraftMessage
  * 
  */

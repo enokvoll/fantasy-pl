@@ -17,7 +17,7 @@ interface DraftBoardProps {
 }
 
 export function DraftBoard({ draftState, myTeamId, botTeamIds = [] }: DraftBoardProps) {
-  const { picks, teams, currentPick, status, pickOrder } = draftState
+  const { picks, teams, currentPick, status, pickOrder, currentTeamId, onlineTeamIds } = draftState
   if (!teams.length) return null
 
   const n = teams.length
@@ -35,23 +35,28 @@ export function DraftBoard({ draftState, myTeamId, botTeamIds = [] }: DraftBoard
     : teams
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-auto h-full">
       <table className="text-xs border-collapse min-w-full">
-        <thead>
+        <thead className="sticky top-0 z-10 bg-card">
           <tr>
             <th className="px-2 py-2 text-muted-foreground font-medium text-left w-8">Rd</th>
-            {teamOrder.map(team => (
-              <th key={team.id}
-                className={cn(
-                  "px-2 py-2 font-medium text-center min-w-[100px] max-w-[120px]",
-                  team.id === myTeamId ? "text-primary" : "text-foreground"
-                )}>
-                <div className="truncate">
-                  {botTeamIds.includes(team.id) && <span className="mr-1 text-xs">🤖</span>}
-                  {team.name}
-                </div>
-              </th>
-            ))}
+            {teamOrder.map(team => {
+              const onClock = team.id === currentTeamId && status === "IN_PROGRESS"
+              return (
+                <th key={team.id}
+                  className={cn(
+                    "px-2 py-2 font-medium text-center min-w-[110px] max-w-[130px] border-b-2",
+                    onClock ? "border-primary" : "border-transparent",
+                    team.id === myTeamId ? "text-primary" : "text-foreground"
+                  )}>
+                  <div className="flex items-center justify-center gap-1 truncate">
+                    {onlineTeamIds?.includes(team.id) && <span className="w-1.5 h-1.5 rounded-full bg-success shrink-0" />}
+                    {botTeamIds.includes(team.id) && <span className="text-xs">🤖</span>}
+                    <span className="truncate">{team.name}</span>
+                  </div>
+                </th>
+              )
+            })}
           </tr>
         </thead>
         <tbody>

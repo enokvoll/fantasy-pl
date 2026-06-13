@@ -31,6 +31,7 @@ export interface DraftTeamInfo {
   draftOrder: number
   userId: string
   rosterCount: number
+  autoPickEnabled: boolean
 }
 
 export interface DraftChatMessage {
@@ -47,6 +48,7 @@ export interface ServerToClientEvents {
   "draft:pick:timer": (data: { timeRemaining: number; currentTeamId: string | null }) => void
   "draft:pick:auto": (data: { pick: DraftPickSummary }) => void
   "draft:queue:updated": (data: { teamId: string; queue: QueueItem[] }) => void
+  "draft:shortlist:updated": (data: { teamId: string; playerIds: number[] }) => void
   "draft:chat:message": (message: DraftChatMessage) => void
   "draft:started": (data: { startedAt: Date }) => void
   "draft:paused": () => void
@@ -64,6 +66,9 @@ export interface ClientToServerEvents {
   "draft:queue:add": (data: { draftId: string; playerId: number; priority: number }) => void
   "draft:queue:remove": (data: { draftId: string; playerId: number }) => void
   "draft:queue:reorder": (data: { draftId: string; playerIds: number[] }) => void
+  "draft:shortlist:add": (data: { draftId: string; playerId: number }) => void
+  "draft:shortlist:remove": (data: { draftId: string; playerId: number }) => void
+  "draft:auto-pick:toggle": (data: { draftId: string; enabled: boolean }) => void
   "draft:chat:send": (data: { draftId: string; content: string }) => void
   "draft:start": (data: { draftId: string }) => void
   "draft:pause": (data: { draftId: string }) => void
