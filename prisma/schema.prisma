@@ -84,6 +84,10 @@ model Player {
   fplTeamId   Int
   nowCost     Int
   status      PlayerStatus @default(AVAILABLE)
+  // Whether the player is currently in the FPL dataset. Set false when they drop out
+  // (relegated club / transferred abroad). Drives the Player Rights lifecycle.
+  inFplPool   Boolean      @default(true)
+  departedAt  DateTime?
   photo       String?
   news        String?
   chancePlayingNextRound Int?
@@ -93,6 +97,10 @@ model Player {
   birthDate   DateTime?
   minutes     Int          @default(0)
   starts      Int          @default(0)
+  // Auto-derived extra lineup-slot eligibility (e.g. a MID who also plays FWD).
+  // Never affects scoring — only which slots the player can fill. Primary `position`
+  // is always implicitly eligible. Per-league overrides live in LeaguePlayerEligibility.
+  secondaryPositions Position[] @default([])
   updatedAt   DateTime     @updatedAt
 
   fplTeam       FplTeam              @relation(fields: [fplTeamId], references: [id])
@@ -103,6 +111,52 @@ model Player {
   waiverDrops   WaiverClaim[]        @relation("DropPlayer")
   tradeAssets   TradeAsset[]
   transferAuctions TransferAuction[]
+  eligibilityOverrides LeaguePlayerEligibility[]
+  rights        PlayerRights[]
+}
+
+// Per-league commissioner override of a player's secondary lineup eligibility.
+// When a row exists for (league, player), its `positions` REPLACE the auto-derived
+// Player.secondaryPositions for that league. Primary position is always eligible.
+model LeaguePlayerEligibility {
+  id        String     @id @default(cuid())
+  leagueId  String
+  playerId  Int
+  positions Position[]
+  updatedAt DateTime   @updatedAt
+
+  league League @relation(fields: [leagueId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@unique([leagueId, playerId])
+  @@index([leagueId])
+}
+
+enum PlayerRightsStatus {
+  HELD               // player has left the PL; rights are dormant
+  AVAILABLE_TO_RESIGN // player is back in the PL; holder has first refusal
+}
+
+// Exclusive claim a team retains on a player who left the Premier League while rostered.
+// On the player's return the holder gets first refusal to re-sign. Persists across
+// dynasty rollover. One active rights row per (league, player).
+model PlayerRights {
+  id         String             @id @default(cuid())
+  leagueId   String
+  teamId     String
+  playerId   Int
+  status     PlayerRightsStatus @default(HELD)
+  reason     String?
+  acquiredAt DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  league League @relation(fields: [leagueId], references: [id])
+  team   Team   @relation(fields: [teamId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@unique([leagueId, playerId])
+  @@index([leagueId, status])
+  @@index([teamId])
 }
 
 enum PlayerStatus {
@@ -239,6 +293,8 @@ model League {
   messages       LeagueMessage[]
   draftPickSlots DraftPickSlot[]
   transferAuctions TransferAuction[]
+  playerEligibility LeaguePlayerEligibility[]
+  playerRights   PlayerRights[]
 }
 
 enum LeagueType {
@@ -318,6 +374,7 @@ model Team {
   draftPickSlots     DraftPickSlot[]
   transferAuctions   TransferAuction[]
   transferBids       TransferBid[]
+  playerRights       PlayerRights[]
 
   @@unique([userId, leagueId])
 }

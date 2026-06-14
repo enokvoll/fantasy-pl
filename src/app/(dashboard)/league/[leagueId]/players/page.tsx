@@ -1,8 +1,11 @@
+import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { getSeasonPlayerPoints } from "@/lib/season-points"
+import { EligibilityEditor } from "@/components/league/EligibilityEditor"
+import { SECONDARY_BADGE } from "@/lib/ui"
 
 const POS_COLORS: Record<string, string> = {
   GK: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
@@ -21,8 +24,15 @@ export default async function PlayersPage({
   const { leagueId } = await params
   const { pos, q, page } = await searchParams
 
-  const league = await prisma.league.findUnique({ where: { id: leagueId } })
+  const league = await prisma.league.findUnique({
+    where: { id: leagueId },
+    include: { teams: { orderBy: { createdAt: "asc" }, take: 1 } },
+  })
   if (!league) notFound()
+
+  // Commissioner (first-created team) may edit per-league position eligibility.
+  const session = await auth()
+  const isCommissioner = league.teams[0]?.userId === session?.user?.id
 
   const offset = (parseInt(page ?? "1") - 1) * 50
 
@@ -32,6 +42,13 @@ export default async function PlayersPage({
     select: { playerId: true, teamId: true },
   })
   const ownedMap = new Map(owned.map(o => [o.playerId!, o.teamId]))
+
+  // Player Rights held in this league (player → holding team name).
+  const rights = await prisma.playerRights.findMany({
+    where: { leagueId },
+    include: { team: { select: { abbreviation: true, name: true } } },
+  })
+  const rightsMap = new Map(rights.map(r => [r.playerId, r.team.abbreviation || r.team.name]))
 
   const players = await prisma.player.findMany({
     where: {
@@ -45,6 +62,12 @@ export default async function PlayersPage({
   })
 
   const totalPlayers = await prisma.player.count()
+
+  // Per-league eligibility overrides for the displayed players (player → positions).
+  const overrides = await prisma.leaguePlayerEligibility.findMany({
+    where: { leagueId, playerId: { in: players.map(p => p.id) } },
+  })
+  const overrideMap = new Map(overrides.map(o => [o.playerId, o.positions as string[]]))
 
   // Season-to-date points (league-scoped). Empty map ⇒ preseason ⇒ render "—".
   const seasonPoints = await getSeasonPlayerPoints(leagueId, players.map(p => p.id))
@@ -95,6 +118,7 @@ export default async function PlayersPage({
                   <th className="text-left px-4 py-3 text-muted-foreground font-medium">Player</th>
                   <th className="text-left px-4 py-3 text-muted-foreground font-medium">Club</th>
                   <th className="text-center px-4 py-3 text-muted-foreground font-medium">Pos</th>
+                  <th className="text-center px-4 py-3 text-muted-foreground font-medium">Eligible</th>
                   <th className="text-right px-4 py-3 text-muted-foreground font-medium">Price</th>
                   <th className="text-right px-4 py-3 text-muted-foreground font-medium">Pts</th>
                   <th className="text-right px-4 py-3 text-muted-foreground font-medium">Form</th>
@@ -104,6 +128,10 @@ export default async function PlayersPage({
               <tbody>
                 {players.map(player => {
                   const ownerTeamId = ownedMap.get(player.id)
+                  const rightsHolder = rightsMap.get(player.id)
+                  const hasOverride = overrideMap.has(player.id)
+                  // Effective secondary set = override if present, else auto-derived.
+                  const secondary = overrideMap.get(player.id) ?? (player.secondaryPositions as string[])
                   return (
                     <tr key={player.id} className="border-b border-border hover:bg-muted/30 transition-colors">
                       <td className="px-4 py-3">
@@ -115,12 +143,33 @@ export default async function PlayersPage({
                           {player.position}
                         </span>
                       </td>
+                      <td className="px-4 py-3 text-center">
+                        {isCommissioner ? (
+                          <EligibilityEditor
+                            leagueId={leagueId}
+                            playerId={player.id}
+                            primary={player.position}
+                            value={secondary}
+                            hasOverride={hasOverride}
+                          />
+                        ) : secondary.length > 0 ? (
+                          <span className={`text-[10px] px-1 py-0.5 rounded font-medium ${SECONDARY_BADGE}`}>
+                            {secondary.join("/")}
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground text-xs">—</span>
+                        )}
+                      </td>
                       <td className="px-4 py-3 text-right text-foreground">£{(player.nowCost / 10).toFixed(1)}m</td>
                       <td className="px-4 py-3 text-right text-foreground font-semibold">{seasonStarted ? (seasonPoints.get(player.id) ?? 0) : "—"}</td>
                       <td className="px-4 py-3 text-right text-foreground">{player.form}</td>
                       <td className="px-4 py-3 text-center">
                         {ownerTeamId ? (
                           <Badge className="bg-muted text-muted-foreground text-xs">Owned</Badge>
+                        ) : rightsHolder ? (
+                          <Badge className="bg-warn/15 text-warn text-xs" title="Rights held — not a free agent">
+                            Rights: {rightsHolder}
+                          </Badge>
                         ) : (
                           <Badge className="bg-primary/20 text-primary text-xs">Free</Badge>
                         )}

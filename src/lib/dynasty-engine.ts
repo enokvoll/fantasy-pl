@@ -44,6 +44,9 @@ export async function rolloverSeason(leagueId: string): Promise<RolloverResult> 
       return a.pointsFor - b.pointsFor
     })
 
+    // Player Rights rows are intentionally NOT touched here: a team's exclusive claim
+    // on a departed player persists across seasons until they re-sign or the right lapses.
+
     // 2. Carry rosters over: bump years owned, clear last season's lineup.
     await tx.rosterSlot.updateMany({
       where: { teamId: { in: league.teams.map((t) => t.id) }, playerId: { not: null } },

@@ -147,6 +147,90 @@ async function main() {
     assert.equal(isProspectEligible({ birthDate: null, minutes: 0 }, ref), false)
   })
 
+  console.log("dynamic position eligibility")
+  const { deriveSecondaryPositions, effectiveEligiblePositions, isEligibleFor, assignPositions } =
+    await import("../src/lib/eligibility")
+  const { validateLineup } = await import("../src/lib/roster-validator")
+
+  test("Salah-type MID gains FWD eligibility", () => {
+    assert.deepEqual(
+      deriveSecondaryPositions({ position: "MID", starts: 30, minutes: 2700, goalsScored: 18, assists: 10 }),
+      ["FWD"]
+    )
+  })
+  test("attacking DEF gains MID eligibility", () => {
+    assert.deepEqual(
+      deriveSecondaryPositions({ position: "DEF", starts: 25, minutes: 2200, goalsScored: 3, assists: 4 }),
+      ["MID"]
+    )
+  })
+  test("creative FWD gains MID eligibility", () => {
+    assert.deepEqual(
+      deriveSecondaryPositions({ position: "FWD", starts: 25, minutes: 2200, goalsScored: 4, assists: 7 }),
+      ["MID"]
+    )
+  })
+  test("low-sample and ordinary players gain nothing; GK never gains", () => {
+    assert.deepEqual(deriveSecondaryPositions({ position: "MID", starts: 3, minutes: 270, goalsScored: 5, assists: 5 }), [])
+    assert.deepEqual(deriveSecondaryPositions({ position: "MID", starts: 30, minutes: 2700, goalsScored: 2, assists: 2 }), [])
+    assert.deepEqual(deriveSecondaryPositions({ position: "GK", starts: 38, minutes: 3420, goalsScored: 0, assists: 1 }), [])
+  })
+
+  test("effective eligibility: primary always present, override replaces derived", () => {
+    const player = { position: "MID" as Position, secondaryPositions: ["FWD"] as Position[] }
+    assert.deepEqual(effectiveEligiblePositions(player).sort(), ["FWD", "MID"])
+    // Override fully replaces the derived set (empty override clears secondaries).
+    assert.deepEqual(effectiveEligiblePositions(player, { positions: [] }), ["MID"])
+    assert.deepEqual(effectiveEligiblePositions(player, { positions: ["DEF"] }).sort(), ["DEF", "MID"])
+    assert.equal(isEligibleFor(player, "FWD"), true)
+    assert.equal(isEligibleFor(player, "DEF"), false)
+  })
+
+  test("assignPositions: dual MID/FWD covers a FWD shortage", () => {
+    const supply = [
+      { id: 1, eligible: ["MID"] as Position[] },
+      { id: 2, eligible: ["MID", "FWD"] as Position[] }, // flexible
+      { id: 3, eligible: ["FWD"] as Position[] },
+    ]
+    // Need 1 MID + 2 FWD: player 2 must slide to FWD.
+    assert.equal(assignPositions(supply, { DEF: 0, MID: 1, FWD: 2, FLEX: 0 }), true)
+  })
+  test("assignPositions: infeasible demand fails", () => {
+    const supply = [
+      { id: 1, eligible: ["MID"] as Position[] },
+      { id: 2, eligible: ["MID"] as Position[] },
+    ]
+    assert.equal(assignPositions(supply, { DEF: 0, MID: 0, FWD: 2, FLEX: 0 }), false)
+  })
+
+  // Minimal lineup builder for validateLineup (only fields the validator reads).
+  const lineSlot = (id: number, position: Position, isStarting: boolean, slotType = isStarting ? "STARTER" : "BENCH") =>
+    ({ playerId: id, isStarting, slotType, position: null, player: { id, position } }) as unknown as Parameters<typeof validateLineup>[0][number]
+  const rc = { GK: 1, DEF: 3, MID: 4, FWD: 3, FLEX: 0, BENCH: 0 }
+
+  test("validateLineup: dual MID/FWD lets a MID start as the 3rd forward", () => {
+    const starters = [
+      lineSlot(1, "GK", true),
+      lineSlot(2, "DEF", true), lineSlot(3, "DEF", true), lineSlot(4, "DEF", true),
+      lineSlot(5, "MID", true), lineSlot(6, "MID", true), lineSlot(7, "MID", true), lineSlot(8, "MID", true),
+      lineSlot(9, "FWD", true), lineSlot(10, "FWD", true),
+      lineSlot(11, "MID", true), // only 2 real FWDs; this MID must cover FWD
+    ]
+    const elig = new Map<number, Position[]>([[11, ["MID", "FWD"]]])
+    assert.equal(validateLineup(starters, rc, elig).valid, true)
+    // Without the eligibility override it should be invalid (only 2 FWD).
+    assert.equal(validateLineup(starters, rc).valid, false)
+  })
+  test("validateLineup: outfielder cannot fill the GK slot", () => {
+    const starters = [
+      lineSlot(2, "DEF", true), lineSlot(3, "DEF", true), lineSlot(4, "DEF", true), lineSlot(5, "DEF", true),
+      lineSlot(6, "MID", true), lineSlot(7, "MID", true), lineSlot(8, "MID", true), lineSlot(9, "MID", true),
+      lineSlot(10, "FWD", true), lineSlot(11, "FWD", true), lineSlot(12, "FWD", true),
+    ]
+    // 0 GK starters → invalid even with broad eligibility.
+    assert.equal(validateLineup(starters, rc).valid, false)
+  })
+
   console.log("")
   if (failures > 0) {
     console.error(`${failures} test(s) failed`)

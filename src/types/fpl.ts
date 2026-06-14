@@ -41,6 +41,8 @@ export interface FplElement {
   birth_date: string | null // "YYYY-MM-DD" or null
   minutes: number // season total
   starts: number // season total
+  goals_scored: number // season total
+  assists: number // season total
 }
 
 export interface FplElementType {

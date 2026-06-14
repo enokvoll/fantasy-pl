@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const PlayerRightsStatus = {
+  HELD: 'HELD',
+  AVAILABLE_TO_RESIGN: 'AVAILABLE_TO_RESIGN'
+} as const
+
+export type PlayerRightsStatus = (typeof PlayerRightsStatus)[keyof typeof PlayerRightsStatus]
+
+
 export const PlayerStatus = {
   AVAILABLE: 'AVAILABLE',
   DOUBTFUL: 'DOUBTFUL',

@@ -6,6 +6,7 @@ import {
   type ScoringAction,
 } from "@/lib/formation-boosts"
 import { DEVELOPMENT_BONUS_PCT } from "@/lib/prospects"
+import { buildEligibilityMap } from "@/lib/eligibility-loader"
 
 interface ScoringRules {
   minutesPlayed1to59: number
@@ -130,6 +131,15 @@ export async function calculateTeamScore(
   })
   const statsMap = new Map(gwStats.map((s) => [s.playerId, s]))
 
+  // Effective lineup eligibility (primary + secondary, with per-league overrides) so a
+  // dual-position bench player can auto-sub for a vacated slot of any line they can fill.
+  const eligibility = await buildEligibilityMap(
+    leagueId,
+    [...starters, ...benchSlots]
+      .map((s) => s.player)
+      .filter((p): p is NonNullable<typeof p> => p !== null)
+  )
+
   // Formation boost is driven by the manager's chosen starting XI (the tactic),
   // independent of any later auto-subs.
   const formationKey = getFormationKey(
@@ -155,13 +165,14 @@ export async function calculateTeamScore(
 
     // Auto-sub: if starter didn't play, find first eligible bench player
     if (!stats || stats.minutes === 0) {
+      const neededPosition = slot.position ?? slot.player.position
       const sub = benchSlots.find(
         (b) =>
           b.playerId !== null &&
           !usedBenchIds.has(b.playerId!) &&
           statsMap.get(b.playerId!)?.minutes &&
           (statsMap.get(b.playerId!)!.minutes ?? 0) > 0 &&
-          (slot.position === null || slot.position === b.player?.position)
+          (eligibility.get(b.playerId!) ?? [b.player!.position]).includes(neededPosition)
       )
       if (sub?.playerId && sub.player) {
         const subStats = statsMap.get(sub.playerId)!

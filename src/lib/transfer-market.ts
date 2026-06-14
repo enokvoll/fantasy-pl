@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { getRosterSize } from "@/lib/dynasty-engine"
+import { assertNotRightsHeld } from "@/lib/player-rights"
 import type { RosterConfig } from "@/types/draft"
 
 /**
@@ -40,6 +41,8 @@ async function assertFreeAgent(leagueId: string, playerId: number): Promise<void
     where: { playerId, team: { leagueId } },
   })
   if (owned) throw new Error("That player is already on a roster in this league")
+  // A player whose rights another team holds is not a free agent.
+  await assertNotRightsHeld(leagueId, playerId)
 }
 
 /** Start a new auction for a free agent with an opening bid. */

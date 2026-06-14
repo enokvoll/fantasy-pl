@@ -72,6 +72,16 @@ export type FplTeam = Prisma.FplTeamModel
  */
 export type Player = Prisma.PlayerModel
 /**
+ * Model LeaguePlayerEligibility
+ * 
+ */
+export type LeaguePlayerEligibility = Prisma.LeaguePlayerEligibilityModel
+/**
+ * Model PlayerRights
+ * 
+ */
+export type PlayerRights = Prisma.PlayerRightsModel
+/**
  * Model Fixture
  * 
  */

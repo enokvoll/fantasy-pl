@@ -203,6 +203,11 @@ export type EnumPlayerStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumPlayerStatusFilter<$PrismaModel> | $Enums.PlayerStatus
 }
 
+export type BoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
 export type EnumPositionWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.Position | Prisma.EnumPositionFieldRefInput<$PrismaModel>
   in?: $Enums.Position[] | Prisma.ListEnumPositionFieldRefInput<$PrismaModel>
@@ -223,17 +228,29 @@ export type EnumPlayerStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPlayerStatusFilter<$PrismaModel>
 }
 
-export type BoolFilter<$PrismaModel = never> = {
-  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
-}
-
 export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type EnumPlayerRightsStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlayerRightsStatus | Prisma.EnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlayerRightsStatusFilter<$PrismaModel> | $Enums.PlayerRightsStatus
+}
+
+export type EnumPlayerRightsStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlayerRightsStatus | Prisma.EnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlayerRightsStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlayerRightsStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPlayerRightsStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPlayerRightsStatusFilter<$PrismaModel>
 }
 
 export type JsonNullableFilter<$PrismaModel = never> =
@@ -856,6 +873,11 @@ export type NestedEnumPlayerStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumPlayerStatusFilter<$PrismaModel> | $Enums.PlayerStatus
 }
 
+export type NestedBoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
+}
+
 export type NestedEnumPositionWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.Position | Prisma.EnumPositionFieldRefInput<$PrismaModel>
   in?: $Enums.Position[] | Prisma.ListEnumPositionFieldRefInput<$PrismaModel>
@@ -876,17 +898,29 @@ export type NestedEnumPlayerStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumPlayerStatusFilter<$PrismaModel>
 }
 
-export type NestedBoolFilter<$PrismaModel = never> = {
-  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
-}
-
 export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumPlayerRightsStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlayerRightsStatus | Prisma.EnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlayerRightsStatusFilter<$PrismaModel> | $Enums.PlayerRightsStatus
+}
+
+export type NestedEnumPlayerRightsStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlayerRightsStatus | Prisma.EnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlayerRightsStatus[] | Prisma.ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlayerRightsStatusWithAggregatesFilter<$PrismaModel> | $Enums.PlayerRightsStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPlayerRightsStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPlayerRightsStatusFilter<$PrismaModel>
 }
 
 export type NestedJsonNullableFilter<$PrismaModel = never> =

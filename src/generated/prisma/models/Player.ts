@@ -55,6 +55,8 @@ export type PlayerMinAggregateOutputType = {
   fplTeamId: number | null
   nowCost: number | null
   status: $Enums.PlayerStatus | null
+  inFplPool: boolean | null
+  departedAt: Date | null
   photo: string | null
   news: string | null
   chancePlayingNextRound: number | null
@@ -75,6 +77,8 @@ export type PlayerMaxAggregateOutputType = {
   fplTeamId: number | null
   nowCost: number | null
   status: $Enums.PlayerStatus | null
+  inFplPool: boolean | null
+  departedAt: Date | null
   photo: string | null
   news: string | null
   chancePlayingNextRound: number | null
@@ -95,6 +99,8 @@ export type PlayerCountAggregateOutputType = {
   fplTeamId: number
   nowCost: number
   status: number
+  inFplPool: number
+  departedAt: number
   photo: number
   news: number
   chancePlayingNextRound: number
@@ -103,6 +109,7 @@ export type PlayerCountAggregateOutputType = {
   birthDate: number
   minutes: number
   starts: number
+  secondaryPositions: number
   updatedAt: number
   _all: number
 }
@@ -137,6 +144,8 @@ export type PlayerMinAggregateInputType = {
   fplTeamId?: true
   nowCost?: true
   status?: true
+  inFplPool?: true
+  departedAt?: true
   photo?: true
   news?: true
   chancePlayingNextRound?: true
@@ -157,6 +166,8 @@ export type PlayerMaxAggregateInputType = {
   fplTeamId?: true
   nowCost?: true
   status?: true
+  inFplPool?: true
+  departedAt?: true
   photo?: true
   news?: true
   chancePlayingNextRound?: true
@@ -177,6 +188,8 @@ export type PlayerCountAggregateInputType = {
   fplTeamId?: true
   nowCost?: true
   status?: true
+  inFplPool?: true
+  departedAt?: true
   photo?: true
   news?: true
   chancePlayingNextRound?: true
@@ -185,6 +198,7 @@ export type PlayerCountAggregateInputType = {
   birthDate?: true
   minutes?: true
   starts?: true
+  secondaryPositions?: true
   updatedAt?: true
   _all?: true
 }
@@ -284,6 +298,8 @@ export type PlayerGroupByOutputType = {
   fplTeamId: number
   nowCost: number
   status: $Enums.PlayerStatus
+  inFplPool: boolean
+  departedAt: Date | null
   photo: string | null
   news: string | null
   chancePlayingNextRound: number | null
@@ -292,6 +308,7 @@ export type PlayerGroupByOutputType = {
   birthDate: Date | null
   minutes: number
   starts: number
+  secondaryPositions: $Enums.Position[]
   updatedAt: Date
   _count: PlayerCountAggregateOutputType | null
   _avg: PlayerAvgAggregateOutputType | null
@@ -327,6 +344,8 @@ export type PlayerWhereInput = {
   fplTeamId?: Prisma.IntFilter<"Player"> | number
   nowCost?: Prisma.IntFilter<"Player"> | number
   status?: Prisma.EnumPlayerStatusFilter<"Player"> | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFilter<"Player"> | boolean
+  departedAt?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
   photo?: Prisma.StringNullableFilter<"Player"> | string | null
   news?: Prisma.StringNullableFilter<"Player"> | string | null
   chancePlayingNextRound?: Prisma.IntNullableFilter<"Player"> | number | null
@@ -335,6 +354,7 @@ export type PlayerWhereInput = {
   birthDate?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
   minutes?: Prisma.IntFilter<"Player"> | number
   starts?: Prisma.IntFilter<"Player"> | number
+  secondaryPositions?: Prisma.EnumPositionNullableListFilter<"Player">
   updatedAt?: Prisma.DateTimeFilter<"Player"> | Date | string
   fplTeam?: Prisma.XOR<Prisma.FplTeamScalarRelationFilter, Prisma.FplTeamWhereInput>
   gameweekStats?: Prisma.PlayerGameweekStatListRelationFilter
@@ -344,6 +364,8 @@ export type PlayerWhereInput = {
   waiverDrops?: Prisma.WaiverClaimListRelationFilter
   tradeAssets?: Prisma.TradeAssetListRelationFilter
   transferAuctions?: Prisma.TransferAuctionListRelationFilter
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityListRelationFilter
+  rights?: Prisma.PlayerRightsListRelationFilter
 }
 
 export type PlayerOrderByWithRelationInput = {
@@ -355,6 +377,8 @@ export type PlayerOrderByWithRelationInput = {
   fplTeamId?: Prisma.SortOrder
   nowCost?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  inFplPool?: Prisma.SortOrder
+  departedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   photo?: Prisma.SortOrderInput | Prisma.SortOrder
   news?: Prisma.SortOrderInput | Prisma.SortOrder
   chancePlayingNextRound?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -363,6 +387,7 @@ export type PlayerOrderByWithRelationInput = {
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   minutes?: Prisma.SortOrder
   starts?: Prisma.SortOrder
+  secondaryPositions?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   fplTeam?: Prisma.FplTeamOrderByWithRelationInput
   gameweekStats?: Prisma.PlayerGameweekStatOrderByRelationAggregateInput
@@ -372,6 +397,8 @@ export type PlayerOrderByWithRelationInput = {
   waiverDrops?: Prisma.WaiverClaimOrderByRelationAggregateInput
   tradeAssets?: Prisma.TradeAssetOrderByRelationAggregateInput
   transferAuctions?: Prisma.TransferAuctionOrderByRelationAggregateInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityOrderByRelationAggregateInput
+  rights?: Prisma.PlayerRightsOrderByRelationAggregateInput
 }
 
 export type PlayerWhereUniqueInput = Prisma.AtLeast<{
@@ -386,6 +413,8 @@ export type PlayerWhereUniqueInput = Prisma.AtLeast<{
   fplTeamId?: Prisma.IntFilter<"Player"> | number
   nowCost?: Prisma.IntFilter<"Player"> | number
   status?: Prisma.EnumPlayerStatusFilter<"Player"> | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFilter<"Player"> | boolean
+  departedAt?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
   photo?: Prisma.StringNullableFilter<"Player"> | string | null
   news?: Prisma.StringNullableFilter<"Player"> | string | null
   chancePlayingNextRound?: Prisma.IntNullableFilter<"Player"> | number | null
@@ -394,6 +423,7 @@ export type PlayerWhereUniqueInput = Prisma.AtLeast<{
   birthDate?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
   minutes?: Prisma.IntFilter<"Player"> | number
   starts?: Prisma.IntFilter<"Player"> | number
+  secondaryPositions?: Prisma.EnumPositionNullableListFilter<"Player">
   updatedAt?: Prisma.DateTimeFilter<"Player"> | Date | string
   fplTeam?: Prisma.XOR<Prisma.FplTeamScalarRelationFilter, Prisma.FplTeamWhereInput>
   gameweekStats?: Prisma.PlayerGameweekStatListRelationFilter
@@ -403,6 +433,8 @@ export type PlayerWhereUniqueInput = Prisma.AtLeast<{
   waiverDrops?: Prisma.WaiverClaimListRelationFilter
   tradeAssets?: Prisma.TradeAssetListRelationFilter
   transferAuctions?: Prisma.TransferAuctionListRelationFilter
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityListRelationFilter
+  rights?: Prisma.PlayerRightsListRelationFilter
 }, "id">
 
 export type PlayerOrderByWithAggregationInput = {
@@ -414,6 +446,8 @@ export type PlayerOrderByWithAggregationInput = {
   fplTeamId?: Prisma.SortOrder
   nowCost?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  inFplPool?: Prisma.SortOrder
+  departedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   photo?: Prisma.SortOrderInput | Prisma.SortOrder
   news?: Prisma.SortOrderInput | Prisma.SortOrder
   chancePlayingNextRound?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -422,6 +456,7 @@ export type PlayerOrderByWithAggregationInput = {
   birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
   minutes?: Prisma.SortOrder
   starts?: Prisma.SortOrder
+  secondaryPositions?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PlayerCountOrderByAggregateInput
   _avg?: Prisma.PlayerAvgOrderByAggregateInput
@@ -442,6 +477,8 @@ export type PlayerScalarWhereWithAggregatesInput = {
   fplTeamId?: Prisma.IntWithAggregatesFilter<"Player"> | number
   nowCost?: Prisma.IntWithAggregatesFilter<"Player"> | number
   status?: Prisma.EnumPlayerStatusWithAggregatesFilter<"Player"> | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolWithAggregatesFilter<"Player"> | boolean
+  departedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Player"> | Date | string | null
   photo?: Prisma.StringNullableWithAggregatesFilter<"Player"> | string | null
   news?: Prisma.StringNullableWithAggregatesFilter<"Player"> | string | null
   chancePlayingNextRound?: Prisma.IntNullableWithAggregatesFilter<"Player"> | number | null
@@ -450,6 +487,7 @@ export type PlayerScalarWhereWithAggregatesInput = {
   birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Player"> | Date | string | null
   minutes?: Prisma.IntWithAggregatesFilter<"Player"> | number
   starts?: Prisma.IntWithAggregatesFilter<"Player"> | number
+  secondaryPositions?: Prisma.EnumPositionNullableListFilter<"Player">
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Player"> | Date | string
 }
 
@@ -461,6 +499,8 @@ export type PlayerCreateInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -469,6 +509,7 @@ export type PlayerCreateInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -478,6 +519,8 @@ export type PlayerCreateInput = {
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateInput = {
@@ -489,6 +532,8 @@ export type PlayerUncheckedCreateInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -497,6 +542,7 @@ export type PlayerUncheckedCreateInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -505,6 +551,8 @@ export type PlayerUncheckedCreateInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUpdateInput = {
@@ -515,6 +563,8 @@ export type PlayerUpdateInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -523,6 +573,7 @@ export type PlayerUpdateInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -532,6 +583,8 @@ export type PlayerUpdateInput = {
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateInput = {
@@ -543,6 +596,8 @@ export type PlayerUncheckedUpdateInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -551,6 +606,7 @@ export type PlayerUncheckedUpdateInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -559,6 +615,8 @@ export type PlayerUncheckedUpdateInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateManyInput = {
@@ -570,6 +628,8 @@ export type PlayerCreateManyInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -578,6 +638,7 @@ export type PlayerCreateManyInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
 }
 
@@ -589,6 +650,8 @@ export type PlayerUpdateManyMutationInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -597,6 +660,7 @@ export type PlayerUpdateManyMutationInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -609,6 +673,8 @@ export type PlayerUncheckedUpdateManyInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -617,6 +683,7 @@ export type PlayerUncheckedUpdateManyInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -630,6 +697,14 @@ export type PlayerOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type EnumPositionNullableListFilter<$PrismaModel = never> = {
+  equals?: $Enums.Position[] | Prisma.ListEnumPositionFieldRefInput<$PrismaModel> | null
+  has?: $Enums.Position | Prisma.EnumPositionFieldRefInput<$PrismaModel> | null
+  hasEvery?: $Enums.Position[] | Prisma.ListEnumPositionFieldRefInput<$PrismaModel>
+  hasSome?: $Enums.Position[] | Prisma.ListEnumPositionFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type PlayerCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   webName?: Prisma.SortOrder
@@ -639,6 +714,8 @@ export type PlayerCountOrderByAggregateInput = {
   fplTeamId?: Prisma.SortOrder
   nowCost?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  inFplPool?: Prisma.SortOrder
+  departedAt?: Prisma.SortOrder
   photo?: Prisma.SortOrder
   news?: Prisma.SortOrder
   chancePlayingNextRound?: Prisma.SortOrder
@@ -647,6 +724,7 @@ export type PlayerCountOrderByAggregateInput = {
   birthDate?: Prisma.SortOrder
   minutes?: Prisma.SortOrder
   starts?: Prisma.SortOrder
+  secondaryPositions?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -669,6 +747,8 @@ export type PlayerMaxOrderByAggregateInput = {
   fplTeamId?: Prisma.SortOrder
   nowCost?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  inFplPool?: Prisma.SortOrder
+  departedAt?: Prisma.SortOrder
   photo?: Prisma.SortOrder
   news?: Prisma.SortOrder
   chancePlayingNextRound?: Prisma.SortOrder
@@ -689,6 +769,8 @@ export type PlayerMinOrderByAggregateInput = {
   fplTeamId?: Prisma.SortOrder
   nowCost?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  inFplPool?: Prisma.SortOrder
+  departedAt?: Prisma.SortOrder
   photo?: Prisma.SortOrder
   news?: Prisma.SortOrder
   chancePlayingNextRound?: Prisma.SortOrder
@@ -762,12 +844,53 @@ export type PlayerUncheckedUpdateManyWithoutFplTeamNestedInput = {
   deleteMany?: Prisma.PlayerScalarWhereInput | Prisma.PlayerScalarWhereInput[]
 }
 
+export type PlayerCreatesecondaryPositionsInput = {
+  set: $Enums.Position[]
+}
+
 export type EnumPositionFieldUpdateOperationsInput = {
   set?: $Enums.Position
 }
 
 export type EnumPlayerStatusFieldUpdateOperationsInput = {
   set?: $Enums.PlayerStatus
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type PlayerUpdatesecondaryPositionsInput = {
+  set?: $Enums.Position[]
+  push?: $Enums.Position | $Enums.Position[]
+}
+
+export type PlayerCreateNestedOneWithoutEligibilityOverridesInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutEligibilityOverridesInput, Prisma.PlayerUncheckedCreateWithoutEligibilityOverridesInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutEligibilityOverridesInput
+  connect?: Prisma.PlayerWhereUniqueInput
+}
+
+export type PlayerUpdateOneRequiredWithoutEligibilityOverridesNestedInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutEligibilityOverridesInput, Prisma.PlayerUncheckedCreateWithoutEligibilityOverridesInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutEligibilityOverridesInput
+  upsert?: Prisma.PlayerUpsertWithoutEligibilityOverridesInput
+  connect?: Prisma.PlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlayerUpdateToOneWithWhereWithoutEligibilityOverridesInput, Prisma.PlayerUpdateWithoutEligibilityOverridesInput>, Prisma.PlayerUncheckedUpdateWithoutEligibilityOverridesInput>
+}
+
+export type PlayerCreateNestedOneWithoutRightsInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutRightsInput, Prisma.PlayerUncheckedCreateWithoutRightsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutRightsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+}
+
+export type PlayerUpdateOneRequiredWithoutRightsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutRightsInput, Prisma.PlayerUncheckedCreateWithoutRightsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutRightsInput
+  upsert?: Prisma.PlayerUpsertWithoutRightsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlayerUpdateToOneWithWhereWithoutRightsInput, Prisma.PlayerUpdateWithoutRightsInput>, Prisma.PlayerUncheckedUpdateWithoutRightsInput>
 }
 
 export type PlayerCreateNestedOneWithoutGameweekStatsInput = {
@@ -884,6 +1007,8 @@ export type PlayerCreateWithoutFplTeamInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -892,6 +1017,7 @@ export type PlayerCreateWithoutFplTeamInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutPlayerInput
@@ -900,6 +1026,8 @@ export type PlayerCreateWithoutFplTeamInput = {
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutFplTeamInput = {
@@ -910,6 +1038,8 @@ export type PlayerUncheckedCreateWithoutFplTeamInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -918,6 +1048,7 @@ export type PlayerUncheckedCreateWithoutFplTeamInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -926,6 +1057,8 @@ export type PlayerUncheckedCreateWithoutFplTeamInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutFplTeamInput = {
@@ -966,6 +1099,8 @@ export type PlayerScalarWhereInput = {
   fplTeamId?: Prisma.IntFilter<"Player"> | number
   nowCost?: Prisma.IntFilter<"Player"> | number
   status?: Prisma.EnumPlayerStatusFilter<"Player"> | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFilter<"Player"> | boolean
+  departedAt?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
   photo?: Prisma.StringNullableFilter<"Player"> | string | null
   news?: Prisma.StringNullableFilter<"Player"> | string | null
   chancePlayingNextRound?: Prisma.IntNullableFilter<"Player"> | number | null
@@ -974,7 +1109,288 @@ export type PlayerScalarWhereInput = {
   birthDate?: Prisma.DateTimeNullableFilter<"Player"> | Date | string | null
   minutes?: Prisma.IntFilter<"Player"> | number
   starts?: Prisma.IntFilter<"Player"> | number
+  secondaryPositions?: Prisma.EnumPositionNullableListFilter<"Player">
   updatedAt?: Prisma.DateTimeFilter<"Player"> | Date | string
+}
+
+export type PlayerCreateWithoutEligibilityOverridesInput = {
+  id: number
+  webName: string
+  firstName?: string | null
+  lastName?: string | null
+  position: $Enums.Position
+  nowCost: number
+  status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
+  photo?: string | null
+  news?: string | null
+  chancePlayingNextRound?: number | null
+  totalPoints?: number
+  form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Date | string
+  fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
+  gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
+  rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutPlayerInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
+  waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
+  waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerUncheckedCreateWithoutEligibilityOverridesInput = {
+  id: number
+  webName: string
+  firstName?: string | null
+  lastName?: string | null
+  position: $Enums.Position
+  fplTeamId: number
+  nowCost: number
+  status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
+  photo?: string | null
+  news?: string | null
+  chancePlayingNextRound?: number | null
+  totalPoints?: number
+  form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Date | string
+  gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
+  rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
+  waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
+  waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerCreateOrConnectWithoutEligibilityOverridesInput = {
+  where: Prisma.PlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutEligibilityOverridesInput, Prisma.PlayerUncheckedCreateWithoutEligibilityOverridesInput>
+}
+
+export type PlayerUpsertWithoutEligibilityOverridesInput = {
+  update: Prisma.XOR<Prisma.PlayerUpdateWithoutEligibilityOverridesInput, Prisma.PlayerUncheckedUpdateWithoutEligibilityOverridesInput>
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutEligibilityOverridesInput, Prisma.PlayerUncheckedCreateWithoutEligibilityOverridesInput>
+  where?: Prisma.PlayerWhereInput
+}
+
+export type PlayerUpdateToOneWithWhereWithoutEligibilityOverridesInput = {
+  where?: Prisma.PlayerWhereInput
+  data: Prisma.XOR<Prisma.PlayerUpdateWithoutEligibilityOverridesInput, Prisma.PlayerUncheckedUpdateWithoutEligibilityOverridesInput>
+}
+
+export type PlayerUpdateWithoutEligibilityOverridesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  webName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
+  nowCost?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
+  gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
+  rosterSlots?: Prisma.RosterSlotUpdateManyWithoutPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
+  waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
+  waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerUncheckedUpdateWithoutEligibilityOverridesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  webName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
+  fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
+  nowCost?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
+  rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
+  waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
+  waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerCreateWithoutRightsInput = {
+  id: number
+  webName: string
+  firstName?: string | null
+  lastName?: string | null
+  position: $Enums.Position
+  nowCost: number
+  status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
+  photo?: string | null
+  news?: string | null
+  chancePlayingNextRound?: number | null
+  totalPoints?: number
+  form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Date | string
+  fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
+  gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
+  rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutPlayerInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
+  waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
+  waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerUncheckedCreateWithoutRightsInput = {
+  id: number
+  webName: string
+  firstName?: string | null
+  lastName?: string | null
+  position: $Enums.Position
+  fplTeamId: number
+  nowCost: number
+  status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
+  photo?: string | null
+  news?: string | null
+  chancePlayingNextRound?: number | null
+  totalPoints?: number
+  form?: string | null
+  birthDate?: Date | string | null
+  minutes?: number
+  starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Date | string
+  gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
+  rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
+  waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
+  waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerCreateOrConnectWithoutRightsInput = {
+  where: Prisma.PlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutRightsInput, Prisma.PlayerUncheckedCreateWithoutRightsInput>
+}
+
+export type PlayerUpsertWithoutRightsInput = {
+  update: Prisma.XOR<Prisma.PlayerUpdateWithoutRightsInput, Prisma.PlayerUncheckedUpdateWithoutRightsInput>
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutRightsInput, Prisma.PlayerUncheckedCreateWithoutRightsInput>
+  where?: Prisma.PlayerWhereInput
+}
+
+export type PlayerUpdateToOneWithWhereWithoutRightsInput = {
+  where?: Prisma.PlayerWhereInput
+  data: Prisma.XOR<Prisma.PlayerUpdateWithoutRightsInput, Prisma.PlayerUncheckedUpdateWithoutRightsInput>
+}
+
+export type PlayerUpdateWithoutRightsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  webName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
+  nowCost?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
+  gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
+  rosterSlots?: Prisma.RosterSlotUpdateManyWithoutPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
+  waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
+  waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerUncheckedUpdateWithoutRightsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  webName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
+  fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
+  nowCost?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  totalPoints?: Prisma.IntFieldUpdateOperationsInput | number
+  form?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  minutes?: Prisma.IntFieldUpdateOperationsInput | number
+  starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
+  rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
+  waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
+  waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutGameweekStatsInput = {
@@ -985,6 +1401,8 @@ export type PlayerCreateWithoutGameweekStatsInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -993,6 +1411,7 @@ export type PlayerCreateWithoutGameweekStatsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   rosterSlots?: Prisma.RosterSlotCreateNestedManyWithoutPlayerInput
@@ -1001,6 +1420,8 @@ export type PlayerCreateWithoutGameweekStatsInput = {
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutGameweekStatsInput = {
@@ -1012,6 +1433,8 @@ export type PlayerUncheckedCreateWithoutGameweekStatsInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1020,6 +1443,7 @@ export type PlayerUncheckedCreateWithoutGameweekStatsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
   draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
@@ -1027,6 +1451,8 @@ export type PlayerUncheckedCreateWithoutGameweekStatsInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutGameweekStatsInput = {
@@ -1053,6 +1479,8 @@ export type PlayerUpdateWithoutGameweekStatsInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1061,6 +1489,7 @@ export type PlayerUpdateWithoutGameweekStatsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   rosterSlots?: Prisma.RosterSlotUpdateManyWithoutPlayerNestedInput
@@ -1069,6 +1498,8 @@ export type PlayerUpdateWithoutGameweekStatsInput = {
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutGameweekStatsInput = {
@@ -1080,6 +1511,8 @@ export type PlayerUncheckedUpdateWithoutGameweekStatsInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1088,6 +1521,7 @@ export type PlayerUncheckedUpdateWithoutGameweekStatsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
   draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1095,6 +1529,8 @@ export type PlayerUncheckedUpdateWithoutGameweekStatsInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutRosterSlotsInput = {
@@ -1105,6 +1541,8 @@ export type PlayerCreateWithoutRosterSlotsInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1113,6 +1551,7 @@ export type PlayerCreateWithoutRosterSlotsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1121,6 +1560,8 @@ export type PlayerCreateWithoutRosterSlotsInput = {
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutRosterSlotsInput = {
@@ -1132,6 +1573,8 @@ export type PlayerUncheckedCreateWithoutRosterSlotsInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1140,6 +1583,7 @@ export type PlayerUncheckedCreateWithoutRosterSlotsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
@@ -1147,6 +1591,8 @@ export type PlayerUncheckedCreateWithoutRosterSlotsInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutRosterSlotsInput = {
@@ -1173,6 +1619,8 @@ export type PlayerUpdateWithoutRosterSlotsInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1181,6 +1629,7 @@ export type PlayerUpdateWithoutRosterSlotsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1189,6 +1638,8 @@ export type PlayerUpdateWithoutRosterSlotsInput = {
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutRosterSlotsInput = {
@@ -1200,6 +1651,8 @@ export type PlayerUncheckedUpdateWithoutRosterSlotsInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1208,6 +1661,7 @@ export type PlayerUncheckedUpdateWithoutRosterSlotsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1215,6 +1669,8 @@ export type PlayerUncheckedUpdateWithoutRosterSlotsInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutDraftPicksInput = {
@@ -1225,6 +1681,8 @@ export type PlayerCreateWithoutDraftPicksInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1233,6 +1691,7 @@ export type PlayerCreateWithoutDraftPicksInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1241,6 +1700,8 @@ export type PlayerCreateWithoutDraftPicksInput = {
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutDraftPicksInput = {
@@ -1252,6 +1713,8 @@ export type PlayerUncheckedCreateWithoutDraftPicksInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1260,6 +1723,7 @@ export type PlayerUncheckedCreateWithoutDraftPicksInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1267,6 +1731,8 @@ export type PlayerUncheckedCreateWithoutDraftPicksInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutDraftPicksInput = {
@@ -1293,6 +1759,8 @@ export type PlayerUpdateWithoutDraftPicksInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1301,6 +1769,7 @@ export type PlayerUpdateWithoutDraftPicksInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1309,6 +1778,8 @@ export type PlayerUpdateWithoutDraftPicksInput = {
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
@@ -1320,6 +1791,8 @@ export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1328,6 +1801,7 @@ export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1335,6 +1809,8 @@ export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutWaiverTargetsInput = {
@@ -1345,6 +1821,8 @@ export type PlayerCreateWithoutWaiverTargetsInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1353,6 +1831,7 @@ export type PlayerCreateWithoutWaiverTargetsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1361,6 +1840,8 @@ export type PlayerCreateWithoutWaiverTargetsInput = {
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutWaiverTargetsInput = {
@@ -1372,6 +1853,8 @@ export type PlayerUncheckedCreateWithoutWaiverTargetsInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1380,6 +1863,7 @@ export type PlayerUncheckedCreateWithoutWaiverTargetsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1387,6 +1871,8 @@ export type PlayerUncheckedCreateWithoutWaiverTargetsInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutWaiverTargetsInput = {
@@ -1402,6 +1888,8 @@ export type PlayerCreateWithoutWaiverDropsInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1410,6 +1898,7 @@ export type PlayerCreateWithoutWaiverDropsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1418,6 +1907,8 @@ export type PlayerCreateWithoutWaiverDropsInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutWaiverDropsInput = {
@@ -1429,6 +1920,8 @@ export type PlayerUncheckedCreateWithoutWaiverDropsInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1437,6 +1930,7 @@ export type PlayerUncheckedCreateWithoutWaiverDropsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1444,6 +1938,8 @@ export type PlayerUncheckedCreateWithoutWaiverDropsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutWaiverDropsInput = {
@@ -1470,6 +1966,8 @@ export type PlayerUpdateWithoutWaiverTargetsInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1478,6 +1976,7 @@ export type PlayerUpdateWithoutWaiverTargetsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1486,6 +1985,8 @@ export type PlayerUpdateWithoutWaiverTargetsInput = {
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutWaiverTargetsInput = {
@@ -1497,6 +1998,8 @@ export type PlayerUncheckedUpdateWithoutWaiverTargetsInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1505,6 +2008,7 @@ export type PlayerUncheckedUpdateWithoutWaiverTargetsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1512,6 +2016,8 @@ export type PlayerUncheckedUpdateWithoutWaiverTargetsInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUpsertWithoutWaiverDropsInput = {
@@ -1533,6 +2039,8 @@ export type PlayerUpdateWithoutWaiverDropsInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1541,6 +2049,7 @@ export type PlayerUpdateWithoutWaiverDropsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1549,6 +2058,8 @@ export type PlayerUpdateWithoutWaiverDropsInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutWaiverDropsInput = {
@@ -1560,6 +2071,8 @@ export type PlayerUncheckedUpdateWithoutWaiverDropsInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1568,6 +2081,7 @@ export type PlayerUncheckedUpdateWithoutWaiverDropsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1575,6 +2089,8 @@ export type PlayerUncheckedUpdateWithoutWaiverDropsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutTransferAuctionsInput = {
@@ -1585,6 +2101,8 @@ export type PlayerCreateWithoutTransferAuctionsInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1593,6 +2111,7 @@ export type PlayerCreateWithoutTransferAuctionsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1601,6 +2120,8 @@ export type PlayerCreateWithoutTransferAuctionsInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutTransferAuctionsInput = {
@@ -1612,6 +2133,8 @@ export type PlayerUncheckedCreateWithoutTransferAuctionsInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1620,6 +2143,7 @@ export type PlayerUncheckedCreateWithoutTransferAuctionsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1627,6 +2151,8 @@ export type PlayerUncheckedCreateWithoutTransferAuctionsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutTransferAuctionsInput = {
@@ -1653,6 +2179,8 @@ export type PlayerUpdateWithoutTransferAuctionsInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1661,6 +2189,7 @@ export type PlayerUpdateWithoutTransferAuctionsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1669,6 +2198,8 @@ export type PlayerUpdateWithoutTransferAuctionsInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutTransferAuctionsInput = {
@@ -1680,6 +2211,8 @@ export type PlayerUncheckedUpdateWithoutTransferAuctionsInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1688,6 +2221,7 @@ export type PlayerUncheckedUpdateWithoutTransferAuctionsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1695,6 +2229,8 @@ export type PlayerUncheckedUpdateWithoutTransferAuctionsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutTradeAssetsInput = {
@@ -1705,6 +2241,8 @@ export type PlayerCreateWithoutTradeAssetsInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1713,6 +2251,7 @@ export type PlayerCreateWithoutTradeAssetsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   fplTeam: Prisma.FplTeamCreateNestedOneWithoutPlayersInput
   gameweekStats?: Prisma.PlayerGameweekStatCreateNestedManyWithoutPlayerInput
@@ -1721,6 +2260,8 @@ export type PlayerCreateWithoutTradeAssetsInput = {
   waiverTargets?: Prisma.WaiverClaimCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
   transferAuctions?: Prisma.TransferAuctionCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
@@ -1732,6 +2273,8 @@ export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
   fplTeamId: number
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1740,6 +2283,7 @@ export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedCreateNestedManyWithoutPlayerInput
   rosterSlots?: Prisma.RosterSlotUncheckedCreateNestedManyWithoutPlayerInput
@@ -1747,6 +2291,8 @@ export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutTargetPlayerInput
   waiverDrops?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
   transferAuctions?: Prisma.TransferAuctionUncheckedCreateNestedManyWithoutPlayerInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedCreateNestedManyWithoutPlayerInput
+  rights?: Prisma.PlayerRightsUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutTradeAssetsInput = {
@@ -1773,6 +2319,8 @@ export type PlayerUpdateWithoutTradeAssetsInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1781,6 +2329,7 @@ export type PlayerUpdateWithoutTradeAssetsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fplTeam?: Prisma.FplTeamUpdateOneRequiredWithoutPlayersNestedInput
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
@@ -1789,6 +2338,8 @@ export type PlayerUpdateWithoutTradeAssetsInput = {
   waiverTargets?: Prisma.WaiverClaimUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
@@ -1800,6 +2351,8 @@ export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
   fplTeamId?: Prisma.IntFieldUpdateOperationsInput | number
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1808,6 +2361,7 @@ export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1815,6 +2369,8 @@ export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
   waiverTargets?: Prisma.WaiverClaimUncheckedUpdateManyWithoutTargetPlayerNestedInput
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateManyFplTeamInput = {
@@ -1825,6 +2381,8 @@ export type PlayerCreateManyFplTeamInput = {
   position: $Enums.Position
   nowCost: number
   status?: $Enums.PlayerStatus
+  inFplPool?: boolean
+  departedAt?: Date | string | null
   photo?: string | null
   news?: string | null
   chancePlayingNextRound?: number | null
@@ -1833,6 +2391,7 @@ export type PlayerCreateManyFplTeamInput = {
   birthDate?: Date | string | null
   minutes?: number
   starts?: number
+  secondaryPositions?: Prisma.PlayerCreatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Date | string
 }
 
@@ -1844,6 +2403,8 @@ export type PlayerUpdateWithoutFplTeamInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1852,6 +2413,7 @@ export type PlayerUpdateWithoutFplTeamInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUpdateManyWithoutPlayerNestedInput
@@ -1860,6 +2422,8 @@ export type PlayerUpdateWithoutFplTeamInput = {
   waiverDrops?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutFplTeamInput = {
@@ -1870,6 +2434,8 @@ export type PlayerUncheckedUpdateWithoutFplTeamInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1878,6 +2444,7 @@ export type PlayerUncheckedUpdateWithoutFplTeamInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gameweekStats?: Prisma.PlayerGameweekStatUncheckedUpdateManyWithoutPlayerNestedInput
   rosterSlots?: Prisma.RosterSlotUncheckedUpdateManyWithoutPlayerNestedInput
@@ -1886,6 +2453,8 @@ export type PlayerUncheckedUpdateWithoutFplTeamInput = {
   waiverDrops?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
   tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
   transferAuctions?: Prisma.TransferAuctionUncheckedUpdateManyWithoutPlayerNestedInput
+  eligibilityOverrides?: Prisma.LeaguePlayerEligibilityUncheckedUpdateManyWithoutPlayerNestedInput
+  rights?: Prisma.PlayerRightsUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateManyWithoutFplTeamInput = {
@@ -1896,6 +2465,8 @@ export type PlayerUncheckedUpdateManyWithoutFplTeamInput = {
   position?: Prisma.EnumPositionFieldUpdateOperationsInput | $Enums.Position
   nowCost?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  inFplPool?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   news?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chancePlayingNextRound?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1904,6 +2475,7 @@ export type PlayerUncheckedUpdateManyWithoutFplTeamInput = {
   birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   minutes?: Prisma.IntFieldUpdateOperationsInput | number
   starts?: Prisma.IntFieldUpdateOperationsInput | number
+  secondaryPositions?: Prisma.PlayerUpdatesecondaryPositionsInput | $Enums.Position[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1920,6 +2492,8 @@ export type PlayerCountOutputType = {
   waiverDrops: number
   tradeAssets: number
   transferAuctions: number
+  eligibilityOverrides: number
+  rights: number
 }
 
 export type PlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1930,6 +2504,8 @@ export type PlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   waiverDrops?: boolean | PlayerCountOutputTypeCountWaiverDropsArgs
   tradeAssets?: boolean | PlayerCountOutputTypeCountTradeAssetsArgs
   transferAuctions?: boolean | PlayerCountOutputTypeCountTransferAuctionsArgs
+  eligibilityOverrides?: boolean | PlayerCountOutputTypeCountEligibilityOverridesArgs
+  rights?: boolean | PlayerCountOutputTypeCountRightsArgs
 }
 
 /**
@@ -1991,6 +2567,20 @@ export type PlayerCountOutputTypeCountTransferAuctionsArgs<ExtArgs extends runti
   where?: Prisma.TransferAuctionWhereInput
 }
 
+/**
+ * PlayerCountOutputType without action
+ */
+export type PlayerCountOutputTypeCountEligibilityOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LeaguePlayerEligibilityWhereInput
+}
+
+/**
+ * PlayerCountOutputType without action
+ */
+export type PlayerCountOutputTypeCountRightsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlayerRightsWhereInput
+}
+
 
 export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2001,6 +2591,8 @@ export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   fplTeamId?: boolean
   nowCost?: boolean
   status?: boolean
+  inFplPool?: boolean
+  departedAt?: boolean
   photo?: boolean
   news?: boolean
   chancePlayingNextRound?: boolean
@@ -2009,6 +2601,7 @@ export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   birthDate?: boolean
   minutes?: boolean
   starts?: boolean
+  secondaryPositions?: boolean
   updatedAt?: boolean
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
   gameweekStats?: boolean | Prisma.Player$gameweekStatsArgs<ExtArgs>
@@ -2018,6 +2611,8 @@ export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   waiverDrops?: boolean | Prisma.Player$waiverDropsArgs<ExtArgs>
   tradeAssets?: boolean | Prisma.Player$tradeAssetsArgs<ExtArgs>
   transferAuctions?: boolean | Prisma.Player$transferAuctionsArgs<ExtArgs>
+  eligibilityOverrides?: boolean | Prisma.Player$eligibilityOverridesArgs<ExtArgs>
+  rights?: boolean | Prisma.Player$rightsArgs<ExtArgs>
   _count?: boolean | Prisma.PlayerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["player"]>
 
@@ -2030,6 +2625,8 @@ export type PlayerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   fplTeamId?: boolean
   nowCost?: boolean
   status?: boolean
+  inFplPool?: boolean
+  departedAt?: boolean
   photo?: boolean
   news?: boolean
   chancePlayingNextRound?: boolean
@@ -2038,6 +2635,7 @@ export type PlayerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   birthDate?: boolean
   minutes?: boolean
   starts?: boolean
+  secondaryPositions?: boolean
   updatedAt?: boolean
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["player"]>
@@ -2051,6 +2649,8 @@ export type PlayerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   fplTeamId?: boolean
   nowCost?: boolean
   status?: boolean
+  inFplPool?: boolean
+  departedAt?: boolean
   photo?: boolean
   news?: boolean
   chancePlayingNextRound?: boolean
@@ -2059,6 +2659,7 @@ export type PlayerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   birthDate?: boolean
   minutes?: boolean
   starts?: boolean
+  secondaryPositions?: boolean
   updatedAt?: boolean
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["player"]>
@@ -2072,6 +2673,8 @@ export type PlayerSelectScalar = {
   fplTeamId?: boolean
   nowCost?: boolean
   status?: boolean
+  inFplPool?: boolean
+  departedAt?: boolean
   photo?: boolean
   news?: boolean
   chancePlayingNextRound?: boolean
@@ -2080,10 +2683,11 @@ export type PlayerSelectScalar = {
   birthDate?: boolean
   minutes?: boolean
   starts?: boolean
+  secondaryPositions?: boolean
   updatedAt?: boolean
 }
 
-export type PlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "webName" | "firstName" | "lastName" | "position" | "fplTeamId" | "nowCost" | "status" | "photo" | "news" | "chancePlayingNextRound" | "totalPoints" | "form" | "birthDate" | "minutes" | "starts" | "updatedAt", ExtArgs["result"]["player"]>
+export type PlayerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "webName" | "firstName" | "lastName" | "position" | "fplTeamId" | "nowCost" | "status" | "inFplPool" | "departedAt" | "photo" | "news" | "chancePlayingNextRound" | "totalPoints" | "form" | "birthDate" | "minutes" | "starts" | "secondaryPositions" | "updatedAt", ExtArgs["result"]["player"]>
 export type PlayerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fplTeam?: boolean | Prisma.FplTeamDefaultArgs<ExtArgs>
   gameweekStats?: boolean | Prisma.Player$gameweekStatsArgs<ExtArgs>
@@ -2093,6 +2697,8 @@ export type PlayerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   waiverDrops?: boolean | Prisma.Player$waiverDropsArgs<ExtArgs>
   tradeAssets?: boolean | Prisma.Player$tradeAssetsArgs<ExtArgs>
   transferAuctions?: boolean | Prisma.Player$transferAuctionsArgs<ExtArgs>
+  eligibilityOverrides?: boolean | Prisma.Player$eligibilityOverridesArgs<ExtArgs>
+  rights?: boolean | Prisma.Player$rightsArgs<ExtArgs>
   _count?: boolean | Prisma.PlayerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PlayerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2113,6 +2719,8 @@ export type $PlayerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     waiverDrops: Prisma.$WaiverClaimPayload<ExtArgs>[]
     tradeAssets: Prisma.$TradeAssetPayload<ExtArgs>[]
     transferAuctions: Prisma.$TransferAuctionPayload<ExtArgs>[]
+    eligibilityOverrides: Prisma.$LeaguePlayerEligibilityPayload<ExtArgs>[]
+    rights: Prisma.$PlayerRightsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -2123,6 +2731,8 @@ export type $PlayerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     fplTeamId: number
     nowCost: number
     status: $Enums.PlayerStatus
+    inFplPool: boolean
+    departedAt: Date | null
     photo: string | null
     news: string | null
     chancePlayingNextRound: number | null
@@ -2131,6 +2741,7 @@ export type $PlayerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     birthDate: Date | null
     minutes: number
     starts: number
+    secondaryPositions: $Enums.Position[]
     updatedAt: Date
   }, ExtArgs["result"]["player"]>
   composites: {}
@@ -2534,6 +3145,8 @@ export interface Prisma__PlayerClient<T, Null = never, ExtArgs extends runtime.T
   waiverDrops<T extends Prisma.Player$waiverDropsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$waiverDropsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WaiverClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tradeAssets<T extends Prisma.Player$tradeAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$tradeAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transferAuctions<T extends Prisma.Player$transferAuctionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$transferAuctionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransferAuctionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  eligibilityOverrides<T extends Prisma.Player$eligibilityOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$eligibilityOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LeaguePlayerEligibilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  rights<T extends Prisma.Player$rightsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$rightsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlayerRightsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2571,6 +3184,8 @@ export interface PlayerFieldRefs {
   readonly fplTeamId: Prisma.FieldRef<"Player", 'Int'>
   readonly nowCost: Prisma.FieldRef<"Player", 'Int'>
   readonly status: Prisma.FieldRef<"Player", 'PlayerStatus'>
+  readonly inFplPool: Prisma.FieldRef<"Player", 'Boolean'>
+  readonly departedAt: Prisma.FieldRef<"Player", 'DateTime'>
   readonly photo: Prisma.FieldRef<"Player", 'String'>
   readonly news: Prisma.FieldRef<"Player", 'String'>
   readonly chancePlayingNextRound: Prisma.FieldRef<"Player", 'Int'>
@@ -2579,6 +3194,7 @@ export interface PlayerFieldRefs {
   readonly birthDate: Prisma.FieldRef<"Player", 'DateTime'>
   readonly minutes: Prisma.FieldRef<"Player", 'Int'>
   readonly starts: Prisma.FieldRef<"Player", 'Int'>
+  readonly secondaryPositions: Prisma.FieldRef<"Player", 'Position[]'>
   readonly updatedAt: Prisma.FieldRef<"Player", 'DateTime'>
 }
     
@@ -3146,6 +3762,54 @@ export type Player$transferAuctionsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.TransferAuctionScalarFieldEnum | Prisma.TransferAuctionScalarFieldEnum[]
+}
+
+/**
+ * Player.eligibilityOverrides
+ */
+export type Player$eligibilityOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LeaguePlayerEligibility
+   */
+  select?: Prisma.LeaguePlayerEligibilitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LeaguePlayerEligibility
+   */
+  omit?: Prisma.LeaguePlayerEligibilityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeaguePlayerEligibilityInclude<ExtArgs> | null
+  where?: Prisma.LeaguePlayerEligibilityWhereInput
+  orderBy?: Prisma.LeaguePlayerEligibilityOrderByWithRelationInput | Prisma.LeaguePlayerEligibilityOrderByWithRelationInput[]
+  cursor?: Prisma.LeaguePlayerEligibilityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LeaguePlayerEligibilityScalarFieldEnum | Prisma.LeaguePlayerEligibilityScalarFieldEnum[]
+}
+
+/**
+ * Player.rights
+ */
+export type Player$rightsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlayerRights
+   */
+  select?: Prisma.PlayerRightsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlayerRights
+   */
+  omit?: Prisma.PlayerRightsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlayerRightsInclude<ExtArgs> | null
+  where?: Prisma.PlayerRightsWhereInput
+  orderBy?: Prisma.PlayerRightsOrderByWithRelationInput | Prisma.PlayerRightsOrderByWithRelationInput[]
+  cursor?: Prisma.PlayerRightsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlayerRightsScalarFieldEnum | Prisma.PlayerRightsScalarFieldEnum[]
 }
 
 /**

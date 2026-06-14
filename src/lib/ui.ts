@@ -19,6 +19,12 @@ export function positionBadge(position: string): string {
   return POSITION_BADGE[position as Position] ?? "bg-muted text-muted-foreground"
 }
 
+/**
+ * Muted pill for a *secondary* (dynamic) eligibility position, e.g. a MID who can
+ * also play FWD. Visually subordinate to the primary POSITION_BADGE.
+ */
+export const SECONDARY_BADGE = "bg-muted text-muted-foreground border border-border"
+
 type Tone = "success" | "warn" | "danger" | "info" | "muted"
 
 const TONE_CLASS: Record<Tone, string> = {

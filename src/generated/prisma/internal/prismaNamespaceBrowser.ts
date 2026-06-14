@@ -57,6 +57,8 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   FplTeam: 'FplTeam',
   Player: 'Player',
+  LeaguePlayerEligibility: 'LeaguePlayerEligibility',
+  PlayerRights: 'PlayerRights',
   Fixture: 'Fixture',
   GameWeek: 'GameWeek',
   PlayerGameweekStat: 'PlayerGameweekStat',
@@ -168,6 +170,8 @@ export const PlayerScalarFieldEnum = {
   fplTeamId: 'fplTeamId',
   nowCost: 'nowCost',
   status: 'status',
+  inFplPool: 'inFplPool',
+  departedAt: 'departedAt',
   photo: 'photo',
   news: 'news',
   chancePlayingNextRound: 'chancePlayingNextRound',
@@ -176,10 +180,36 @@ export const PlayerScalarFieldEnum = {
   birthDate: 'birthDate',
   minutes: 'minutes',
   starts: 'starts',
+  secondaryPositions: 'secondaryPositions',
   updatedAt: 'updatedAt'
 } as const
 
 export type PlayerScalarFieldEnum = (typeof PlayerScalarFieldEnum)[keyof typeof PlayerScalarFieldEnum]
+
+
+export const LeaguePlayerEligibilityScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  playerId: 'playerId',
+  positions: 'positions',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeaguePlayerEligibilityScalarFieldEnum = (typeof LeaguePlayerEligibilityScalarFieldEnum)[keyof typeof LeaguePlayerEligibilityScalarFieldEnum]
+
+
+export const PlayerRightsScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  teamId: 'teamId',
+  playerId: 'playerId',
+  status: 'status',
+  reason: 'reason',
+  acquiredAt: 'acquiredAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlayerRightsScalarFieldEnum = (typeof PlayerRightsScalarFieldEnum)[keyof typeof PlayerRightsScalarFieldEnum]
 
 
 export const FixtureScalarFieldEnum = {

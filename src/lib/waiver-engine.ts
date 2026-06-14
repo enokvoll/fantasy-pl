@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import type { WaiverType } from "@/generated/prisma/client"
+import { assertNotRightsHeld } from "@/lib/player-rights"
 
 export async function processWaiverRun(
   leagueId: string,
@@ -51,6 +52,27 @@ export async function processWaiverRun(
       await prisma.waiverClaim.update({
         where: { id: claim.id },
         data: { status: "REJECTED", failReason: "Player already owned", processedAt: new Date() },
+      })
+      rejected++
+      continue
+    }
+
+    // Player Rights: a player whose rights another team holds is off-limits. The
+    // holder reclaims them via the dedicated re-sign action, not the waiver wire.
+    const rights = await prisma.playerRights.findUnique({
+      where: { leagueId_playerId: { leagueId, playerId: claim.targetPlayerId } },
+    })
+    if (rights) {
+      await prisma.waiverClaim.update({
+        where: { id: claim.id },
+        data: {
+          status: "REJECTED",
+          failReason:
+            rights.teamId === claim.teamId
+              ? "You hold this player's rights — use Re-sign to reclaim them"
+              : "Another team holds this player's rights",
+          processedAt: new Date(),
+        },
       })
       rejected++
       continue
@@ -160,6 +182,9 @@ export async function processInstantPickup(
     where: { playerId: targetPlayerId, team: { leagueId } },
   })
   if (isOwned) throw new Error("Player already owned in this league")
+
+  // Any active rights block a free-agent pickup; the holder reclaims via Re-sign.
+  await assertNotRightsHeld(leagueId, targetPlayerId)
 
   await prisma.$transaction(async (tx) => {
     if (dropPlayerId) {

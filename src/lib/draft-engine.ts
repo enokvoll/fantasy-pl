@@ -71,6 +71,13 @@ export async function makePick(
     })
     if (alreadyPicked) throw new Error("Player already drafted")
 
+    // Player Rights: a player whose rights another team holds can't be drafted by
+    // anyone else; the holder reclaims them via the re-sign action.
+    const heldRights = await tx.playerRights.findUnique({
+      where: { leagueId_playerId: { leagueId: draft.leagueId, playerId } },
+    })
+    if (heldRights) throw new Error("Another team holds the rights to this player")
+
     // In a rookie draft, rosters carry over — reject players already on a roster
     // in this league, and enforce the roster cap (team must cut to make room).
     const rosterConfig = draft.league.rosterConfig as unknown as RosterConfig

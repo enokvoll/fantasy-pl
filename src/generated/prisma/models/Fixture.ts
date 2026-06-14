@@ -567,10 +567,6 @@ export type FixtureUncheckedUpdateManyWithoutAwayTeamNestedInput = {
   deleteMany?: Prisma.FixtureScalarWhereInput | Prisma.FixtureScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type FixtureCreateNestedManyWithoutGameweekInput = {
   create?: Prisma.XOR<Prisma.FixtureCreateWithoutGameweekInput, Prisma.FixtureUncheckedCreateWithoutGameweekInput> | Prisma.FixtureCreateWithoutGameweekInput[] | Prisma.FixtureUncheckedCreateWithoutGameweekInput[]
   connectOrCreate?: Prisma.FixtureCreateOrConnectWithoutGameweekInput | Prisma.FixtureCreateOrConnectWithoutGameweekInput[]

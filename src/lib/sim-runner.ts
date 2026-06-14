@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { syncLiveScores } from "@/lib/fpl-sync"
 import { calculateTeamScore } from "@/lib/scoring"
+import { buildEligibilityMap } from "@/lib/eligibility-loader"
 import { finishDraftPicks, finalizeDraftCompletion } from "@/lib/draft-flow"
 import type { RosterConfig } from "@/types/draft"
 import type { Position } from "@/generated/prisma/client"
@@ -111,28 +112,37 @@ export async function autoSetBestLineup(teamId: string, gameweekId: number): Pro
   })
   const statsMap = new Map(gwStats.map(s => [s.playerId, s.totalPoints]))
 
+  // Effective lineup eligibility (primary + secondary, with per-league overrides).
+  const eligibility = await buildEligibilityMap(
+    team.league.id,
+    slots.map(s => s.player!)
+  )
+
   // Sort players by GW points (or season totalPoints as fallback)
   const scored = slots.map(s => ({
     slotId: s.id,
     playerId: s.playerId!,
     position: s.player!.position,
+    eligible: eligibility.get(s.playerId!) ?? [s.player!.position],
     points: statsMap.get(s.playerId!) ?? s.player!.totalPoints,
   }))
 
   // Greedily fill starting slots by required position counts
   const starting = new Set<number>()
 
-  // Fill required positions first
+  // Fill required positions first. GK stays strict (only real keepers). For outfield
+  // lines, prefer the most inflexible eligible players so dual-position players stay
+  // available to cover other lines and FLEX.
   for (const [pos, count] of [
     ["GK", rosterConfig.GK] as [Position, number],
     ["DEF", rosterConfig.DEF] as [Position, number],
     ["MID", rosterConfig.MID] as [Position, number],
     ["FWD", rosterConfig.FWD] as [Position, number],
   ]) {
-    const eligible = scored
-      .filter(p => p.position === pos && !starting.has(p.playerId))
-      .sort((a, b) => b.points - a.points)
-    eligible.slice(0, count).forEach(p => starting.add(p.playerId))
+    const candidates = scored.filter(p => !starting.has(p.playerId) &&
+      (pos === "GK" ? p.position === "GK" : p.eligible.includes(pos)))
+      .sort((a, b) => a.eligible.length - b.eligible.length || b.points - a.points)
+    candidates.slice(0, count).forEach(p => starting.add(p.playerId))
   }
 
   // Fill FLEX spots from best remaining non-GK players

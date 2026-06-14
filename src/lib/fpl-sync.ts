@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { getBootstrap, getFixtures, getLiveGameweek } from "@/lib/fpl-api"
 import type { Position } from "@/generated/prisma/client"
+import { deriveSecondaryPositions } from "@/lib/eligibility"
+import { handlePlayerDeparture, handlePlayerReturn } from "@/lib/player-rights"
 
 const POSITION_MAP: Record<number, Position> = {
   1: "GK",
@@ -57,6 +59,13 @@ export async function syncPlayers(): Promise<{ teams: number; players: number }>
             birthDate: el.birth_date ? new Date(el.birth_date) : null,
             minutes: el.minutes ?? 0,
             starts: el.starts ?? 0,
+            secondaryPositions: deriveSecondaryPositions({
+              position: POSITION_MAP[el.element_type],
+              starts: el.starts ?? 0,
+              minutes: el.minutes ?? 0,
+              goalsScored: el.goals_scored ?? 0,
+              assists: el.assists ?? 0,
+            }),
           },
           update: {
             webName: el.web_name,
@@ -72,6 +81,13 @@ export async function syncPlayers(): Promise<{ teams: number; players: number }>
             birthDate: el.birth_date ? new Date(el.birth_date) : null,
             minutes: el.minutes ?? 0,
             starts: el.starts ?? 0,
+            secondaryPositions: deriveSecondaryPositions({
+              position: POSITION_MAP[el.element_type],
+              starts: el.starts ?? 0,
+              minutes: el.minutes ?? 0,
+              goalsScored: el.goals_scored ?? 0,
+              assists: el.assists ?? 0,
+            }),
           },
         })
       )
@@ -79,7 +95,43 @@ export async function syncPlayers(): Promise<{ teams: number; players: number }>
     playersCount += chunk.length
   }
 
+  await reconcileFplPool(new Set(bootstrap.elements.map((el) => el.id)))
+
   return { teams: teamsCount, players: playersCount }
+}
+
+/**
+ * Detect players who left or returned to the FPL dataset and drive the Player Rights
+ * lifecycle. Runs after the upsert so newly-added players already exist.
+ * - Departed (was in pool, now absent): retain rights for owning teams, free their slots.
+ * - Returned (was out of pool, now present): flip held rights to re-signable.
+ */
+async function reconcileFplPool(presentIds: Set<number>): Promise<void> {
+  const present = [...presentIds]
+
+  const departed = await prisma.player.findMany({
+    where: { inFplPool: true, id: { notIn: present } },
+    select: { id: true },
+  })
+  for (const { id } of departed) {
+    await handlePlayerDeparture(id, "Left the Premier League (no longer in FPL dataset)")
+    await prisma.player.update({
+      where: { id },
+      data: { inFplPool: false, departedAt: new Date() },
+    })
+  }
+
+  const returned = await prisma.player.findMany({
+    where: { inFplPool: false, id: { in: present } },
+    select: { id: true },
+  })
+  for (const { id } of returned) {
+    await handlePlayerReturn(id)
+    await prisma.player.update({
+      where: { id },
+      data: { inFplPool: true, departedAt: null },
+    })
+  }
 }
 
 export async function syncGameweeks(): Promise<number> {

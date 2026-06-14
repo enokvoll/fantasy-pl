@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { positionBadge } from "@/lib/ui"
+import { positionBadge, SECONDARY_BADGE } from "@/lib/ui"
 import { PlayerHistoryDrawer } from "./PlayerHistoryDrawer"
 import type { DraftState } from "@/types/draft"
 
@@ -20,6 +20,7 @@ interface TablePlayer {
   id: number
   webName: string
   position: string
+  secondaryPositions?: string[]
   nowCost: number
   points: number | null
   seasonStats: SeasonStats | null
@@ -220,8 +221,13 @@ export function PlayerTable({
                     </div>
                   </td>
                   <td className="px-1 py-1 text-muted-foreground">{p.fplTeam.shortName}</td>
-                  <td className="px-1 py-1 text-center">
+                  <td className="px-1 py-1 text-center whitespace-nowrap">
                     <span className={cn("text-[10px] px-1 py-0.5 rounded font-medium", positionBadge(p.position))}>{p.position}</span>
+                    {p.secondaryPositions && p.secondaryPositions.length > 0 && (
+                      <span className={cn("ml-0.5 text-[10px] px-1 py-0.5 rounded font-medium", SECONDARY_BADGE)} title="Also eligible at">
+                        {p.secondaryPositions.join("/")}
+                      </span>
+                    )}
                   </td>
                   <td className="px-1 py-1 text-right text-foreground tabular-nums">{(p.nowCost / 10).toFixed(1)}</td>
                   <td className="px-1 py-1 text-right text-foreground font-semibold tabular-nums">{p.points ?? "—"}</td>

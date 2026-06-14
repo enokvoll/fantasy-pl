@@ -22,6 +22,8 @@ interface PlayerSlot {
   gwPoints: number | null
   isStarting: boolean
   locked?: boolean
+  /** Secondary lineup-eligible positions (excludes the primary). */
+  eligible?: string[]
 }
 
 interface RosterPitchProps {
@@ -67,7 +69,12 @@ function PlayerCard({
       {slot.locked && (
         <span className="absolute top-0.5 right-1 text-[10px] leading-none" aria-label="locked">🔒</span>
       )}
-      <span className="text-[10px] font-bold uppercase opacity-70">{slot.position}</span>
+      <span className="text-[10px] font-bold uppercase opacity-70">
+        {slot.position}
+        {slot.eligible && slot.eligible.length > 0 && (
+          <span className="ml-1 font-semibold opacity-90">/{slot.eligible.join("/")}</span>
+        )}
+      </span>
       <span className="text-xs font-semibold text-foreground leading-tight truncate w-full">{slot.playerName}</span>
       <span className="text-[10px] opacity-60">{slot.clubShort}</span>
       {slot.gwPoints !== null ? (

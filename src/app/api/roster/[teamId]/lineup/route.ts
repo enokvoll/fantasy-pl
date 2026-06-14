@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { validateLineup, validateLiveSubstitution } from "@/lib/roster-validator"
 import { getLockedPlayerIds, isGameweekLive } from "@/lib/lineup-lock"
+import { buildEligibilityMap } from "@/lib/eligibility-loader"
 import type { RosterConfig } from "@/types/draft"
 import { z } from "zod"
 
@@ -78,10 +79,16 @@ export async function PATCH(
   const starterSlots = allSlots.filter(s => starterSet.has(s.playerId!))
   const benchSlots = allSlots.filter(s => !starterSet.has(s.playerId!))
 
+  const eligibility = await buildEligibilityMap(
+    team.leagueId,
+    allSlots.map((s) => s.player!)
+  )
+
   const validation = validateLineup(
     [...starterSlots.map(s => ({ ...s, isStarting: true })),
      ...benchSlots.map(s => ({ ...s, isStarting: false }))],
-    rosterConfig
+    rosterConfig,
+    eligibility
   )
 
   if (!validation.valid) {

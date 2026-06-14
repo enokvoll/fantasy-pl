@@ -4,7 +4,9 @@ import { notFound, redirect } from "next/navigation"
 import { RosterPitch } from "@/components/roster/RosterPitch"
 import { DynastyPanel } from "@/components/roster/DynastyPanel"
 import { YouthPanel } from "@/components/roster/YouthPanel"
+import { PlayerRightsPanel } from "@/components/roster/PlayerRightsPanel"
 import { getRosterSize } from "@/lib/dynasty-engine"
+import { buildEligibilityMap } from "@/lib/eligibility-loader"
 import { getLockedPlayerIds, isGameweekLive } from "@/lib/lineup-lock"
 import { getFormationKey, resolveFormationBoost } from "@/lib/formation-boosts"
 import { getSeasonPlayerPoints } from "@/lib/season-points"
@@ -93,6 +95,9 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
   const seasonPoints = await getSeasonPlayerPoints(leagueId, slots.map(s => s.playerId!))
   const seasonStarted = seasonPoints.size > 0
 
+  // Effective lineup eligibility (primary + secondary) for secondary-position chips.
+  const eligibility = await buildEligibilityMap(leagueId, slots.map(s => s.player!))
+
   const pitchSlots = slots
     .filter(s => s.player)
     .map(s => ({
@@ -104,7 +109,22 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
       totalPoints: seasonStarted ? (seasonPoints.get(s.playerId!) ?? 0) : null,
       gwPoints: statsMap.get(s.playerId!) ?? null,
       isStarting: s.isStarting,
+      eligible: (eligibility.get(s.playerId!) ?? [s.player!.position]).filter(p => p !== s.player!.position),
     }))
+
+  // Player Rights this team holds (players who left the PL while rostered).
+  const rights = await prisma.playerRights.findMany({
+    where: { leagueId, teamId: myTeam.id },
+    include: { player: { include: { fplTeam: { select: { shortName: true } } } } },
+    orderBy: { acquiredAt: "desc" },
+  })
+  const rightsPlayers = rights.map(r => ({
+    playerId: r.playerId,
+    playerName: r.player.webName,
+    position: r.player.position,
+    clubShort: r.player.fplTeam.shortName,
+    status: r.status,
+  }))
 
   return (
     <div>
@@ -159,6 +179,10 @@ export default async function RosterPage({ params }: { params: Promise<{ leagueI
 
       {league.type === "DYNASTY" && league.youthSquadEnabled && (
         <YouthPanel teamId={myTeam.id} />
+      )}
+
+      {rightsPlayers.length > 0 && (
+        <PlayerRightsPanel teamId={myTeam.id} players={rightsPlayers} />
       )}
     </div>
   )

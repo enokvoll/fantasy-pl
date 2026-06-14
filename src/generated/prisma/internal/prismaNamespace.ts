@@ -390,6 +390,8 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   FplTeam: 'FplTeam',
   Player: 'Player',
+  LeaguePlayerEligibility: 'LeaguePlayerEligibility',
+  PlayerRights: 'PlayerRights',
   Fixture: 'Fixture',
   GameWeek: 'GameWeek',
   PlayerGameweekStat: 'PlayerGameweekStat',
@@ -428,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftShortlist" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "transferAuction" | "transferBid" | "trade" | "tradeParticipant" | "tradeAsset" | "tradeVote" | "leagueMessage"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "fplTeam" | "player" | "leaguePlayerEligibility" | "playerRights" | "fixture" | "gameWeek" | "playerGameweekStat" | "league" | "team" | "rosterSlot" | "draft" | "draftPick" | "draftPickSlot" | "draftQueue" | "draftShortlist" | "draftMessage" | "matchup" | "teamGameweekScore" | "waiverRun" | "waiverClaim" | "transferAuction" | "transferBid" | "trade" | "tradeParticipant" | "tradeAsset" | "tradeVote" | "leagueMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -873,6 +875,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PlayerCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PlayerCountAggregateOutputType> | number
+        }
+      }
+    }
+    LeaguePlayerEligibility: {
+      payload: Prisma.$LeaguePlayerEligibilityPayload<ExtArgs>
+      fields: Prisma.LeaguePlayerEligibilityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LeaguePlayerEligibilityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LeaguePlayerEligibilityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>
+        }
+        findFirst: {
+          args: Prisma.LeaguePlayerEligibilityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LeaguePlayerEligibilityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>
+        }
+        findMany: {
+          args: Prisma.LeaguePlayerEligibilityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>[]
+        }
+        create: {
+          args: Prisma.LeaguePlayerEligibilityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>
+        }
+        createMany: {
+          args: Prisma.LeaguePlayerEligibilityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LeaguePlayerEligibilityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>[]
+        }
+        delete: {
+          args: Prisma.LeaguePlayerEligibilityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>
+        }
+        update: {
+          args: Prisma.LeaguePlayerEligibilityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>
+        }
+        deleteMany: {
+          args: Prisma.LeaguePlayerEligibilityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LeaguePlayerEligibilityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LeaguePlayerEligibilityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>[]
+        }
+        upsert: {
+          args: Prisma.LeaguePlayerEligibilityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LeaguePlayerEligibilityPayload>
+        }
+        aggregate: {
+          args: Prisma.LeaguePlayerEligibilityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLeaguePlayerEligibility>
+        }
+        groupBy: {
+          args: Prisma.LeaguePlayerEligibilityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeaguePlayerEligibilityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LeaguePlayerEligibilityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LeaguePlayerEligibilityCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlayerRights: {
+      payload: Prisma.$PlayerRightsPayload<ExtArgs>
+      fields: Prisma.PlayerRightsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlayerRightsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlayerRightsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>
+        }
+        findFirst: {
+          args: Prisma.PlayerRightsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlayerRightsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>
+        }
+        findMany: {
+          args: Prisma.PlayerRightsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>[]
+        }
+        create: {
+          args: Prisma.PlayerRightsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>
+        }
+        createMany: {
+          args: Prisma.PlayerRightsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlayerRightsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>[]
+        }
+        delete: {
+          args: Prisma.PlayerRightsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>
+        }
+        update: {
+          args: Prisma.PlayerRightsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlayerRightsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlayerRightsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlayerRightsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlayerRightsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerRightsPayload>
+        }
+        aggregate: {
+          args: Prisma.PlayerRightsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlayerRights>
+        }
+        groupBy: {
+          args: Prisma.PlayerRightsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerRightsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlayerRightsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerRightsCountAggregateOutputType> | number
         }
       }
     }
@@ -2687,6 +2837,8 @@ export const PlayerScalarFieldEnum = {
   fplTeamId: 'fplTeamId',
   nowCost: 'nowCost',
   status: 'status',
+  inFplPool: 'inFplPool',
+  departedAt: 'departedAt',
   photo: 'photo',
   news: 'news',
   chancePlayingNextRound: 'chancePlayingNextRound',
@@ -2695,10 +2847,36 @@ export const PlayerScalarFieldEnum = {
   birthDate: 'birthDate',
   minutes: 'minutes',
   starts: 'starts',
+  secondaryPositions: 'secondaryPositions',
   updatedAt: 'updatedAt'
 } as const
 
 export type PlayerScalarFieldEnum = (typeof PlayerScalarFieldEnum)[keyof typeof PlayerScalarFieldEnum]
+
+
+export const LeaguePlayerEligibilityScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  playerId: 'playerId',
+  positions: 'positions',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LeaguePlayerEligibilityScalarFieldEnum = (typeof LeaguePlayerEligibilityScalarFieldEnum)[keyof typeof LeaguePlayerEligibilityScalarFieldEnum]
+
+
+export const PlayerRightsScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  teamId: 'teamId',
+  playerId: 'playerId',
+  status: 'status',
+  reason: 'reason',
+  acquiredAt: 'acquiredAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlayerRightsScalarFieldEnum = (typeof PlayerRightsScalarFieldEnum)[keyof typeof PlayerRightsScalarFieldEnum]
 
 
 export const FixtureScalarFieldEnum = {
@@ -3195,6 +3373,20 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'PlayerRightsStatus'
+ */
+export type EnumPlayerRightsStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlayerRightsStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PlayerRightsStatus[]'
+ */
+export type ListEnumPlayerRightsStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlayerRightsStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -3561,6 +3753,8 @@ export type GlobalOmitConfig = {
   verificationToken?: Prisma.VerificationTokenOmit
   fplTeam?: Prisma.FplTeamOmit
   player?: Prisma.PlayerOmit
+  leaguePlayerEligibility?: Prisma.LeaguePlayerEligibilityOmit
+  playerRights?: Prisma.PlayerRightsOmit
   fixture?: Prisma.FixtureOmit
   gameWeek?: Prisma.GameWeekOmit
   playerGameweekStat?: Prisma.PlayerGameweekStatOmit
