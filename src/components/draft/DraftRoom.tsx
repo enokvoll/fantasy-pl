@@ -183,6 +183,19 @@ export function DraftRoom({
             compact
           />
           <span className={cn("w-2 h-2 rounded-full shrink-0", isConnected ? "bg-primary" : "bg-red-400")} />
+          {myTeamId && (
+            <button
+              onClick={() => toggleAutoPick(!myAutoPickEnabled)}
+              title="Auto-pick all of your remaining picks for the rest of the draft"
+              className={cn(
+                "text-xs px-2 py-0.5 rounded font-semibold transition-colors",
+                myAutoPickEnabled
+                  ? "bg-success/20 text-success hover:bg-success/30"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70"
+              )}>
+              {myAutoPickEnabled ? "✓ Auto-picking rest" : "🤖 Auto-pick rest"}
+            </button>
+          )}
           {isCommissioner && (
             status === "IN_PROGRESS" ? (
               <button onClick={pauseDraft} className="text-xs px-2 py-0.5 rounded bg-muted hover:bg-muted text-muted-foreground transition-colors">
