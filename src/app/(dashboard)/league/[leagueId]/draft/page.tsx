@@ -38,7 +38,15 @@ export default async function DraftPage({
   }
 
   const myTeam = league.teams.find(t => t.userId === userId)
-  const isCommissioner = league.teams[0]?.userId === userId
+  // The commissioner is the earliest-created team (consistent with the rest of
+  // the app and the socket server). `league.teams` here is ordered by the
+  // randomly-shuffled `draftOrder`, so teams[0] is NOT the commissioner.
+  const commissioner = await prisma.team.findFirst({
+    where: { leagueId },
+    orderBy: { createdAt: "asc" },
+    select: { userId: true },
+  })
+  const isCommissioner = commissioner?.userId === userId
 
   // FPL clubs for the player-table team filter (no separate endpoint needed).
   const fplTeams = await prisma.fplTeam.findMany({

@@ -29,12 +29,19 @@ export async function GET(
   }
 
   const myTeam = league.teams.find(t => t.userId === session.user!.id)
+  // Commissioner is the earliest-created team — `league.teams` is ordered by the
+  // randomly-shuffled `draftOrder`, so teams[0] is not necessarily the commissioner.
+  const commissioner = await prisma.team.findFirst({
+    where: { leagueId },
+    orderBy: { createdAt: "asc" },
+    select: { userId: true },
+  })
 
   return Response.json({
     draft,
     league: { ...league, rosterConfig: league.rosterConfig as unknown as RosterConfig },
     teams: league.teams,
     myTeamId: myTeam?.id ?? null,
-    isCommissioner: league.teams[0]?.userId === session.user!.id,
+    isCommissioner: commissioner?.userId === session.user!.id,
   })
 }
